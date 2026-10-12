@@ -48,12 +48,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "BME——人工智能/1、导论.md",
+                "file": "BME——人工智能/2、搜索算法.md",
                 "mode": "source",
-                "source": true
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "1、导论"
+              "title": "2、搜索算法"
             }
           }
         ]
@@ -268,17 +268,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5d504a3954debc04",
+  "active": "55525cd3a0fce4f3",
   "lastOpenFiles": [
+    "BME——人工智能/2、搜索算法.md",
     "img/20261012100146772.png",
+    "templates/日记模板.md",
+    "templates/课程笔记模板.md",
+    "README.md",
+    "BME——人工智能/1、导论.md",
     "img",
     "imgpicgo-test.png",
-    "BME——人工智能/2、搜索算法.md",
-    "BME——人工智能/1、导论.md",
     "file:C:/Users/yang/Downloads/bme1322_2.md",
     "未命名",
     "名词解释/池化层.md",
-    "README.md",
     "名词解释",
     "file:C:/Users/yang/Downloads/code_artifact.md",
     "2026-10-12.md",

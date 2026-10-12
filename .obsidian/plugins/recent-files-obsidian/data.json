@@ -3,6 +3,26 @@
     {
       "basename": "1、导论",
       "path": "BME——人工智能/1、导论.md"
+    },
+    {
+      "basename": "2、搜索算法",
+      "path": "BME——人工智能/2、搜索算法.md"
+    },
+    {
+      "basename": "20261012100146772",
+      "path": "img/20261012100146772.png"
+    },
+    {
+      "basename": "日记模板",
+      "path": "templates/日记模板.md"
+    },
+    {
+      "basename": "课程笔记模板",
+      "path": "templates/课程笔记模板.md"
+    },
+    {
+      "basename": "README",
+      "path": "README.md"
     }
   ],
   "omittedPaths": [],
