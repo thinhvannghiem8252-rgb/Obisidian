@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "BME——人工智能/1、导论.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -39,21 +39,21 @@
         "currentTab": 1
       },
       {
-        "id": "5af81d2a0046dc81",
+        "id": "582af49e2e6e8e49",
         "type": "tabs",
         "children": [
           {
-            "id": "5d504a3954debc04",
+            "id": "2f40a15f1cfc07fb",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "BME——人工智能/2、搜索算法.md",
+                "file": "BME——人工智能/1、导论.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2、搜索算法"
+              "title": "1、导论"
             }
           }
         ]
@@ -118,7 +118,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "685566a277d8063b",
