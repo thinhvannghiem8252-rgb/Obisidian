@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "1、导论.md",
+                "file": "名词解释/池化层.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "1、导论"
+              "title": "池化层"
             }
           }
         ]
@@ -33,7 +33,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "1、导论.md",
+                "file": "BME——人工智能/1、导论.md",
                 "mode": "source",
                 "source": true
               },
@@ -119,7 +119,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1、导论.md",
+                "file": "BME——人工智能/1、导论.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -196,7 +196,7 @@
             "state": {
               "type": "footnotes",
               "state": {
-                "file": "1、导论.md"
+                "file": "BME——人工智能/1、导论.md"
               },
               "icon": "lucide-file-signature",
               "title": "脚注"
@@ -238,11 +238,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "58c216bbd1a82c5d",
+  "active": "5d504a3954debc04",
   "lastOpenFiles": [
-    "池化层.md",
+    "名词解释/池化层.md",
+    "名词解释",
+    "BME——人工智能/1、导论.md",
     "file:C:/Users/yang/Downloads/code_artifact.md",
-    "1、导论.md",
     "2026-10-12.md",
     "未命名.canvas",
     "未命名.md",
