@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "名词解释/池化层.md",
+                "file": "BME——人工智能/1、导论.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "池化层"
+              "title": "1、导论"
+            }
+          },
+          {
+            "id": "55525cd3a0fce4f3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "BME——人工智能/1、导论.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "1、导论"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "5af81d2a0046dc81",
@@ -238,15 +253,18 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5d504a3954debc04",
+  "active": "55525cd3a0fce4f3",
   "lastOpenFiles": [
-    "名词解释/池化层.md",
-    "名词解释",
+    "BME——人工智能/2、搜索算法.md",
     "BME——人工智能/1、导论.md",
+    "file:C:/Users/yang/Downloads/bme1322_2.md",
+    "未命名",
+    "名词解释/池化层.md",
+    "README.md",
+    "名词解释",
     "file:C:/Users/yang/Downloads/code_artifact.md",
     "2026-10-12.md",
     "未命名.canvas",
-    "未命名.md",
     "BME——人工智能",
     "创建链接.md",
     "欢迎.md",
