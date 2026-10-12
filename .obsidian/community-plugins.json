@@ -3,5 +3,20 @@
   "dataview",
   "obsidian-tasks-plugin",
   "obsidian-git",
-  "obsidian-image-auto-upload-plugin"
+  "obsidian-image-auto-upload-plugin",
+  "editing-toolbar",
+  "obsidian-style-settings",
+  "recent-files-obsidian",
+  "table-editor-obsidian",
+  "easy-typing-obsidian",
+  "cm-chs-patch",
+  "pdf-plus",
+  "obsidian-excalidraw-plugin",
+  "image-converter",
+  "obsidian-pandoc",
+  "obsidian-linter",
+  "obsidian-auto-link-title",
+  "tag-wrangler",
+  "obsidian-outliner",
+  "calendar"
 ]

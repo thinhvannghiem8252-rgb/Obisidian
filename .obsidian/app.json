@@ -1,1 +1,17 @@
-{}
+{
+  "attachmentFolderPath": "attachments",
+  "newFileLocation": "current",
+  "alwaysUpdateLinks": true,
+  "trashOption": "local",
+  "showLineNumber": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "readableLineLength": true,
+  "showInlineTitle": true,
+  "livePreview": true,
+  "defaultViewMode": "source",
+  "spellcheck": false,
+  "autoPairBrackets": true,
+  "autoPairMarkdown": true,
+  "smartIndentList": true
+}
