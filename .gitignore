@@ -1,5 +1,10 @@
-﻿.obsidian/workspace.json
+# --- Obsidian 设备本地状态：不参与同步 ---
+.obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/plugins/recent-files-obsidian/data.json
+.obsidian/image-converter-image-alignments.json
+
+# --- 其他 ---
 .trash/
 .DS_Store
 Thumbs.db

@@ -1,0 +1,6 @@
+# Obsidian：设备相关的插件状态文件在合并时保留本机版本，避免同步被冲突卡住。
+# 每台设备需要执行一次：git config merge.ours.driver true
+# （若未配置，git 会退回默认合并，行为与之前一致，不会报错）
+.obsidian/plugins/*/data.json merge=ours
+.obsidian/workspace.json merge=ours
+.obsidian/workspace-mobile.json merge=ours
