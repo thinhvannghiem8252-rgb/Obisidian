@@ -94,15 +94,15 @@
 - **样本点 / 基本事件 (Element / Sample Point / Elementary Event, $\omega$)**：随机试验的每一个具体单次可能结果，满足 $\omega \in \Omega$。
 - **随机事件 (Random Event, $A$)**：样本空间 $\Omega$ 的子集，记作 $A \subset \Omega$。
   - 当试验结果 $\omega \in A$ 时，称“事件 $A$ 发生”；
-  - **必然事件 (Certain Event)**：全集 $\Omega$ 本身，每次试验必定发生；
-  - **不可能事件 (Impossible Event)**：空集 $\emptyset$，任何一次试验都不可能发生。
+  - **必然事件 (Certain Event)**：<font color="#ff0000">全集 $\Omega$ </font>本身，每次试验必定发生；
+  - **不可能事件 (Impossible Event)**：<font color="#ff0000">空集 $\emptyset$，</font>任何一次试验都不可能发生。
 
 #### (2) 样本空间的分类与典型实例
 1. **离散有限样本空间**：
    - 抛一枚硬币：$\Omega = \{\text{正面 (Head)}, \text{反面 (Tail)}\}$，元素个数 $|\Omega| = 2$；
    - 掷一颗六面骰子：$\Omega = \{1, 2, 3, 4, 5, 6\}$，基本事件 $\omega_i = \{i\}$。
 2. **连续不可数样本空间**：
-   - 在区间 $[0, 1]$ 内随机选取一个实数：$\Omega = [0, 1]$，每一个实数 $\omega \in [0, 1]$ 都是一个基本事件，样本点个数不可数无穷。
+   - 在区间 $[0, 1]$ 内随机选取一个实数：$\Omega = [0, 1]$，<u>每一个实数 $\omega \in [0, 1]$ 都是一个基本事件，样本点个数不可数无穷。</u>
 
 ---
 
@@ -110,17 +110,17 @@
 
 由于事件是样本空间的子集，概率论中的事件运算完全等价于**集合论代数 (Algebra of Sets)**：
 
-| 概率论术语 | 集合论记号 | 数学定义 / 元素刻画 | 实际物理含义 |
-| :--- | :--- | :--- | :--- |
-| **包含 / 蕴涵** | $A \subset B$ | $\forall \omega \in A \implies \omega \in B$ | 若事件 $A$ 发生，则事件 $B$ 必发生 |
-| **事件相等** | $A = B$ | $A \subset B$ 且 $B \subset A$ | 事件 $A$ 与事件 $B$ 同生同灭 |
-| **和事件 / 并** | $A \cup B$ | $\{\omega : \omega \in A \text{ 或 } \omega \in B\}$ | 事件 $A$ 与事件 $B$ 至少有一个发生 |
-| **积事件 / 交** | $A \cap B$ 或 $AB$ | $\{\omega : \omega \in A \text{ 且 } \omega \in B\}$ | 事件 $A$ 与事件 $B$ 同时发生 |
-| **差事件** | $A \setminus B$ 或 $A - B$ | $\{\omega : \omega \in A \text{ 且 } \omega \notin B\} = A \cap B^c$ | 事件 $A$ 发生而事件 $B$ 不发生 |
-| **对立事件 / 补集** | $A'$ 或 $A^c$ | $\{\omega : \omega \in \Omega \setminus A\}$ | 事件 $A$ 不发生 |
-| **互斥 / 互不相容** | $A \cap B = \emptyset$ | $AB = \emptyset$ | 事件 $A$ 与事件 $B$ 不可能同时发生 |
-| **完备事件群** | $\bigcup_{i=1}^n A_i = \Omega$ | 至少有一个 $A_i$ 发生 | 试验结果必落在某个 $A_i$ 中 |
-| **样本空间划分** | $A_i \cap A_j = \emptyset (i \ne j)$ 且 $\bigcup A_i = \Omega$ | 两两互斥且完全覆盖 | 每次试验有且仅有一个 $A_i$ 发生 |
+| 概率论术语              | 集合论记号                                                         | 数学定义 / 元素刻画                                                         | 实际物理含义                   |
+| :----------------- | :------------------------------------------------------------ | :------------------------------------------------------------------ | :----------------------- |
+| **包含 / 蕴涵**        | $A \subset B$                                                 | $\forall \omega \in A \implies \omega \in B$                        | 若事件 $A$ 发生，则事件 $B$ 必发生   |
+| **事件相等**           | $A = B$                                                       | $A \subset B$ 且 $B \subset A$                                       | 事件 $A$ 与事件 $B$ 同生同灭      |
+| **和事件 / 并**        | $A \cup B$                                                    | $\{\omega : \omega \in A \text{ 或 } \omega \in B\}$                 | 事件 $A$ 与事件 $B$ 至少有一个发生   |
+| **积事件 / 交**        | $A \cap B$ 或 $AB$                                             | $\{\omega : \omega \in A \text{ 且 } \omega \in B\}$                 | 事件 $A$ 与事件 $B$ 同时发生      |
+| ==**差事件**==        | $A \setminus B$ 或 $A - B$                                     | $\{\omega : \omega \in A \text{ 且 } \omega \notin B\} = A \cap B^c$ | ==事件 $A$ 发生且事件 $B$ 不发生== |
+| **对立事件 / 补集**      | $A'$ 或 $A^c$                                                  | $\{\omega : \omega \in \Omega \setminus A\}$                        | 事件 $A$ 不发生               |
+| **互斥 / exclusive** | $A \cap B = \emptyset$                                        | $AB = \emptyset$                                                    | 事件 $A$ 与事件 $B$ 不可能同时发生   |
+| **完备事件群**          | $\bigcup_{i=1}^n A_i = \Omega$                                | 至少有一个 $A_i$ 发生                                                      | 试验结果必落在某个 $A_i$ 中        |
+| **样本空间划分**         | $A_i \cap A_j = \emptyset (i \ne j)$ 且 $\bigcup A_i = \Omega$ | 两两互斥(exclusive)且完全覆盖(exhaustive)                                    | 每次试验有且仅有一个 $A_i$ 发生      |
 
 #### 常用集合运算定律：
 1. **交换律 (Commutative Laws)**：$A \cup B = B \cup A,\quad A \cap B = B \cap A$
