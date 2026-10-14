@@ -130,7 +130,7 @@
    $$A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$$
 4. **德摩根律 / 对偶原则 (De Morgan's Laws)**：
    $$(A \cup B)^c = A^c \cap B^c,\quad (A \cap B)^c = A^c \cup B^c$$
-   推广至有限/可数无限个事件：
+   ==推广至有限/可数无限个事件：==
    $$\left( \bigcup_{i} A_i \right)^c = \bigcap_{i} A_i^c, \quad \left( \bigcap_{i} A_i \right)^c = \bigcup_{i} A_i^c$$
 
 #### 复合事件的集合语言表述规范：
@@ -143,7 +143,7 @@
 
 ### 2.3 集合系与 $\sigma$-代数 ($\sigma$-Algebra) 深度辨析
 
-在现代测度论概率体系中，不能随意将样本空间 $\Omega$ 的“任意子集”都定义为事件。必须明确定义一个由子集构成的集合系（代数与 $\sigma$-代数）。
+==在现代测度论概率体系中，不能随意将样本空间 $\Omega$ 的“任意子集”都定义为事件。必须明确定义一个由子集构成的集合系（代数与 $\sigma$-代数）==。
 
 #### (1) 代数 (Algebra / Field)
 设 $\Omega$ 是样本空间，$\mathcal{A}$ 是 $\Omega$ 的某些子集组成的集类。若满足：
