@@ -1,8 +1,8 @@
-# 《蛋白质设计》图文详解复习笔记 — Chapter 0: Introduction to Protein Design（蛋白质设计导论）
+﻿# 《蛋白质设计》图文详解复习笔记 — Chapter 0: Introduction to Protein Design（蛋白质设计导论）
 
 > **课件范围**：Chapter 0 全章节（共 26 页 PPT，含 **17 张课件原图高清截图**、**10 幅权威文献/百科配图** 与 **8 幅结构化原理示意图**）  
 > **核心模块**：蛋白质多样性（Protein Diversity）与计算蛋白质设计（Computational Protein Design）  
-> **使用说明**：若在本地 Typora / Obsidian / VS Code 中打开本文件，请将压缩包完整解压，确保 `images/` 文件夹与本 `.md` 文件位于同一目录下，即可同时显示全部课件原图与文献网络配图。
+> **使用说明**：若在本地 Typora / Obsidian / VS Code 中打开本文件，请将压缩包完整解压，确保 `img/` 文件夹与本 `.md` 文件位于同一目录下，即可同时显示全部课件原图与文献网络配图。
 
 ## 一、 课程全貌与核心脉络概览（Slides 1, 8, 10, 23, 25, 26）
 
@@ -47,8 +47,8 @@
 ![David S. Goodsell 绘制的细胞内蛋白质分子全景插图（RCSB PDB Molecule of the Month）](https://cdn.rcsb.org/pdb101/motm/wallpaper.jpg)
 *▲ 图 1-1（网络拓展配图）：结构生物学家兼科学插画家 [David S. Goodsell](https://pdb101.rcsb.org/motm/motm-goodsell) 绘制的蛋白质分子世界全景图（来源：[RCSB PDB Molecule of the Month](https://pdb101.rcsb.org/motm/motm-about)）*
 
-![Slide 2 - An Immense World of Proteins (Goodsell 蛋白质全景图)](images/fig01_slide02_goodsell_proteins.png)
-*▲ 课件原图（Slide 2）：An Immense World of Proteins（本地路径：`images/fig01_slide02_goodsell_proteins.png`）*
+![Slide 2 - An Immense World of Proteins (Goodsell 蛋白质全景图)](../img/fig01_slide02_goodsell_proteins.png)
+*▲ 课件原图（Slide 2）：An Immense World of Proteins（本地路径：`img/fig01_slide02_goodsell_proteins.png`）*
 
 * **课件核心内容**：
   * 引用了 [David S. Goodsell](https://pdb101.rcsb.org/motm/motm-goodsell) 绘制的蛋白质分子全景图，直观展示了细胞内外形态各异的蛋白质机器（如跨膜通道、球状酶、纤维状胶原蛋白/肌动蛋白、病毒衣壳、核糖体及分子伴侣复合物等）。
@@ -65,8 +65,8 @@
 ![生命演化树（Phylogenetic Tree of Life）](https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Phylogenetic_Tree_of_Life.png/500px-Phylogenetic_Tree_of_Life.png)
 *▲ 图 1-3（网络拓展配图）：涵盖细菌（Bacteria）、古菌（Archaea）和真核生物（Eukaryota）三大域的系统发生生命之树（来源：[Wikimedia Commons](https://en.wikipedia.org/wiki/Last_universal_common_ancestor)）*
 
-![Slide 3 - Protein Diversity through the Lens of Evolution](images/fig02_slide03_tree_of_life.png)
-*▲ 课件原图（Slide 3）：Protein Diversity through the Lens of Evolution（本地路径：`images/fig02_slide03_tree_of_life.png`）*
+![Slide 3 - Protein Diversity through the Lens of Evolution](../img/fig02_slide03_tree_of_life.png)
+*▲ 课件原图（Slide 3）：Protein Diversity through the Lens of Evolution（本地路径：`img/fig02_slide03_tree_of_life.png`）*
 
 * **课件核心内容**：
   * 展示了从地球诞生（Earth Birth，约 40–45 亿年前）到今天（Today）的生命演化扇形时间树，涵盖细菌（Bacteria）、古菌（Archaea）和真核生物（Eukaryotes：植物、真菌、原口动物、棘皮动物、鱼类、两栖类、爬行类、鸟类、哺乳动物等），并标注了海洋氧化（Oceans Rust）、全球冰期（Global Ice Ages）、寒武纪大爆发（Cambrian Explosion）及多次生物大灭绝（Mass Extinction）等关键地质与演化节点。
@@ -83,8 +83,8 @@
 ![蛋白质折叠自由能漏斗（Folding Funnel）示意图](https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Folding_funnel_schematic.svg/500px-Folding_funnel_schematic.svg.png)
 *▲ 图 1-4（网络拓展配图）：蛋白质折叠能量漏斗（Folding Funnel）模型——漏斗宽度代表构象熵（Conformational Entropy），深度代表焓/内能（Energy），多肽链从顶部高熵去折叠态沿漏斗壁向底部唯一天然态（Native State）汇聚（来源：[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Folding_funnel_schematic.svg)）*
 
-![Slide 4 - Protein Diversity through the Lens of Physics](images/fig03_slide04_folding_funnel_physics.png)
-*▲ 课件原图（Slide 4）：Protein Diversity through the Lens of Physics — 折叠能量漏斗与能量-构象-序列三维映射（本地路径：`images/fig03_slide04_folding_funnel_physics.png`）*
+![Slide 4 - Protein Diversity through the Lens of Physics](../img/fig03_slide04_folding_funnel_physics.png)
+*▲ 课件原图（Slide 4）：Protein Diversity through the Lens of Physics — 折叠能量漏斗与能量-构象-序列三维映射（本地路径：`img/fig03_slide04_folding_funnel_physics.png`）*
 
 ```text
   能量 (Energy, E / ΔG)
@@ -127,8 +127,8 @@
 ![经典拉氏图（Ramachandran Plot）允许区域](https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Ramachandran_plot_original_outlines.jpg/250px-Ramachandran_plot_original_outlines.jpg)
 *▲ 图 1-6（网络拓展配图）：拉氏图（Ramachandran Plot）中主链二面角 $(\phi, \psi)$ 因原子空间位阻而形成的允许区域（$\alpha$-螺旋区与 $\beta$-折叠区）（来源：[Wikimedia Commons](https://en.wikipedia.org/wiki/Ramachandran_plot)）*
 
-![Slide 5 - Protein Conformational Space & F(phi, psi, chi)](images/fig04_slide05_conformational_space.png)
-*▲ 课件原图（Slide 5）：Protein Conformational Space — 柔性扭转角 $F(\phi, \psi, \chi)$ 与利文索尔悖论（本地路径：`images/fig04_slide05_conformational_space.png`）*
+![Slide 5 - Protein Conformational Space & F(phi, psi, chi)](../img/fig04_slide05_conformational_space.png)
+*▲ 课件原图（Slide 5）：Protein Conformational Space — 柔性扭转角 $F(\phi, \psi, \chi)$ 与利文索尔悖论（本地路径：`img/fig04_slide05_conformational_space.png`）*
 
 ```text
           H       O                 H       O
@@ -160,11 +160,11 @@
 
 #### （3） 蛋白质序列空间（Protein Sequence Space，Slides 6 & 7）
 
-![Slide 6 - Protein Sequence Space](images/fig05_slide06_sequence_space.png)
-*▲ 课件原图（Slide 6）：Protein Sequence Space — 二肽（400）、三肽（8000）至 300 氨基酸蛋白质（$10^{390}$）的高维序列空间（引用自 [Thomas Shafee, 2014](https://commons.wikimedia.org/w/index.php?curid=94447984)，本地路径：`images/fig05_slide06_sequence_space.png`）*
+![Slide 6 - Protein Sequence Space](../img/fig05_slide06_sequence_space.png)
+*▲ 课件原图（Slide 6）：Protein Sequence Space — 二肽（400）、三肽（8000）至 300 氨基酸蛋白质（$10^{390}$）的高维序列空间（引用自 [Thomas Shafee, 2014](https://commons.wikimedia.org/w/index.php?curid=94447984)，本地路径：`img/fig05_slide06_sequence_space.png`）*
 
-![Slide 7 - Sequence, Structure, Function Summary](images/fig06_slide07_seq_struct_func_summary.png)
-*▲ 课件原图（Slide 7）：Sequence ($20^N$), Structure ($\sim 10^{2N}$), Function 三元映射全景图（本地路径：`images/fig06_slide07_seq_struct_func_summary.png`）*
+![Slide 7 - Sequence, Structure, Function Summary](../img/fig06_slide07_seq_struct_func_summary.png)
+*▲ 课件原图（Slide 7）：Sequence ($20^N$), Structure ($\sim 10^{2N}$), Function 三元映射全景图（本地路径：`img/fig06_slide07_seq_struct_func_summary.png`）*
 
 ```text
   ┌───────────────────────── 蛋白质序列空间维度扩张示意 (20^N) ─────────────────────────┐
@@ -195,8 +195,8 @@
 
 ## 三、 模块二：蛋白质功能设计的三个层级（Multiple Levels of Designing Protein Function，Slides 8–10）
 
-![Slide 9 - Multiple levels of designing protein function](images/fig07_slide09_three_levels_design.png)
-*▲ 课件原图（Slide 9）：Multiple levels of designing protein function — 蛋白质功能设计的三大递进层级（本地路径：`images/fig07_slide09_three_levels_design.png`）*
+![Slide 9 - Multiple levels of designing protein function](../img/fig07_slide09_three_levels_design.png)
+*▲ 课件原图（Slide 9）：Multiple levels of designing protein function — 蛋白质功能设计的三大递进层级（本地路径：`img/fig07_slide09_three_levels_design.png`）*
 
 ```text
 ┌─────────────────────────────┬─────────────────────────────┬─────────────────────────────┐
@@ -222,8 +222,8 @@
 
 ## 四、 模块三：蛋白质设计的两大核心流派（Two Schools of Thought，Slides 11–23）
 
-![Slide 11 - Two Approaches to Protein Design](images/fig08_slide11_two_approaches_overview.png)
-*▲ 课件原图（Slide 11）：Two Approaches to Protein Design — Sequence-centric 与 Structure-centric 两大流派总览（本地路径：`images/fig08_slide11_two_approaches_overview.png`）*
+![Slide 11 - Two Approaches to Protein Design](../img/fig08_slide11_two_approaches_overview.png)
+*▲ 课件原图（Slide 11）：Two Approaches to Protein Design — Sequence-centric 与 Structure-centric 两大流派总览（本地路径：`img/fig08_slide11_two_approaches_overview.png`）*
 
 课件第 11 至 23 页系统阐述并对比了蛋白质功能设计的两大方法论范式：**以序列为中心的方法（Sequence-centric approach）**与**以结构为中心的方法（Structure-centric approach）**。
 
@@ -237,8 +237,8 @@
 ![Romero & Arnold (2009) 蛋白质适应度景观与单步演化路径图](https://cdn.ncbi.nlm.nih.gov/pmc/blobs/0787/2997618/5dcc104be857/nihms251972f4.jpg)
 *▲ 图 4-1（文献原图拓展）：蛋白质序列空间中的适应度景观（Fitness Landscape）与单氨基酸突变演化网络（来源：[Romero & Arnold, *Nat. Rev. Mol. Cell Biol.* 2009, PMC2997618](https://pmc.ncbi.nlm.nih.gov/articles/PMC2997618/)）*
 
-![Slide 13 - Fitness Landscape: Badland vs. Fujiyama](images/fig09_slide13_fitness_landscape.png)
-*▲ 课件原图（Slide 13）：Fitness Landscape — 稀疏功能峰、“Badland”（恶地型崎岖景观）与“Fujiyama”（富士山型平滑景观）（本地路径：`images/fig09_slide13_fitness_landscape.png`）*
+![Slide 13 - Fitness Landscape: Badland vs. Fujiyama](../img/fig09_slide13_fitness_landscape.png)
+*▲ 课件原图（Slide 13）：Fitness Landscape — 稀疏功能峰、“Badland”（恶地型崎岖景观）与“Fujiyama”（富士山型平滑景观）（本地路径：`img/fig09_slide13_fitness_landscape.png`）*
 
 ```text
   Fitness (功能适应度)                                Fitness (功能适应度)
@@ -264,8 +264,8 @@
 ![定向进化（Directed Evolution）的迭代实验流程示意图](https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/DE_cycle.png/500px-DE_cycle.png)
 *▲ 图 4-2（网络拓展配图）：定向进化（Directed Evolution）的“基因突变建库 → 表达筛选 → 迭代进化”闭环流程（来源：[Wikimedia Commons](https://en.wikipedia.org/wiki/Directed_evolution)）*
 
-![Slide 14 - Exploring the Fitness Landscape by Directed Evolution](images/fig10_slide14_directed_evolution_cycle.png)
-*▲ 课件原图（Slide 14）：Exploring the Fitness Landscape by Directed Evolution（本地路径：`images/fig10_slide14_directed_evolution_cycle.png`）*
+![Slide 14 - Exploring the Fitness Landscape by Directed Evolution](../img/fig10_slide14_directed_evolution_cycle.png)
+*▲ 课件原图（Slide 14）：Exploring the Fitness Landscape by Directed Evolution（本地路径：`img/fig10_slide14_directed_evolution_cycle.png`）*
 
 ```text
   ┌───────────────────┐
@@ -295,8 +295,8 @@
 ![2018 年诺贝尔化学奖官方科普图：酶的定向进化原理](https://www.nobelprize.org/uploads/2018/10/pop_fig2_ke_en_18_enzymeEvolution.jpg)
 *▲ 图 4-3（诺奖官方科普配图）：[2018 年诺贝尔化学奖](https://www.nobelprize.org/prizes/chemistry/2018/popular-information/)官方图解——Frances H. Arnold 开发的酶定向进化循环（来源：[NobelPrize.org](https://www.nobelprize.org/prizes/chemistry/2018/popular-information/)）*
 
-![Slide 15 - Revolution by Evolution: Chemistry Nobel Prize 2018](images/fig11_slide15_nobel_prize_2018.png)
-*▲ 课件原图（Slide 15）：‘Revolution by Evolution’: Chemistry Nobel Prize 2018（本地路径：`images/fig11_slide15_nobel_prize_2018.png`）*
+![Slide 15 - Revolution by Evolution: Chemistry Nobel Prize 2018](../img/fig11_slide15_nobel_prize_2018.png)
+*▲ 课件原图（Slide 15）：‘Revolution by Evolution’: Chemistry Nobel Prize 2018（本地路径：`img/fig11_slide15_nobel_prize_2018.png`）*
 
 * **“Revolution by Evolution”：2018 年诺贝尔化学奖（Slide 15）**：
   * [2018 年诺贝尔化学奖](https://www.nobelprize.org/prizes/chemistry/2018/summary/)授予了三位利用进化力量改造蛋白质的先驱：
@@ -313,11 +313,11 @@
 
 #### （1） 逆向思维范式与结构中心设计三步曲（Slides 17 & 18，以识别 cAMP 为例）
 
-![Slide 17 - Structure-Centric Protein Design](images/fig12_slide17_cAMP_structure_centric.png)
-*▲ 课件原图（Slide 17）：Protein Science (`sequence -> structure -> function`) 与 Protein Function Design (`function -> structure -> sequence`) 的逆向范式对比及 cAMP 结合位点化学相互作用（本地路径：`images/fig12_slide17_cAMP_structure_centric.png`）*
+![Slide 17 - Structure-Centric Protein Design](../img/fig12_slide17_cAMP_structure_centric.png)
+*▲ 课件原图（Slide 17）：Protein Science (`sequence -> structure -> function`) 与 Protein Function Design (`function -> structure -> sequence`) 的逆向范式对比及 cAMP 结合位点化学相互作用（本地路径：`img/fig12_slide17_cAMP_structure_centric.png`）*
 
-![Slide 18 - Structure-Centric Protein Design 3 Steps](images/fig13_slide18_structure_centric_3steps.png)
-*▲ 课件原图（Slide 18）：Structure-Centric Protein Design 三步流程（Target Function → Structural Basis → Sequence Design）（本地路径：`images/fig13_slide18_structure_centric_3steps.png`）*
+![Slide 18 - Structure-Centric Protein Design 3 Steps](../img/fig13_slide18_structure_centric_3steps.png)
+*▲ 课件原图（Slide 18）：Structure-Centric Protein Design 三步流程（Target Function → Structural Basis → Sequence Design）（本地路径：`img/fig13_slide18_structure_centric_3steps.png`）*
 
 ```text
   【蛋白质科学 Protein Science（正向研究）】
@@ -347,8 +347,8 @@
 ![从头设计的荧光激活 β-桶蛋白结合生色团 DFHBI 的三维晶体结构 (PDB: 6D0T)](https://cdn.rcsb.org/images/structures/6d0t_chain-A.jpeg)
 *▲ 图 4-4（PDB 晶体结构图）：从头设计的 8 股反平行 $\beta$-桶荧光激活蛋白（bFAP, [PDB: 6D0T](https://www.rcsb.org/structure/6d0t)）与内部锁定的生色团小分子 DFHBI 三维结构（来源：[Dou et al., *Nature* 2018](https://pubmed.ncbi.nlm.nih.gov/30209393/)）*
 
-![Slide 20 - De Novo Fluorescence-Activating beta Barrel](images/fig14_slide20_de_novo_beta_barrel.png)
-*▲ 课件原图（Slide 20）：De Novo Fluorescence-Activating beta Barrel（Dou et al., 2018 *Nature*）——图 a 为生色团 DFHBI 的旋转异构体相互作用场（Functional motif）与从头构建的 $\beta$-桶骨架（Scaffold），图 b 为序列设计后的全原子结合口袋（本地路径：`images/fig14_slide20_de_novo_beta_barrel.png`）*
+![Slide 20 - De Novo Fluorescence-Activating beta Barrel](../img/fig14_slide20_de_novo_beta_barrel.png)
+*▲ 课件原图（Slide 20）：De Novo Fluorescence-Activating beta Barrel（Dou et al., 2018 *Nature*）——图 a 为生色团 DFHBI 的旋转异构体相互作用场（Functional motif）与从头构建的 $\beta$-桶骨架（Scaffold），图 b 为序列设计后的全原子结合口袋（本地路径：`img/fig14_slide20_de_novo_beta_barrel.png`）*
 
 * **文献出处**：[Dou et al., "De novo design of a fluorescence-activating $\beta$-barrel", *Nature* 561, 485–491 (2018)](https://pubmed.ncbi.nlm.nih.gov/30209393/)（[PMC 全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC6275156/)，[PDB: 6D0T](https://www.rcsb.org/structure/6d0t)，华盛顿大学 David Baker 实验室）。
 * **科学背景与目标功能（Target Function，Slide 19）**：
@@ -361,8 +361,8 @@
 
 #### （3） 经典案例精读二：利用深度学习从头设计人工荧光素酶（De novo design of a luciferase by deep learning，Slide 21）
 
-![Slide 21 - De novo design of a luciferase by deep learning](images/fig15_slide21_deep_learning_luciferase.png)
-*▲ 课件原图（Slide 21）：De novo design of a luciferase by deep learning（Yeh et al., 2023 *Nature*）——下半部分图 a 展示深度网络幻觉（Deep network hallucination）生成定制骨架，上半部分图 b–d 展示 RifGen 与 RifDock 构建催化过渡态结合口袋（本地路径：`images/fig15_slide21_deep_learning_luciferase.png`）*
+![Slide 21 - De novo design of a luciferase by deep learning](../img/fig15_slide21_deep_learning_luciferase.png)
+*▲ 课件原图（Slide 21）：De novo design of a luciferase by deep learning（Yeh et al., 2023 *Nature*）——下半部分图 a 展示深度网络幻觉（Deep network hallucination）生成定制骨架，上半部分图 b–d 展示 RifGen 与 RifDock 构建催化过渡态结合口袋（本地路径：`img/fig15_slide21_deep_learning_luciferase.png`）*
 
 ```text
   ┌─────────────────── Slide 21: 深度学习从头设计人工荧光素酶 (Yeh et al., 2023 Nature) ───────────────────┐
@@ -398,8 +398,8 @@
 
 ### 3. 两大设计流派的全方位对比总结（Slide 22）
 
-![Slide 22 - Two Approaches to Protein Function Design](images/fig16_slide22_two_approaches_comparison.png)
-*▲ 课件原图（Slide 22）：Two Approaches to Protein Function Design 并置总结图（本地路径：`images/fig16_slide22_two_approaches_comparison.png`）*
+![Slide 22 - Two Approaches to Protein Function Design](../img/fig16_slide22_two_approaches_comparison.png)
+*▲ 课件原图（Slide 22）：Two Approaches to Protein Function Design 并置总结图（本地路径：`img/fig16_slide22_two_approaches_comparison.png`）*
 
 | 对比维度 | 以序列为中心（Sequence-Centric Approach） | 以结构为中心（Structure-Centric Approach） |
 | :--- | :--- | :--- |
@@ -413,8 +413,8 @@
 
 ## 五、 模块四：计算蛋白质设计的两大核心模型（Computational Models for Designing Proteins，Slides 24 & 25）
 
-![Slide 24 - Computational Models for Designing Proteins](images/fig17_slide24_rosetta_vs_deeplearning.png)
-*▲ 课件原图（Slide 24）：Computational Models for Designing Proteins — 左：基于物理的 Rosetta 建模循环；右：基于深度学习的 AlphaFold 与 RFdiffusion 去噪扩散生成过程（本地路径：`images/fig17_slide24_rosetta_vs_deeplearning.png`）*
+![Slide 24 - Computational Models for Designing Proteins](../img/fig17_slide24_rosetta_vs_deeplearning.png)
+*▲ 课件原图（Slide 24）：Computational Models for Designing Proteins — 左：基于物理的 Rosetta 建模循环；右：基于深度学习的 AlphaFold 与 RFdiffusion 去噪扩散生成过程（本地路径：`img/fig17_slide24_rosetta_vs_deeplearning.png`）*
 
 ### 1. 基于物理的模型（Physics-Based Models）：以 Rosetta 为代表（Slide 24 左）
 
