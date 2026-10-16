@@ -343,7 +343,7 @@ $$P\left(\bigcap_{i=1}^\infty A_i\right) = \lim_{m \to \infty} P\left(\bigcap_{i
 - **局限性（失效边界）**：  
   若单个事件的概率不够大，例如 $P(A) = 0.4, P(B) = 0.4$，则：
   $$P(A \cap B) \ge 0.4 + 0.4 - 1 = -0.2$$
-  由于任何事件概率平凡地大于等于 0，负数下界虽然在数学上完全正确，但**没有任何信息量 (Useless though correct)**。
+  由==于任何事件概率平凡地大于等于 0，负数下界虽然在数学上完全正确，但**没有任何信息量== (Useless though correct)**。
 - **统计学拓展**：在多重假设检验中，著名的 **Bonferroni 校正 (Bonferroni Correction)** 即基于此原理，控制总体第一类错误率 (Family-Wise Error Rate, FWER)。
 
 ---
