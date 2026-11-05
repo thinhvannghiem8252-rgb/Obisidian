@@ -9,6 +9,8 @@
 2024年6月，[Arc研究所（Arc Institute）](https://arcinstitute.org/news/bridge)的Patrick D. Hsu团队、东京大学的Hiroshi Nishimasu团队以及悉尼大学的Sandro F. Ataide团队分别在《Nature》与《Nature Communications》发表里程碑式研究，共同揭开了原核生物**IS110家族插入序列（IS110 Insertion Sequence Family）**及其近缘**IS1111亚家族**的神秘面纱（[Durrant et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208160/)；[Hiraizumi et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208158/)；[Siddiquee et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11187229/)）。研究证实，IS110家族转座子编码一种结构紧凑的**桥接RNA（Bridge RNA，简称bRNA，在IS1111/IS110部分研究中亦称为seekRNA）**，作为自然界首个被发现的**天然双特异性引导RNA（bispecific guide RNA）**，能够通过两个独立可编程的内部环——靶标结合环（Target-Binding Loop, TBL）和供体结合环（Donor-Binding Loop, DBL）——同时与靶标基因组DNA（Target DNA, tDNA）和供体DNA（Donor DNA, dDNA）双链发生碱基配对，直接招募并激活单一的IS110重组酶催化位点特异性重组。
 
 
+![图1.1](../img/IS110综述图片/review_fig_1.1.jpg)
+
 *图1.1：新兴RNA引导转座元件的作用机制对比。（a）真核Fanzor通过$\omega$RNA引导切割DNA；（b）IS110通过Bridge RNA（bRNA）与桥接重组酶直接识别靶DNA和供体DNA这四种组分，在不产生游离双链断裂的前提下完成可编程DNA重组；（c）工程化R2逆转录转座子引导靶向整合（图片来源：[Mechanisms of RNA-guided TE insertion, ResearchGate](https://www.researchgate.net/figure/Mechanisms-of-RNA-guided-TE-insertion-a-Fanzor-cuts-DNA-in-eukaryotic-cells-at-locations_fig4_398002795)）。*
 
 这一发现标志着第三代可编程RNA引导技术——**RNA引导的DNA重组系统（RNA-guided DNA Recombination）**的诞生。不同于CRISPR-Cas的“切割后修复”逻辑，IS110/Bridge RNA系统将RNA的可编程序列识别能力与重组酶自主催化链切割、交换及重新连接（无需宿主修复通路、无游离DSB产生、无PAM序列限制、无痕重组）的生物化学特性合二为一，为单基因座精准替换、超大片段基因写入及全基因组三维构象重排提供了统一的分子引擎。
@@ -29,6 +31,8 @@
 插入序列（Insertion Sequences, IS）是细菌和古菌基因组中最简化的自主移动遗传元件（Mobile Genetic Elements, MGEs），通常仅包含编码自身移动所需转座酶的开放阅读框（ORF）以及两端的顺式作用序列（[Siguier et al., 2014](https://pmc.ncbi.nlm.nih.gov/articles/PMC7190074/)）。在ISfinder数据库收录的约28至30个IS家族中，绝大多数家族编码典型的DDE催化基序转座酶（如IS1、IS3、IS4、IS5等）或HUH核酸内切酶家族转座酶（如IS91、IS200/IS605），通过蛋白质直接识别元件两端的末端反向重复序列（Terminal Inverted Repeats, TIRs）完成剪切或复制转座，并在靶位点两侧留下特征性的靶位点重复（Target Site Duplications, TSDs）（[ASM Journals, 2015](https://journals.asm.org/doi/10.1128/microbiolspec.mdna3-0030-2014)）。
 
 
+[查看原始表格（ResearchGate）](https://www.researchgate.net/figure/Characteristics-of-insertion-sequence-families_tbl1_275827944)
+
 *图2.1：原核生物各插入序列（IS）家族的元件大小、末端反向重复（IR）、靶位点重复（DR/TSD）及转座酶催化化学分类总览表，其中IS110/IS1111家族独树一帜地采用DEDD催化基序并经历环状中间体（图片来源：[Siguier et al., Everyman's Guide to Bacterial Insertion Sequences, ResearchGate](https://www.researchgate.net/figure/Characteristics-of-insertion-sequence-families_tbl1_275827944)）。*
 
 相比之下，首次在天蓝色链霉菌（*Streptomyces coelicolor*）温和噬菌体$\phi$C31衍生物中鉴定出的[IS110元件](https://pmc.ncbi.nlm.nih.gov/articles/PMC306192/)及其家族成员（如大肠杆菌中的IS621、假交替单胞菌中的IS492、恶臭假单胞菌中的ISPpu9和ISPpu10），展现出一系列截然不同的反常生物学特征：
@@ -38,6 +42,8 @@
 4. **独特的复合型DEDD-丝氨酸重组酶**：IS110家族是唯一使用**DEDD催化基序**的插入序列家族。其编码的单一重组酶（长约300–460个氨基酸）在N端具有一个与RuvC霍利迪交叉解离酶（Holliday junction resolvase）同源的**DEDD结构域（Pfam ID: PF01548）**，通过一段含两个$\alpha$-螺旋的卷曲螺旋（coiled-coil, CC）结构域连接至C端特有的**Tnp结构域（Pfam ID: PF02371）**，后者包含一个高度保守的催化丝氨酸残基（如IS621中的S241）（[Durrant et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208160/)；[Hiraizumi et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208158/)）。
 
 
+![图2.2](../img/IS110综述图片/review_fig_2.2.jpg)
+
 *图2.2：IS110重组酶家族的序列保守性图谱（Durrant et al., 2024, Extended Data Fig. 1）。（a）基于213,171条比对序列生成的N端RuvC样结构域（PF01548）序列Logo图，箭头指示高度保守的DEDD四联体催化残基；（b）基于208,634条比对序列生成的C端Tnp结构域（PF02371）序列Logo图，箭头指示高度保守的催化丝氨酸（S）残基（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Conserved-residues-in-the-RuvC-like-and-Tnp-domains-of-IS110-a-Sequence-logo-of-213-171_fig1_381737633)）。*
 
 在长达数十年的时间里，由于研究人员无法在体外用纯化的IS110重组酶和DNA底物重构出转座活性，IS110究竟如何识别缺乏明显反向重复的自身末端以及高度特异性的宿主基因组靶标，一直是转座子生物学中的核心谜团（[Durrant et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208160/)）。
@@ -46,6 +52,8 @@
 
 通过对涵盖37,067个宏基因组、超过113万个细菌与古菌基因组及ISfinder数据库的系统挖掘（[Durrant et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208160/)），研究团队对28个IS家族的非编码末端长度分布进行了横向比较（对应原文**Fig. 1d**与**Extended Data Fig. 2**）。分析揭示，IS110家族拥有所有IS家族中最长的中位非编码末端（Non-coding ends，即重组酶CDS两侧的左端LE和右端RE），且分布范围极为紧凑，暗示这段非编码区承载着保守且不可或缺的遗传功能。
 
+
+![图2.3](../img/IS110综述图片/review_fig_2.3.jpg)
 
 *图2.3：28个原核生物IS家族的最大非编码末端（RE–LE）长度分布箱线图（Durrant et al., 2024, Extended Data Fig. 2）。IS110家族具有显著长于其他家族且分布高度集中的非编码区，为编码结构化Bridge RNA提供了序列空间（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Maximum-non-coding-end-length-distribution-of-28-IS-families-Distribution-of-non-coding_fig2_381737633)）。*
 
@@ -57,8 +65,12 @@
 | **IS1111 亚群** | 较短 | **显著长于 LE** | 具有长约 **7–17 bp** 的典型STIR序列 | 编码于 **RE 区**（共变模型预测检出率 **93.0%**） | 供体结合核苷酸常位于复杂的多分支环（multi-loop）结构中，或形成紧凑型seekRNA（~70–100 nt，引导序列顺序与IS110相反）；代表元件：ISCARN28、ISAzs32、ISPa11、ISKpn4、ISEc11（[Durrant et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11208160/)；[Siddiquee et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11187229/)） |
 
 
+![图2.4](../img/IS110综述图片/review_fig_2.4.jpg)
+
 *图2.4：IS110与IS1111两大亚家族编码多样化Bridge RNA二级结构（Durrant et al., 2024, Fig. 6）。（a）IS110亚群LE显著长于RE，而IS1111亚群RE显著长于LE；（b）Bridge RNA在IS110（85.7%位于LE）和IS1111（93.0%位于RE）中的预测位置分布；（c）ISfinder中274个IS110/IS1111重组酶的系统发育树；（d）6个代表性元件（ISPpu10、ISAar29、ISHne5、ISCARN28、ISAzs32、ISPa11）的bRNA共识二级结构，蓝色标示靶标配对环，橙色标示供体配对环，绿色标示核心配对碱基（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/IS110-subfamilies-encode-distinct-and-diverse-bridge-RNA-secondary-structures-in_fig16_381737633)）。*
 
+
+![图2.5](../img/IS110综述图片/review_fig_2.5.jpg)
 
 *图2.5：IS110/IS1111亚群序列特征与6种不同Bridge RNA的靶标/供体配对细节（Durrant et al., 2024, Extended Data Fig. 10）。（a）IS110供体序列共变分析揭示侧翼短3 bp STIR信号（ATA/TAT）；（b）IS110（长LE、短RE、短STIR）与IS1111（短LE、长RE、长STIR）元件架构对比；（c）6个代表性元件bRNA内部环与各自靶标（Target）和供体（Donor）围绕核心序列（下划线）的精确碱基配对对齐图（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Detailed-analysis-of-diverse-bridge-RNA-sequences-and-their-predicted-targetanddonor_fig10_381737633)）。*
 
@@ -78,8 +90,12 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
 3. **跨界驯化（Exaptation）模型**：系统发育树拓扑结构表明，IS110重组酶与Nop5蛋白是RuvC超家族中的姊妹演化支。在细菌与古菌的最后共同祖先或早期古菌中，一个类似IS110重组酶的祖先蛋白经历了分子驯化——其N端RuvC样结构域丧失了DEDD核酸酶催化活性，转而演化出招募纤维蛋白（fibrillarin，甲基转移酶）和L7Ae（真核中为15.5 kDa/Snu13p）的蛋白互作界面，从而将原本用于**RNA引导的DNA重组**的IS110机器，改造为古菌和真核生物中负责**RNA引导的RNA修饰（snoRNP）**的核心机器；随后在早期真核生物中，Nop56/Nop58发生基因复制并演化出**Prp31**，结合U4/U6 snRNA参与真核生物**前体mRNA剪接（RNA splicing）**（[PMC11930352](https://pmc.ncbi.nlm.nih.gov/articles/PMC11930352/)）。这一发现与“IS200/IS605转座子TnpB/IscB演化为CRISPR-Cas9/Cas12”共同证明，原核生物转座子是生命演化史上复杂RNA引导机制的终极摇篮。
 
 
+![图2.6](../img/IS110综述图片/review_fig_2.6.jpg)
+
 *图2.6：细菌IS110转座酶（IS110 Tnp）、古菌Nop5与真核剪接体蛋白Prp31的功能与三维结构相似性（Nat. Microbiol. 2025, Fig. 1）。（a）IS110 bRNA与古菌/真核C/D-box snoRNA及U4 snRNA二级结构对比；（b–d）IS110 Tnp（PDB: 8WT7）、Nop5（PDB: 7XPL）与Prp31（PDB: 2OZB）高度一致的“RuvC样结构域 + 卷曲螺旋 + C端$\alpha$-螺旋Nop/Tnp结构域”三维架构；（e）二聚体表面构象与引导RNA结合模式对比（图片来源：[Nat. Microbiol. 2025 / ResearchGate](https://www.researchgate.net/publication/387672972_Evolutionary_origins_of_archaeal_and_eukaryotic_RNA-guided_RNA_modification_in_bacterial_IS110_transposons)）。*
 
+
+![图2.7](../img/IS110综述图片/review_fig_2.7.jpg)
 
 *图2.7：IS110家族转座酶与Nop5/Prp31家族共享共同演化祖先（Nat. Microbiol. 2025, Fig. 2）。系统发育树与简约演化模型展示了从远古IS110样RNA引导DNA重组机器，到古菌/真核C/D-box snoRNP（RNA 2'-O-甲基化修饰），再到真核U4/U6 snRNP剪接体组分Prp31的演化路径（图片来源：[Nat. Microbiol. 2025 / ResearchGate](https://www.researchgate.net/figure/IS110-family-transposases-share-a-common-evolutionary-ancestor-with-Nop5-family-proteins_fig2_387672972)）。*
 
@@ -96,6 +112,8 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **小RNA测序与结合亲和力验证（Fig. 1e–g）**：在携带拼接RE–LE序列质粒的大肠杆菌中进行小RNA测序（small RNA-seq），在IS621及其5个近缘同源物的LE区检测到从预测转录起始位点（TSS）延伸约177 bp的连续高丰度转录峰（**Fig. 1e**）。利用微量热泳动（MST）测定体外转录的177 nt ncRNA与纯化IS621重组酶的结合能力，证实两者具有极高的特异性结合亲和力，平衡解离常数达到 **$K_D = 2.1 \pm 0.2\text{ nM}$**，而打乱序列的对照RNA则完全不结合（**Fig. 1f**）。对103个同源物LE序列的二级结构共识预测（ConsAlifold）显示，该ncRNA折叠为一个5'茎环以及两个带有显著内部环的发夹茎环（**Fig. 1g**，其中第一内部环序列保守性低，信息量仅$0.48 \pm 0.09$ bits，暗示其负责识别多变的宿主靶位点；第二内部环保守性较高，信息量为$0.93 \pm 0.11$ bits，对应**Extended Data Fig. 3c**）。
 
 
+![图3.1](../img/IS110综述图片/review_fig_3.1.jpg)
+
 *图3.1：IS110移动遗传元件表达与其编码重组酶特异性结合的非编码RNA（Durrant et al., 2024, Fig. 1）。（a）IS110重组酶结构域示意图；（b）IS621元件生命周期：从基因组切除形成环状中间体，在RE–LE连接处跨越核心序列（绿色菱形）重构$\sigma^{70}$启动子驱动LE区转录ncRNA；（c）1,054条IS110重组酶的系统发育树；（d）8个IS家族非编码末端长度对比；（e）IS621及5个同源物RE–LE区域的small RNA-seq转录峰；（f）MST测定IS621重组酶与WT ncRNA的高亲和力结合（$K_D = 2.1 \pm 0.2\text{ nM}$）；（g）103个IS110 LE序列的ncRNA共识二级结构（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/IS110-mobile-genetic-elements-express-a-ncRNA-that-is-bound-by-its-encoded-recombinase-a_fig11_381737633)）。*
 
 * **Fig. 2 & Extended Data Figs. 4–5（共变矩阵揭示双环分别配对靶DNA与供体DNA，实现体外四组分重构）**：
@@ -103,12 +121,16 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **首次体外重组重构（In Vitro Recombination, Fig. 2c–f）**：将体外转录的177 nt Bridge RNA、纯化的IS621重组酶与含靶序列和供体序列的双链DNA寡核苷酸混合孵育，首次在体外成功检测并测序证实了预期的`LT–RD`和`LD–RT`重组产物（**Fig. 2d,e**），证明**这四种组分（重组酶、bRNA、靶DNA、供体DNA）是催化DNA重组的必要且充分条件**。MST实验进一步测得IS621 RNP复合体对野生型靶DNA的结合亲和力为 **$K_D = 13 \pm 6\text{ nM}$**，对野生型供体DNA为 **$K_D = 77 \pm 3\text{ nM}$**（**Fig. 2f**）。
 
 
+![图3.2](../img/IS110综述图片/review_fig_3.2.jpg)
+
 *图3.2：鉴定IS621 Bridge RNA特异性识别靶DNA和供体DNA的双结合环（Durrant et al., 2024, Fig. 2）。（a,b）5,511对靶点-ncRNA与2,201对供体-ncRNA的共变矩阵，红色对角线代表与DNA底链互补，蓝色对角线代表与DNA顶链互补；（c–e）体外重组（IVR）实验证明重组酶、ncRNA、靶DNA与供体DNA四组分足以在体外生成LD–RT与LT–RD重组产物；（f）MST测定IS621 RNP对靶DNA（$K_D = 13\text{ nM}$）和供体DNA（$K_D = 77\text{ nM}$）的特异性结合；（g,h）Bridge RNA的靶标结合环（TBL：LTG/RTG，蓝色）与供体结合环（DBL：LDG/RDG，橙色）同靶DNA及供体DNA的双链交错配对模型（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Identification-of-IS621-bridge-RNA-binding-loops-with-sequence-specific-recognition-of_fig12_381737633)）。*
 
 * **Fig. 3 & Extended Data Fig. 6（靶位点的独立重编程与反式bRNA表达）**：
   * **大肠杆菌双质粒GFP报告系统（Fig. 3a–d）**：构建pTarget（含重组酶、50 bp靶位点及启动子）与pDonor（含RE–LE及无启动子*gfp*）。将野生型靶位点替换为7个全新的正交靶序列（T1–T7），并同步重编程bRNA的TBL，流式细胞术显示重编程bRNA完全消除了对WT靶标的活性，而在各自对应的T1–T7靶标上实现了**13.8%–59.5%**的阳性细胞重组率（**Fig. 3d**）；而将DEDD基序或S241突变为丙氨酸则彻底丧失活性（**Fig. 3b**）。
   * **顺式与反式解耦（Fig. 3e,f）**：将pDonor上的298 bp全长RE–LE截短为仅围绕核心序列的**22 bp极简供体序列**（去除了天然启动子`-35`区），并在质粒另一位置由合成启动子（J23119）以**反式（in trans）**独立表达bRNA，不仅完全恢复了重组活性，而且总GFP荧光强度比天然顺式启动子提高了近**2倍**（**Fig. 3f**）。
 
+
+![图3.3](../img/IS110综述图片/review_fig_3.3.jpg)
 
 *图3.3：IS621靶位点可由Bridge RNA独立指定并重编程（Durrant et al., 2024, Fig. 3）。（a,b）大肠杆菌双质粒重组GFP流式报告系统及催化残基突变体（D11A、E60A、D102A、D105A、S241A）失活验证；（c,d）针对WT及T1–T7七个合成靶位点重编程TBL的正交重组矩阵，展现极高的序列专一性；（e,f）将298 bp RE–LE简化为22 bp供体序列并反式（in trans）表达bRNA，重组荧光信号较顺式（in cis）提升近2倍（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/The-IS621-target-site-is-reprogrammable-and-is-specified-by-the-bridge-RNA-a-Schematic_fig13_381737633)）。*
 
@@ -120,8 +142,12 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **可编程切除与倒位（Fig. 5h–k）**：当靶位点与供体位点位于同一DNA分子且**同向排列**（LD与LT位于同一链）时，系统高效介导两识别位点间1 kb转录终止子序列的**可编程切除（Excision，效率32.2%–98.9%，Fig. 5h,j）**；当两识别位点位于同一分子但**反向排列**（位于相反链）时，系统高效介导约900 bp *gfp*编码区的**可编程倒位（Inversion，效率4.54%–98.2%，Fig. 5i,k）**。
 
 
+![图3.4](../img/IS110综述图片/review_fig_3.4.jpg)
+
 *图3.4：Bridge RNA供体编码区的重编程赋能完全可编程的DNA插入、倒位与切除（Durrant et al., 2024, Fig. 5）。（a–e）UMI高通量文库筛选揭示DBL在7 bp LD与2 bp RD位置的可编程性与错配敏感度；（f,g）D1–D9九组重编程供体与对应DBL的正交重组矩阵；（h–k）通过改变同一DNA分子上靶序列与供体序列的相对取向（同向或反向），高效实现可编程DNA切除（h,j）与可编程DNA倒位（i,k）（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Bridge-RNA-donor-recoding-enables-fully-programmable-insertion-inversion-and-excision-a_fig15_381737633)）。*
 
+
+![图3.5](../img/IS110综述图片/review_fig_3.5.jpg)
 
 *图3.5：IS621桥接重组系统介导插入（Insertion）、切除（Excision）与倒位（Inversion）的拓扑逻辑及大肠杆菌流式细胞术门控数据（Durrant et al., 2024, Extended Data Fig. 9）（图片来源：[Durrant et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Insertion-excision-and-inversion-using-the-IS621-bridge-recombination-system-a_fig9_381737633)）。*
 
@@ -134,11 +160,17 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **双二聚体X型架构与双bRNA分子来源（Fig. 1e–g & Extended Data Fig. 2k）**：突触复合体由四个IS621原聚体（IS621.1–4）组成两个二聚体：IS621.1/2二聚体结合bRNA的TBL与38 bp靶DNA（tDNA），IS621.3/4二聚体结合DBL与44 bp供体DNA（dDNA）；tDNA与dDNA在中央催化中心周围强烈弯曲，呈X型交叉架构。电镜密度图揭示了一个意想不到的关键事实：在单个突触复合体中，TBL的3'端（C95）与DBL的5'端（A110）相距约**80 Å**（建模显示即使算上无序连接区U96–A109，C98与C99仍相距约40 Å，**Extended Data Fig. 2k**）。这表明**单个四聚体突触复合体中的TBL和DBL实际上分别来自两条不同的bRNA分子**（2D分类中亦观察到由两条bRNA串联起的突触复合体二聚体，且体外将TBL与DBL拆分为两条独立RNA分子同样支持高效重组，**Extended Data Fig. 6e**）。
 
 
+![图3.6](../img/IS110综述图片/review_fig_3.6.jpg)
+
 *图3.6：IS621四聚体突触复合体的整体冷冻电镜结构（Hiraizumi et al., 2024, Fig. 1）。（a,b）IS621元件与重组酶结构域（RuvC、CC、Tnp）划分；（c,d）bRNA引导识别tDNA与dDNA的配对示意图及切割位点（黄色三角）；（e,f）IS621–bRNA–dDNA–tDNA突触复合体及核酸骨架三维结构，红色实心圆圈标示有序的复合活性位点（含形成5'-磷酸丝氨酸共价键的S241.2和S241.4），红色虚线圆圈标示无序位点；（g,h）IS621四聚体与单体的晶体学/电镜拓扑模型（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/IS621-synaptic-complex-structure-a-Schematic-of-the-IS621-insertion-sequence-element_fig11_381737551)）。*
 
 
+![图3.7](../img/IS110综述图片/review_fig_3.7.jpg)
+
 *图3.7：IS621突触复合体的冷冻电镜重构与跨分子bRNA组装证据（Hiraizumi et al., 2024, Extended Data Fig. 2）。（a,b）SEC纯化与SDS-PAGE显示共价IS621–DNA中间体慢迁移条带；（c–h）2.52 Å电镜重构流程与局部密度图，其中（d）的2D分类图像清晰捕捉到由两条bRNA分子连接而成的突触复合体二聚体；（i,j）5'茎环缺失对结合与重组活性的影响；（k）结构建模显示同一复合体内的TBL 3'端与DBL 5'端相距约40–80 Å，证实单个突触复合体中的TBL和DBL来自两条不同的bRNA分子（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Cryo-EM-analysis-of-the-IS621-synaptic-complex-a-Preparation-of-the_fig2_381737551)）。*
 
+
+![图3.8](../img/IS110综述图片/review_fig_3.8.jpg)
 
 *图3.8：IS621重组酶单体与四聚体结构细节（Hiraizumi et al., 2024, Extended Data Fig. 3）。（a）IS621 RuvC结构域（结合单$\text{Mg}^{2+}$稳定5'-磷酸丝氨酸中间体）与Cas9 RuvC结构域（PDB: 7S4X，结合双$\text{Mg}^{2+}$催化水解）的对比；（b,c）四个IS621原聚体构象对比，显示IS621.2/4中S241环有序，而IS621.1/3中S241环无序；（d）四聚体中跨二聚体拼合的RuvC.1–Tnp.4（蓝圈）与RuvC.3–Tnp.2（品红圈）复合活性位点（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/IS621-recombinase-structure-a-Structural-comparison-of-the-RuvC-domains-of-IS621-and_fig3_381737551)）。*
 
@@ -148,8 +180,12 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **CT核心双核苷酸的原子级识别（Extended Data Fig. 5c–g）**：解释了为何核心序列（第8、9位）偏好`CT`且第9位`T`几乎不可变：tDNA的tT9和dDNA的dT9碱基直接与RuvC.1和RuvC.3结构域中G63的主链酰胺基团形成特异性氢键；而第8位的tC8和dC8本身不直接接触蛋白，但与其配对的引导RNA碱基G80（RTG）和G165（RDG）与RuvC.1/RuvC.3的A61主链羰基形成氢键，且底链互补碱基tG7\*和dG7\*被RuvC.2/RuvC.4的N84侧链识别。
 
 
+![图3.9](../img/IS110综述图片/review_fig_3.9.jpg)
+
 *图3.9：IS621重组酶与核酸（bRNA、tDNA、dDNA）的原子级相互作用全景图（Hiraizumi et al., 2024, Extended Data Fig. 4）。粗体标示TBL与DBL共有的外翻腺嘌呤（A43/A67/A116/A150）、顺式构象鸟嘌呤（G48/G72/G121/G155）以及CT核心核苷酸，青色圆圈代表催化位点中的$\text{Mg}^{2+}$离子（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Schematic-of-interactions-between-IS621-and-nucleic-acids-A43-A67-A116-A150-and_fig4_381737551)）。*
 
+
+![图3.10](../img/IS110综述图片/review_fig_3.10.jpg)
 
 *图3.10：IS621的DNA双链解旋与核心序列识别机制（Hiraizumi et al., 2024, Extended Data Fig. 5）。（a,b）TBL–tDNA与DBL–dDNA复合物结构；（c–g）RuvC结构域中G63、A61和N84对CT核心双核苷酸及其互补碱基的氢键识别；（h–j）Tnp结构域疏水楔（Y264、M265、M268）插入DNA双螺旋末端促进解旋，突变疏水楔（dWED）使细菌内重组活性显著丧失（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/DNA-recognition-mechanism-a-b-Structures-of-TBL-tDNA-a-and-DBL-dDNA-b-c-d_fig5_381737551)）。*
 
@@ -160,22 +196,34 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
   * **握手引导序列（Handshake Guides, HSGs）的发现与功能验证（Extended Data Figs. 7–8）**：共变分析在bRNA的RTG紧邻区（第81–82位）和RDG紧邻区（第166–167位）发现了神秘的跨环共变信号——它们不与各自原本结合的DNA配对，而是分别与**交换过来的对侧DNA顶链第6–7位（Handshake Bases, HSB）**互补。研究团队将其命名为**握手引导序列（HSGs）**。体外与体内实验及电镜结构（PDB: 8WT7）证实：若将HSG突变为与自身原配DNA互补（pre-HSB bRNA），复合体虽能切割顶链，但会被死死锁在链交换前状态（Pre-strand exchange locked state），无法产生重组产物；反之，设计HSG使其与交换后的非原配DNA顶链互补（post-HSB bRNA），则能通过形成新的Watson-Crick碱基对，像热力学棘轮一样驱动切割后的顶链跨越活性中心发生交换并重新连接（**Fig. 4d–f**，State 1，2.88 Å，形成霍利迪交叉中间体）。
 
 
+![图3.11](../img/IS110综述图片/review_fig_3.11.jpg)
+
 *图3.11：共变分析揭示握手引导序列（HSGs）的跨环配对潜能（Hiraizumi et al., 2024, Extended Data Fig. 7）。（a）红色箭头与橙色箭头分别指示TBL-HSG（P81）与供体DNA第7位（dDNA P7）、以及DBL-HSG（P166）与靶DNA第7位（tDNA P7）之间的跨环共变信号；（b）顶链交换前后TBL–tDNA与DBL–dDNA碱基配对模式重排示意图（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Covariation-analysis-a-Nucleotide-covariation-and-base-pairing-potential-between-bRNAs_fig7_381737551)）。*
 
+
+![图3.12](../img/IS110综述图片/review_fig_3.12.jpg)
 
 *图3.12：握手碱基配对（Handshake Base-Pairing）对链交换的决定性影响（Hiraizumi et al., 2024, Extended Data Fig. 8）。（a,b）与链交换前原配DNA互补的pre-HSB bRNA虽能切割顶链，但将复合体死锁在切割态而无法生成重组产物；而与交换后对侧DNA互补的post-HSB bRNA则大幅提升体外重组产物比例并消除切割副产物；（c）大肠杆菌内验证DBL-HSG配对对重组效率的调控（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Effects-of-handshake-base-pairing-a-Schematics-of-the-TBL-DBL-and-tDNA-dDNA-sequences_fig8_381737551)）。*
 
   * **构象切换与底链切割解离（Fig. 4g–i & Fig. 5a,b）**：在随后的霍利迪交叉解离状态（State 2，2.73 Å，PDB: 8WT9）中，原本无序的**Tnp.1和Tnp.3的S241催化环变为有序状态**，分别与RuvC.4和RuvC.2组装成新的复合活性中心（RuvC.2–Tnp.3和RuvC.4–Tnp.1），在tC9\*–tC10\*和dT9\*–dA10\*之间切割tDNA和dDNA的底链（S241.3和S241.1分别与tC10\*和dA10\*形成5'-磷酸丝氨酸共价键），从而解离霍利迪交叉并完成整个重组反应（**Fig. 5b**）。此外，与经典酪氨酸重组酶Cre（PDB: 1CRX/3CRX）相比，IS621突触复合体中两条DNA分子的相对夹角相差约$180^\circ$，导致IS621形成**平行（parallel）**取向的霍利迪交叉中间体，而Cre形成反平行（antiparallel）取向（**Extended Data Fig. 10**）。
 
 
+![图3.13](../img/IS110综述图片/review_fig_3.13.jpg)
+
 *图3.13：IS621介导的链交换与霍利迪交叉形成/解离机制（Hiraizumi et al., 2024, Fig. 4）。（a–c）链交换前状态（Pre-strand exchange，PDB: 8WT6）：顶链在黄色三角处被切割形成5'-磷酸丝氨酸中间体；（d–f）链交换后状态1——霍利迪交叉中间体（State 1，2.88 Å，PDB: 8WT8）：顶链跨越中心交换并在绿色/青色三角处重新连接，HSG（第81–82位与166–167位）与交换过来的DNA顶链第6–7位配对；（g–i）链交换后状态2——霍利迪交叉解离态（State 2，2.73 Å，PDB: 8WT9）：第二组复合活性位点有序化并切割底链（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Strand-exchange-mechanism-a-i-Schematics-of-TBL-tDNAandDBL-dDNA-and-the-structures-of_fig14_381737551)）。*
 
+
+![图3.14](../img/IS110综述图片/review_fig_3.14.jpg)
 
 *图3.14：链交换后State 1与State 2的活性中心接力切换（Hiraizumi et al., 2024, Extended Data Fig. 9）。（a,b）在State 1中仅RuvC.1–Tnp.4与RuvC.3–Tnp.2有序（红实心圈），而在State 2中Tnp.1与Tnp.3的S241环也变为有序（四个红实心圈），激活RuvC.2–Tnp.3与RuvC.4–Tnp.1底链切割位点；（c–j）顶链重连与底链切割位点的局部冷冻电镜密度图（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Structures-of-the-IS621-synaptic-complexes-in-the-post-strand-exchange-states-a-b_fig9_381737551)）。*
 
 
+![图3.15](../img/IS110综述图片/review_fig_3.15.jpg)
+
 *图3.15：Bridge RNA引导的DNA重组完整分子机制总结图（Hiraizumi et al., 2024, Fig. 5）。（a）两个IS621二聚体分别结合来自两条不同bRNA的TBL和DBL，各自识别tDNA与dDNA后组装为四聚体突触复合体；（b）从顶链切割（5'-磷酸丝氨酸中间体）、HSG驱动的顶链交换与重连（形成霍利迪交叉中间体），到底链切割与重组完成的完整催化循环（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Bridge-recombination-mechanism-a-b-Proposed-mechanisms-of-the-IS621-synaptic-complex_fig15_381737551)）。*
 
+
+![图3.16](../img/IS110综述图片/review_fig_3.16.jpg)
 
 *图3.16：IS621与经典酪氨酸重组酶Cre（PDB: 1CRX/3CRX）的对比（Hiraizumi et al., 2024, Extended Data Fig. 10）。IS621利用bRNA识别DNA并形成5'-磷酸丝氨酸中间体，且两条DNA分子夹角与Cre相差约$180^\circ$，生成平行（parallel）霍利迪交叉；而Cre通过蛋白质直接识别loxP序列，形成3'-磷酸酪氨酸中间体与反平行（antiparallel）霍利迪交叉（图片来源：[Hiraizumi et al., Nature 2024 / ResearchGate](https://www.researchgate.net/figure/Comparison-of-IS621-and-Cre-Comparison-of-the-synaptic-complex-structures-DNA_fig10_381737551)）。*
 
@@ -186,14 +234,22 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
 * **双向链识别与引导顺序反转**：与Bridge RNA一致，seekRNA与约350 aa的DEDD转座酶共纯化，并通过内部的靶标序列和供体序列分别识别靶标双链的顶链和底链，在无需宿主因子的情况下实现大片段DNA货物的位点特异性无痕插入。尤为关键的是，该研究发现IS1111家族（NCR位于转座酶基因下游RE区）与IS110家族（NCR位于转座酶基因上游LE区）中匹配靶DNA顶链与底链的短序列排列顺序恰好**相反（reversed）**，这两项背靠背的独立工作相互印证，确立了IS110/IS1111超家族普适的RNA引导DNA重组法则。
 
 
+![图3.17](../img/IS110综述图片/review_fig_3.17.jpg)
+
 *图3.17：IS1111与IS110家族成员的基因组组织特征对比（Siddiquee et al., 2024, Fig. 1）。展示IS1111家族（具有亚末端反向重复sTIR，非编码区NCR位于转座酶基因下游RE端）与IS110家族（无明显sTIR，NCR位于转座酶基因上游LE端）的结构差异及靶位点对齐关系（图片来源：[Siddiquee et al., Nat. Commun. 2024 / ResearchGate](https://www.researchgate.net/figure/IS1111-and-IS110-family-features-a-Organisation-of-IS1111-and-IS110-family-members_fig1_381549892)）。*
 
+
+![图3.18](../img/IS110综述图片/review_fig_3.18.jpg)
 
 *图3.18：IS1111家族成员ISEc11转座所需的环状中间体、启动子及seekRNA二级结构特征（Siddiquee et al., 2024, Fig. 2）（图片来源：[Siddiquee et al., Nat. Commun. 2024 / ResearchGate](https://www.researchgate.net/figure/Features-of-the-IS1111-family-member-ISEc11-required-for-transposition-a-Circular_fig2_381549892)）。*
 
 
+![图3.19](../img/IS110综述图片/review_fig_3.19.jpg)
+
 *图3.19：IS110家族成员ISEc21的微环（Minicircle）连接序列、seekRNA结构与转座活性验证（Siddiquee et al., 2024, Fig. 6）（图片来源：[Siddiquee et al., Nat. Commun. 2024 / ResearchGate](https://www.researchgate.net/figure/Features-of-the-IS110-family-member-ISEc21-required-for-transposition-a-Minicircle_fig6_381549892)）。*
 
+
+![图3.20](../img/IS110综述图片/review_fig_3.20.jpg)
 
 *图3.20：seekRNA引导IS1111与IS110家族转座酶进行靶向选址与转座的分子机制模型（Siddiquee et al., 2024, Fig. 7）（图片来源：[Siddiquee et al., Nat. Commun. 2024 / PMC11187229](https://pmc.ncbi.nlm.nih.gov/articles/PMC11187229/)）。*
 
@@ -219,6 +275,10 @@ IS110系统的科学意义远超细菌转座本身。2025年1月发表于《Natu
 * **enIS621–tebRNA与Pelea et al.的平行验证（2026）**：
   * 2026年6月，Guo等人在《Nature Communications》（[Nat. Commun. 17: 7234, PubMed: 42251048](https://pubmed.ncbi.nlm.nih.gov/42251048/)）发表了对原始大肠杆菌IS621系统的理性改造，构建了**enIS621–tebRNA**系统。该系统在多种人类细胞系中对千碱基级（kb-scale）环状DNA供体实现了最高达**27.75%**的无痕整合效率（对10 kb大片段供体仍保持2.53%活性），并成功在T细胞治疗相关基因座完成了**CD19-CAR**的功能性整合，以及针对B型血友病的人凝血因子IX（**Factor IX, F9**）基因原位敲入。与此同时，Pelea等人（[ResearchGate, 2026](https://www.researchgate.net/publication/400507050_Programmable_genome_editing_in_human_cells_using_RNA-guided_bridge_recombinases)）亦独立利用冷冻电镜解析了ISCro4在人类细胞中的高活性结构决定簇，证实了基于全RNA递送（all-RNA delivery）的多千碱基切除、倒位与>6%的供体整合。
 
+
+![seekRNA 机制概览](../img/IS110综述图片/review_fig_3.21a.webp)
+
+![bridge RNA 机制概览](../img/IS110综述图片/review_fig_3.21b.webp)
 
 *图3.21：可编程RNA引导DNA重组（seekRNA与bridgeRNA）的作用机制概览图（图片来源：[Programmable RNA-Guided DNA Recombination, MDPI Biomedicines 2026](https://www.mdpi.com/2227-9059/14/9/2008)）。*
 
