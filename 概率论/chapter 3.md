@@ -1,1043 +1,1456 @@
-# Chapter 3: 多维随机变量及其分布（Multi-dimensional Random Variables and Distributions）深度精讲笔记
+# 第三章　多维随机变量与联合分布：教材式复习讲义
 
-> **课程来源与参考教材**
+> 依据 Chapter3.pdf 的全部 46 页整理。内容顺序按知识依赖关系重新组织：联合分布 → 边缘分布 → 条件分布 → 独立性 → 多元变量变换 → 卡方、t、F 分布。课件中的全部例题均给出推导；额外内容标为“补充”。页码均指 PDF 的物理页码。Gamma 分布一律采用“形状—速率”参数。
 >
-> * **英文主教材**：Robert V. Hogg, Elliot A. Tanis, Dale Zimmerman, *Probability and Statistical Inference* (9th / 10th Edition), **Chapters 4.1–4.4, 5.2**
->
-> * **中文参考教材**：魏宗舒《概率论与数理统计教程》（第三版），**第 2.2、2.6、3.3、3.6 节**
->
-> * **核心关键词**：联合分布（Joint Distribution）、边缘分布（Marginal Distribution）、条件分布（Conditional Distribution）、相互独立性（Mutual Independence）、多维随机变量变换（Change of Multivariate Variables）、雅可比行列式（Jacobian Determinant）、三大导出抽样分布（$t$ 分布、$\chi^2$ 分布、$F$ 分布）
+> 原课件：[Chapter3.pdf](C:/Users/yang/Desktop/大四/概率论/Chapter3.pdf)。本文以 $p$ 表示离散概率质量函数，以 $f$ 表示连续概率密度，避免课件统一用 $f$ 带来的混淆。
 
-## 一、全章知识脉络与核心对比总览
+## 导论　本章究竟研究什么
 
-本章将一维随机变量的概率分布理论全面推广至**多维（**$n$ **维，重点是二维）随机向量**。无论离散型还是连续型，其核心逻辑均围绕“联合 $\to$ 边缘 $\to$ 条件 $\to$ 独立性 $\to$ 函数变换”五条主线展开。
+第二章描述一个随机变量的分布；第三章研究多个随机变量共同变化时的概率规律。例如，掷两颗骰子得到的最小值与最大值，分别都有自己的分布，但仅知道它们各自的分布，还不能回答“最小值为 2 且最大值为 5”的概率。
 
-### 离散型与连续型多维随机变量核心公式对照表
+本章围绕五个问题展开：
 
-| 核心概念 | 多维离散型随机变量 $(X_1, \dots, X_n)$ | 多维连续型随机变量 $(X_1, \dots, X_n)$ | 核心操作转换 | 
-| ----- | ----- | ----- | ----- | 
-| **基本描述工具** | 联合概率质量函数（Joint PMF）  $f(x_1,\dots,x_n) = P(X_1=x_1,\dots,X_n=x_n)$ | 联合概率密度函数（Joint PDF）  $f(x_1,\dots,x_n)$ | 概率点质量 $\leftrightarrow$ 概率微元密度 | 
-| **非负性** | $0 \le f(x_1,\dots,x_n) \le 1$ | $f(x_1,\dots,x_n) \ge 0$（注意：可大于 $1$） | 概率值有上界 $1$，密度值无上界 $1$ | 
-| **规范性（归一性）** | $\sum_{(x_1,\dots,x_n)\in\mathbb{S}} f(x_1,\dots,x_n) = 1$ | $\int_{\mathbb{R}^n} f(x_1,\dots,x_n)\,dx_1\cdots dx_n = 1$ | 离散求和 $\sum \leftrightarrow$ 连续积分 $\int$ | 
-| **事件概率计算** | $P(\mathbf{X}\in A) = \sum_{\mathbf{x}\in A} f(x_1,\dots,x_n)$ | $P(\mathbf{X}\in A) = \int_{A} f(x_1,\dots,x_n)\,dx_1\cdots dx_n$ | 对事件区域 $A$ 求和 / 多重积分 | 
-| **边缘分布（以** $X_j$ **为例）** | $f_{X_j}(x_j) = \sum_{\tilde{x}_{-j}\in\mathbb{S}_{-j}} f(x_1,\dots,x_n)$ | $f_{X_j}(x_j) = \int_{\mathbb{R}^{n-1}} f(x_1,\dots,x_n)\,d\tilde{x}_{-j}$ | **消元降维**：对除 $x_j$ 外的所有其余变量求和/积分 | 
-| **条件分布（给定** $\tilde{X}_{-j}=\tilde{x}_{-j}$**）** | $f_{X_j\mid\tilde{X}_{-j}}(x_j\mid\tilde{x}_{-j}) = \frac{f(x_1,\dots,x_n)}{f_{\tilde{X}_{-j}}(\tilde{x}_{-j})}$ | $f_{X_j\mid\tilde{X}_{-j}}(x_j\mid\tilde{x}_{-j}) = \frac{f(x_1,\dots,x_n)}{f_{\tilde{X}_{-j}}(\tilde{x}_{-j})}$ | **联合除以边缘**（形式完全一致，前提是分母 $>0$） | 
-| **相互独立性充要条件** | $\forall \mathbf{x}\in\mathbb{S},\; f(x_1,\dots,x_n) = \prod_{i=1}^n f_{X_i}(x_i)$ | $\forall \mathbf{x}\in\mathbb{R}^n,\; f(x_1,\dots,x_n) = \prod_{i=1}^n f_{X_i}(x_i)$ | **联合分布等于边缘分布的乘积** | 
+1. **共同取值：** 多个变量同时落在某个区域的概率是多少？——联合分布。
+2. **只观察其中一个：** 忽略其余变量后，它的分布是什么？——边缘分布。
+3. **已知另一个的信息：** 限定另一个变量的取值后，它的分布如何改变？——条件分布。
+4. **信息是否有影响：** 知道一个变量会不会改变对另一个的概率判断？——独立性。
+5. **重新组合变量：** 和、比值、平方和的分布如何求？——变量变换及三大抽样分布。
 
-## 二、3.1 多维离散型随机变量（Discrete Type）
+本章最值得形成的习惯是：**先写取值区域，再写求和或积分；先写变量关系，再写变换公式。** 很多错误并不出在积分计算，而是出在积分区域或变换方向。
 
-### 1. 联合概率质量函数（Joint PMF, Slide P4）
+### 课件与本文对应关系
 
-#### （1）定义与符号说明
+| 课件页码 | 内容 | 本文位置 |
+|---|---|---|
+| 4—7 | 离散联合、边缘、条件分布与独立性 | 第一至四节 |
+| 8—10 | 例 3.1：两骰子的最小值、最大值 | 第五节 |
+| 12—15 | 连续联合、边缘、条件密度与独立性 | 第一至四节 |
+| 16—18 | 例 3.2：单位正方形上的密度 | 第六节 |
+| 19—21 | 例 3.3：非矩形区域上的密度 | 第七节 |
+| 24 | 多元变量变换公式 | 第八节 |
+| 26—31 | t 分布及密度推导，例 3.4 | 第十一节 |
+| 32—36 | 卡方分布及密度推导，例 3.5 | 第十节 |
+| 37—43 | F 分布、性质、密度推导 | 第十二节 |
+| 44—46 | 例 3.6：比值变换与独立性 | 第九节 |
 
-设 $X_1, \dots, X_n$ 是定义在离散样本空间上的一组随机变量：
+---
 
-* 记每个分量 $X_j$ 的取值空间（支撑集，Support）为 $\mathbb{X}_j$（$j = 1, \dots, n$）。
+## 第一节　随机向量与联合分布
 
-* 记随机向量 $(X_1, \dots, X_n)$ 的联合取值空间为笛卡尔积 $\mathbb{S} = \mathbb{X}_1 \times \dots \times \mathbb{X}_n$（注：若变量间存在取值约束，实际有效支撑集为 $\mathbb{S}$ 的子集）。
+### 1.1 从一个数扩展到一组数
 
-* 事件 $\{X_1 = x_1, \dots, X_n = x_n\}$ 同时发生的概率定义为**联合概率质量函数（Joint PMF）**： 
+设 $X,Y$ 定义在同一个概率空间上，则
 
-  $$
-  f(x_1, \dots, x_n) = P(X_1 = x_1, \dots, X_n = x_n)
-  $$
+$$\boldsymbol X=(X,Y)$$
 
-#### （2）三条基本性质
+称为二维随机向量。同一个试验结果 $\omega$ 同时产生 $X(\omega)$ 和 $Y(\omega)$，于是产生平面上的一个点。
 
-* **(a) 有界非负性**：$0 \le f(x_1, \dots, x_n) \le 1, \quad \forall (x_1, \dots, x_n) \in \mathbb{S}$
+“定义在同一个概率空间上”使“$X$ 与 $Y$ 同时满足条件”成为有意义的事件；它不表示二者一定独立。
 
-* **(b) 归一性（规范性）**：$\sum_{(x_1, \dots, x_n) \in \mathbb{S}} f(x_1, \dots, x_n) = 1$
+记各自可能取值的范围为 $S_X,S_Y$，实际联合取值区域为 $D$。通常只有
 
-* **(c) 任意区域概率可加性**：对任意子集 $A \subset \mathbb{S}$，随机向量落入 $A$ 的概率为： 
+$$D\subseteq S_X\times S_Y,$$
 
-  $$
-  P\big((X_1, \dots, X_n) \in A\big) = \sum_{(x_1, \dots, x_n) \in A} f(x_1, \dots, x_n)
-  $$
+**不能默认等号成立。** 例如最小值 $X$ 不可能大于最大值 $Y$，所以实际区域位于 $x\le y$ 内。
 
-  > **【课件细节注记】** Slide P4 性质 (c) 左端写作 $P((x_1, \dots, x_n) \in A)$，在严格概率论记号中，大写字母代表随机变量，小写字母代表确定取值，因此规范写法应为 $P\big((X_1, \dots, X_n) \in A\big)$。
+本文说“支持集”时，主要指用于写密度及积分的有效取值区域。连续情形中，加入或删去零面积边界通常不影响分布；严格的拓扑支持集还会包含相应边界。
 
-### 2. 边缘概率质量函数（Marginal PMF, Slide P5–P6）
+### 1.2 离散情形：联合 PMF
 
-#### （1）二维情形与联合分布表（Slide P5）
+定义
 
-设 $X_1$ 的可能取值为 $a_1, a_2, \dots$，$X_2$ 的可能取值为 $b_1, b_2, \dots$，记联合概率 $p_{ij} = P(X_1 = a_i, X_2 = b_j)$。二维联合分布可用如下列联表直观表示：
+$$\boxed{p_{X,Y}(x,y)=P(X=x,Y=y).}$$
 
-| $X_1 \backslash X_2$ | $b_1$ | $b_2$ | $\cdots$ | $b_j$ | $\cdots$ | **行求和（**$X_1$ **的边缘分布** $p_{i\cdot}$**）** | 
-| ----- | ----- | ----- | ----- | ----- | ----- | ----- | 
-| $a_1$ | $p_{11}$ | $p_{12}$ | $\cdots$ | $p_{1j}$ | $\cdots$ | $p_{1\cdot} = \sum_j p_{1j}$ | 
-| $a_2$ | $p_{21}$ | $p_{22}$ | $\cdots$ | $p_{2j}$ | $\cdots$ | $p_{2\cdot} = \sum_j p_{2j}$ | 
-| $\vdots$ | $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ | $\ddots$ | $\vdots$ | 
-| $a_i$ | $p_{i1}$ | $p_{i2}$ | $\cdots$ | $p_{ij}$ | $\cdots$ | $p_{i\cdot} = \sum_j p_{ij}$ | 
-| $\vdots$ | $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ | $\ddots$ | $\vdots$ | 
-| **列求和（**$X_2$ **的边缘分布** $p_{\cdot j}$**）** | $p_{\cdot 1} = \sum_i p_{i1}$ | $p_{\cdot 2} = \sum_i p_{i2}$ | $\cdots$ | $p_{\cdot j} = \sum_i p_{ij}$ | $\cdots$ | **总和** $\sum_i \sum_j p_{ij} = 1$ | 
+逗号表示“并且”。联合 PMF 必须满足
 
-* $X_1$ **的边缘 PMF（按行求和，消去** $X_2$**）**： 
+$$p_{X,Y}(x,y)\ge0,\qquad \sum_x\sum_y p_{X,Y}(x,y)=1.$$
 
-  $$
-  f_{X_1}(a_i) = P(X_1 = a_i) = \sum_j P(X_1 = a_i, X_2 = b_j) = \sum_j p_{ij} = p_{i\cdot}
-  $$
+因此，对于点的集合 $A$，
 
-* $X_2$ **的边缘 PMF（按列求和，消去** $X_1$**）**： 
+$$P((X,Y)\in A)=\sum_{(x,y)\in A}p_{X,Y}(x,y).$$
 
-  $$
-  f_{X_2}(b_j) = P(X_2 = b_j) = \sum_i P(X_1 = a_i, X_2 = b_j) = \sum_i p_{ij} = p_{\cdot j}
-  $$
+可在整个笛卡尔积 $S_X\times S_Y$ 上定义 PMF，把不可能出现的组合的概率设为 0。这样既方便统一求和，也保留实际区域 $D$ 的限制。
 
-> **【课件勘误提醒（Slide P5）】**
->
-> * 在 Slide P5 倒数第三行求 $X_2$ 的边缘分布时，课件写成了： 
->
->   $$
->   f_{X_2}(b_j) = P(X_2 = b_j) = \sum_i P(X_1 = a_i, X_2 = b_j) = \sum_j p_{ij} = p_{\cdot j}
->   $$
->
-> * 其中第二个求和号下标 $\sum_j p_{ij}$ 属于**笔误**，正确写法应为对行标 $i$ 求和：$\sum_i p_{ij} = p_{\cdot j}$（固定列标 $j$，遍历所有行 $i$）。
->
-> * **为什么叫“边缘（Marginal）”分布？** 因为在二维表格中，$X_1$ 和 $X_2$ 各自的分布恰好写在表格的最右侧边缘列和最底部边缘行，故得名“边缘分布”。
+### 1.3 连续情形：联合 PDF
 
-#### （2）$n$ 维一般情形与去一向量记号（Slide P6）
+如果联合分布具有二维密度，则
 
-为了简洁书写 $n$ 维情形，课件引入了非常实用的**去第** $j$ **分量记号（Leave-one-out Notation）**：
+$$\boxed{P((X,Y)\in A)=\iint_A f_{X,Y}(x,y)\,dx\,dy.}$$
 
-* 记去除第 $j$ 个随机变量后的 $(n-1)$ 维随机向量为： 
+密度必须满足
 
-  $$
-  \tilde{X}_{-j} = (X_1, \dots, X_{j-1}, X_{j+1}, \dots, X_n)
-  $$
+$$f_{X,Y}(x,y)\ge0,\qquad
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx\,dy=1.$$
 
-* 其对应的取值与状态空间分别为： 
+若只在区域 $D$ 内给出密度表达式，则默认 $D$ 外为 0，计算事件概率时实际积分区域为 $A\cap D$。
 
-  $$
-  \tilde{x}_{-j} = (x_1, \dots, x_{j-1}, x_{j+1}, \dots, x_n) \in \mathbb{S}_{-j} = \mathbb{X}_1 \times \dots \times \mathbb{X}_{j-1} \times \mathbb{X}_{j+1} \times \dots \times \mathbb{X}_n
-  $$
+联合密度描述单位面积上的概率集中程度。对于足够小的矩形，
 
-* 则 $X_j$ 的**边缘 PMF** 定义为对所有其余 $(n-1)$ 个变量取值的多重求和： 
+$$P(x<X\le x+\Delta x,\ y<Y\le y+\Delta y)
+\approx f_{X,Y}(x,y)\Delta x\Delta y.$$
 
-  $$
-  f_{X_j}(x_j) = P(X_j = x_j) = \sum_{\tilde{x}_{-j} \in \mathbb{S}_{-j}} f(x_1, \dots, x_n)
-  $$
+因此必须区分：
 
-### 3. 离散型随机变量的相互独立性（Mutual Independence, Slide P6）
+- $f(x,y)$ 是密度，可以大于 1。
+- $P(X=x,Y=y)$ 是点概率；具有二维密度时，它等于 0。
+- 真正的概率由区域上的积分得到。
 
-#### （1）定义
+**补充辨析：各分量连续，不保证存在联合密度。** 若 $X\sim U(0,1)$ 且 $Y=X$，两个边缘分布都是连续均匀分布，但全部概率集中在直线 $y=x$ 上，不能用普通二维面积密度表示。因此课件的连续型公式适用于联合分布确实具有密度的情形。
 
-随机变量 $X_1, \dots, X_n$ 称为**相互独立（Mutually Independent）**，当且仅当对联合空间中的**任意**取值点 $\forall (x_1, \dots, x_n) \in \mathbb{S}$，都有： 
+### 1.4 联合 CDF：统一语言（补充）
 
-$$
-P(X_1 = x_1, \dots, X_n = x_n) = \prod_{i=1}^n P(X_i = x_i) \quad \Longleftrightarrow \quad f(x_1, \dots, x_n) = \prod_{i=1}^n f_{X_i}(x_i)
-$$
+二维累积分布函数定义为
 
-#### （2）疑难深度剖析：判断独立性的三大核心要点
+$$F_{X,Y}(x,y)=P(X\le x,Y\le y).$$
 
-1. **证伪只需一个反例，证明必须遍历全空间**：
+它同时适用于离散、连续和其他类型的联合分布。若 $a<b,c<d$，则由容斥原理，
 
-   * 要说明 $X, Y$ **不独立**，只需找到**一对**具体数值 $(x_0, y_0)$，使得 $f(x_0, y_0) \ne f_X(x_0)f_Y(y_0)$ 即可（如 Example 3.1 与 Example 3.2）。
+$$\begin{aligned}
+P(a<X\le b,c<Y\le d)
+={}&F(b,d)-F(a,d)\\
+&-F(b,c)+F(a,c).
+\end{aligned}$$
 
-   * 要证明 $X, Y$ **独立**，则必须对所有可能的 $(x, y)$ 验证等式恒成立。
+连续且满足相应可微条件时，
 
-2. **支撑集（Support）几何判别法（秒杀技巧）**：
+$$F(x,y)=\int_{-\infty}^{x}\int_{-\infty}^{y}f(u,v)\,dv\,du,
+\qquad f(x,y)=\frac{\partial^2F(x,y)}{\partial x\partial y}.$$
 
-   * 若 $X_1, \dots, X_n$ 相互独立，则其联合支撑集 $\{(x_1,\dots,x_n): f(x_1,\dots,x_n) > 0\}$ **必然是各变量边缘支撑集的笛卡尔积（即二维下的矩形区域或网格点阵）**。
+联合 CDF 的地位与第二章的一元 CDF 相同；只是“阈值左侧”变成了“左下方矩形”。
 
-   * **推论**：只要有效取值的边界满足类似 $x \le y$、$x + y \le 1$ 等变量间相互制约的不等式（即非矩形支撑集），则变量**一定不独立**！
+---
 
-3. **两两独立（Pairwise Independence）**$\ne$ **相互独立（Mutual Independence）**：
+## 第二节　边缘分布：把不关心的变量消去
 
-   * 当 $n \ge 3$ 时，任意两个变量独立并不能推出全体相互独立；而Slide P6 定义的 $f(x_1,\dots,x_n) = \prod_{i=1}^n f_{X_i}(x_i)$ 是最强的**相互独立**，它自动蕴含任意子集之间的独立性。
+### 2.1 离散边缘分布与推导
 
-### 4. 条件概率质量函数（Conditional PMF, Slide P7）
+事件 $\{X=x\}$ 可以拆成互不相交的事件 $\{X=x,Y=y\}$，于是
 
-#### （1）定义
+$$\boxed{p_X(x)=\sum_y p_{X,Y}(x,y),\qquad
+p_Y(y)=\sum_x p_{X,Y}(x,y).}$$
 
-设 $(X_1, \dots, X_n)$ 的联合 PMF 为 $f(x_1, \dots, x_n)$。在给定其余变量取值 $\tilde{X}_{-j} = \tilde{x}_{-j}$ 且满足边缘概率 $f_{\tilde{X}_{-j}}(\tilde{x}_{-j}) > 0$ 的条件下，$X_j$ 的**条件 PMF** 定义为： 
+**保留谁，就消去另一个变量。** 求 $p_X$ 时，$x$ 固定，对所有 $y$ 求和。在表格中通常就是行和、列和。
 
-$$
-f_{X_j \mid \tilde{X}_{-j} = \tilde{x}_{-j}}\left(x_j \mid \tilde{X}_{-j} = \tilde{x}_{-j}\right) = \frac{f(x_1, \dots, x_n)}{f_{\tilde{X}_{-j}}(\tilde{x}_{-j})} = \frac{f(x_1, \dots, x_n)}{\sum_{x_j \in \mathbb{X}_j} f(x_1, \dots, x_n)}
-$$
+### 2.2 连续边缘密度
 
-#### （2）本质理解
+同样地，
 
-* **来自条件概率公式**：在二维情形下，即 $f_{X\mid Y}(x\mid y) = P(X=x \mid Y=y) = \frac{P(X=x, Y=y)}{P(Y=y)} = \frac{f(x,y)}{f_Y(y)}$。
+$$\boxed{f_X(x)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dy,\qquad
+f_Y(y)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx.}$$
 
-* **截面归一化视角**：固定条件变量 $\tilde{x}_{-j}$ 后，分子 $f(x_1, \dots, x_n)$ 只是 $x_j$ 的一元函数，而分母 $f_{\tilde{X}_{-j}}(\tilde{x}_{-j}) = \sum_{x_j} f(x_1, \dots, x_n)$ 是一个与 $x_j$ 无关的**归一化常数**，确保条件概率关于 $x_j$ 求和等于 $1$。
+原因是，对任意区间 $A$，
 
-### 5. 经典例题深度精讲：Example 3.1（Slide P8–P10）
+$$P(X\in A)=\int_A\left[\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dy\right]dx.$$
 
-> **题目（Example 3.1）**：投掷一对均匀的六面骰子，共有 36 个等可能样本点（每个样本点概率为 $1/36$）。设 $X$ 表示两枚骰子中较小的点数，$Y$ 表示较大的点数（即 $X = \min(D_1, D_2), Y = \max(D_1, D_2)$）。
->
-> * (a) 求 $(X, Y)$ 的联合 PMF，并由联合 PMF 推导 $X$ 和 $Y$ 的边缘 PMF；
->
-> * (b) 判断 $X, Y$ 是否相互独立；
->
-> * (c) 求给定 $Y = 4$ 条件下 $X$ 的条件 PMF。
+方括号内的函数正是使该式成立的 $X$ 的密度。
 
-#### 【完整解析与拓展】
+### 2.3 积分上下限从哪里来
 
-##### (a) 联合 PMF 与边缘 PMF 推导
+全轴积分是统一写法；真正计算时只需对密度不为零的部分积分。固定 $x$ 后，所有允许的 $y$ 构成区域 $D$ 的一条竖直截面，因此
 
-设第一枚骰子点数为 $D_1$，第二枚为 $D_2$，样本点 $(D_1, D_2) \in \{1,2,3,4,5,6\}^2$。 由于 $X = \min(D_1, D_2)$，$Y = \max(D_1, D_2)$，必然有 $1 \le x \le y \le 6$（若 $x > y$，概率必为 $0$）。
+$$f_X(x)=\int_{\{y:(x,y)\in D\}}f(x,y)\,dy.$$
 
-* **情形 1：当** $x = y$ **时**（两枚骰子点数相同）： 事件 $\{X=x, Y=x\}$ 仅对应唯一样本点 $\{(x, x)\}$，故： 
+求 $f_Y$ 则取水平截面。
 
-  $$
-  f(x, x) = P(\{(x, x)\}) = \frac{1}{36}, \quad x = 1, 2, \dots, 6
-  $$
+例如 $D=\{0<x<y<1\}$，则
 
-* **情形 2：当** $1 \le x < y \le 6$ **时**（两枚骰子点数不同）： 事件 $\{X=x, Y=y\}$ 对应两个对称样本点 $\{(x, y), (y, x)\}$（即第一枚掷出 $x$ 第二枚掷出 $y$，或反之），故： 
+$$f_X(x)=\int_x^1 f(x,y)\,dy,\quad 0<x<1,$$
 
-  $$
-  f(x, y) = P(\{(x, y), (y, x)\}) = \frac{2}{36}, \quad 1 \le x < y \le 6
-  $$
+$$f_Y(y)=\int_0^y f(x,y)\,dx,\quad 0<y<1.$$
 
-汇总得联合 PMF： 
+**不能因为 $X,Y$ 各自都在 $(0,1)$ 内，就把两个积分都写成从 0 到 1，而不再处理 $x<y$ 的限制。**
 
-$$
-f(x, y) = P(X = x, Y = y) = \begin{cases} \dfrac{1}{36}, & \text{if } 1 \le x = y \le 6 \\ \dfrac{2}{36}, & \text{if } 1 \le x < y \le 6 \\ 0, & \text{otherwise} \end{cases}
-$$
+### 2.4 边缘分布通常不能恢复联合分布
 
-**【直观补充：**$(X,Y)$ **的** $6\times 6$ **联合分布与边缘分布全表】**
+边缘只记录“分别是什么分布”，丢失了“如何共同变化”的信息。
 
-| $X \backslash Y$ | $y=1$ | $y=2$ | $y=3$ | $y=4$ | $y=5$ | $y=6$ | **行和** $f_X(x)$ | 
-| ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | 
-| $x=1$ | $1/36$ | $2/36$ | $2/36$ | $2/36$ | $2/36$ | $2/36$ | $11/36$ | 
-| $x=2$ | $0$ | $1/36$ | $2/36$ | $2/36$ | $2/36$ | $2/36$ | $9/36$ | 
-| $x=3$ | $0$ | $0$ | $1/36$ | $2/36$ | $2/36$ | $2/36$ | $7/36$ | 
-| $x=4$ | $0$ | $0$ | $0$ | $1/36$ | $2/36$ | $2/36$ | $5/36$ | 
-| $x=5$ | $0$ | $0$ | $0$ | $0$ | $1/36$ | $2/36$ | $3/36$ | 
-| $x=6$ | $0$ | $0$ | $0$ | $0$ | $0$ | $1/36$ | $1/36$ | 
-| **列和** $f_Y(y)$ | $1/36$ | $3/36$ | $5/36$ | $7/36$ | $9/36$ | $11/36$ | **总和** $36/36 = 1$ | 
+例如取 $X\sim\operatorname{Bernoulli}(1/2)$，以下三种情形中 $Y$ 也都服从同一个 Bernoulli 分布：
 
-* **求** $X$ **的边缘 PMF** $f_X(x)$（固定行 $x$，对 $y$ 从 $x$ 到 $6$ 求和）： 其中 $y = x$ 这一项为 $1/36$，而 $y \in \{x+1, \dots, 6\}$ 共 $(6-x)$ 项均为 $2/36$： 
+1. $Y=X$，二者总是相同。
+2. $Y=1-X$，二者总是相反。
+3. $Y$ 与 $X$ 独立，四种组合各占 $1/4$。
 
-  $$
-  f_X(x) = \sum_{y=x}^6 f(x, y) = f(x, x) + \sum_{y=x+1}^6 f(x, y) = \frac{1}{36} + \frac{2(6 - x)}{36} = \frac{13 - 2x}{36}, \quad x = 1, \dots, 6
-  $$
+三个模型的边缘完全一样，联合分布却不同。只有额外知道独立性时，才能由边缘乘积直接恢复联合分布。
 
-* **求** $Y$ **的边缘 PMF** $f_Y(y)$（固定列 $y$，对 $x$ 从 $1$ 到 $y$ 求和）： 其中 $x = y$ 这一项为 $1/36$，而 $x \in \{1, \dots, y-1\}$ 共 $(y-1)$ 项均为 $2/36$： 
+---
 
-  $$
-  f_Y(y) = \sum_{x=1}^y f(x, y) = \sum_{x=1}^{y-1} f(x, y) + f(y, y) = \frac{2(y - 1)}{36} + \frac{1}{36} = \frac{2y - 1}{36}, \quad y = 1, \dots, 6
-  $$
+## 第三节　条件分布：固定信息后重新归一化
 
-##### (b) 独立性判定与课件笔误修正
+### 3.1 离散条件 PMF
 
-* **方法一（课件反例法 + 勘误）**：
-  取 $x = 1, y = 2$，由联合分布知 $f(1, 2) = \frac{2}{36}$。
-  而边缘概率分别为 $f_X(1) = \frac{13-2(1)}{36} = \frac{11}{36}$，$f_Y(2) = \frac{2(2)-1}{36} = \frac{3}{36}$。
+由条件概率定义，只要 $p_Y(y)>0$，
 
-  > **【课件勘误提醒（Slide P9）】** 课件在计算 $f_X(1)f_Y(2)$ 时写成了 $\frac{11}{36} \times \frac{1}{36} \ne \frac{2}{36}$（把 $f_Y(1)=\frac{1}{36}$ 误代入了 $f_Y(2)$）。准确数值应为：
-  > 
-  >
-  > $$
-  > f_X(1)f_Y(2) = \frac{11}{36} \times \frac{3}{36} = \frac{33}{1296} \ne \frac{2}{36}
-  > $$
-  >
-  > 
-  > 结论不变，$X$ 与 $Y$ **不独立**。
+$$\boxed{p_{X\mid Y}(x\mid y)=\frac{p_{X,Y}(x,y)}{p_Y(y)}.}$$
 
-* **方法二（零概率点/支撑集秒杀法）**：
-  直接取下三角区域的点，例如 $x = 2, y = 1$：由于最小值不可能大于最大值，必有 $f(2, 1) = 0$；但 $f_X(2) = \frac{9}{36} > 0, f_Y(1) = \frac{1}{36} > 0$，显然 $0 \ne \frac{9}{36} \times \frac{1}{36}$，一秒证伪！
+这里的思路分成两步：先保留 $Y=y$ 对应的一列或一行，再除以该列或该行的总概率，使它重新加起来等于 1。
 
-##### (c) 给定 $Y = 4$ 下 $X$ 的条件 PMF（Slide P10）
+$$\sum_xp_{X\mid Y}(x\mid y)=1.$$
 
-1. 先求条件事件的分母边缘概率：
-   
+变量 $x$ 是待研究的取值，$y$ 是已经给定的信息，二者角色不能混淆。
 
-   $$
-   f_Y(4) = \frac{2(4) - 1}{36} = \frac{7}{36}
-   $$
+### 3.2 连续条件 PDF
 
-2. 再列出 $Y = 4$ 这一列的联合概率截面 $f(x, 4)$：
-   
+在边缘密度 $f_Y(y)>0$ 的位置，通常取
 
-   $$
-   f(x, 4) = P(X = x, Y = 4) = \begin{cases} 1/36, & \text{if } x = 4 \\ 2/36, & \text{if } x = 1, 2, 3 \\ 0, & \text{otherwise} \end{cases}
-   $$
+$$\boxed{f_{X\mid Y}(x\mid y)=\frac{f_{X,Y}(x,y)}{f_Y(y)}.}$$
 
-3. 相除即得条件 PMF：
-   
+对固定 $y$，它关于 $x$ 积分为 1。条件概率由该密度计算：
 
-   $$
-   f_{X\mid Y=4}(x \mid Y = 4) = \frac{f(x, 4)}{f_Y(4)} = \begin{cases} 1/7, & \text{if } x = 4 \\ 2/7, & \text{if } x = 1, 2, 3 \\ 0, & \text{otherwise} \end{cases}
-   $$
+$$P(a<X<b\mid Y=y)=\int_a^b f_{X\mid Y}(x\mid y)\,dx.$$
 
-   
-   *检验归一性*：$\frac{2}{7} \times 3 + \frac{1}{7} = \frac{7}{7} = 1$，完全正确。
+**为什么不能直接用事件条件概率的分母 $P(Y=y)$？** 因为连续情形中 $P(Y=y)=0$，不能除以 0。密度比公式可以通过窄区间条件理解：在足够规则的位置，
 
-## 三、3.2 多维连续型随机变量（Continuous Type）
+$$\begin{aligned}
+P(X\in A\mid y<Y<y+h)
+&=\frac{\int_y^{y+h}\int_A f(x,v)\,dx\,dv}
+{\int_y^{y+h} f_Y(v)\,dv}\\
+&\longrightarrow \int_A\frac{f(x,y)}{f_Y(y)}\,dx.
+\end{aligned}$$
 
-### 1. 联合、边缘与条件概率密度函数（Slide P12–P15）
+这说明“给定一个精确值”的条件密度，是对相关截面的归一化。
 
-#### （1）联合概率密度函数（Joint PDF, Slide P12）
+**严谨性补充：** 连续条件分布只在对 $Y$ 的分布而言“几乎处处”被唯一确定。像课件中的 $Y=1$ 这样的单点条件，一般按题目给出的密度版本和连续延拓约定计算；改变单个条件值处的版本不改变整体联合分布。基础计算中使用上面的密度比即可，但不要把它误写成两个点概率之比。
 
-设 $X_1, \dots, X_n$ 为连续型随机变量，若存在非负可积函数 $f(x_1, \dots, x_n)$，使得对任意区域 $A \subset \mathbb{R}^n$ 有：
+### 3.3 条件分布与边缘分布的关系
 
-$$
-P\big((X_1, \dots, X_n) \in A\big) = \int \dots \int_{(x_1, \dots, x_n) \in A} f(x_1, \dots, x_n)\,dx_1 \dots dx_n
-$$
+由定义可以反写出乘法公式：
 
+$$f_{X,Y}(x,y)=f_{X\mid Y}(x\mid y)f_Y(y).$$
 
-则称 $f(x_1, \dots, x_n)$ 为联合 PDF。它满足：
+再对 $y$ 积分，得到连续形式的全概率公式：
 
-* **(a)** $f(x_1, \dots, x_n) \ge 0, \quad \forall (x_1, \dots, x_n) \in \mathbb{R}^n$
+$$\boxed{f_X(x)=\int f_{X\mid Y}(x\mid y)f_Y(y)\,dy.}$$
 
-* **(b)** $\int_{\mathbb{R}^n} f(x_1, \dots, x_n)\,d(x_1, \dots, x_n) = 1$
+离散形式把积分换成求和：
 
-> **【疑难辨析：密度的值为什么可以大于 1？】**
-> 概率是体积（面积），而密度 $f(x_1,\dots,x_n)$ 是“单位体积上的概率高度”，只有乘以无穷小体积微元后才是概率：
-> 
->
-> $$
-> P(x_1 \le X_1 \le x_1 + dx_1, \dots, x_n \le X_n \le x_n + dx_n) \approx f(x_1, \dots, x_n)\,dx_1 \dots dx_n
-> $$
->
-> 
-> 例如后面 Example 3.3 中 $f(1,1) = \frac{30}{7} > 1$，完全合法，只要全空间积分为 $1$ 即可。
+$$p_X(x)=\sum_y p_{X\mid Y}(x\mid y)p_Y(y).$$
 
-#### （2）边缘概率密度函数（Marginal PDF, Slide P13）
+因此，**边缘分布是不同条件分布按条件出现的概率进行的加权混合。** 边缘化并不是把另一个变量代成 0，也不是代成某个平均值。
 
-记 $\tilde{X}_{-j} = (X_1, \dots, X_{j-1}, X_{j+1}, \dots, X_n)$，则 $X_j$ 的边缘 PDF 通过对所有其余 $(n-1)$ 个变量在 $\mathbb{R}^{n-1}$ 上积分得到：
+作为进一步联系，Bayes 公式也可以写成密度形式：
 
-$$
-f_{X_j}(x_j) = \int_{\tilde{x}_{-j} \in \mathbb{R}^{n-1}} f(x_1, \dots, x_n)\,d\tilde{x}_{-j}
-$$
+$$f_{Y\mid X}(y\mid x)=
+\frac{f_{X\mid Y}(x\mid y)f_Y(y)}{f_X(x)},\qquad f_X(x)>0.$$
 
-* **二维特例**（最常用）：
-  
+### 3.4 三种分布应如何区分
 
-  $$
-  f_X(x) = \int_{-\infty}^{+\infty} f(x, y)\,dy \quad (\text{消去 } y), \qquad f_Y(y) = \int_{-\infty}^{+\infty} f(x, y)\,dx \quad (\text{消去 } x)
-  $$
+| 对象 | 回答的问题 | 从联合分布得到的方法 |
+|---|---|---|
+| 联合分布 | 两个变量如何共同取值？ | 原始模型或已知信息 |
+| 边缘分布 | 不知道另一个变量时，单个变量怎样取值？ | 对另一个变量求和、积分 |
+| 条件分布 | 已知另一个变量后，单个变量怎样取值？ | 固定另一个变量，再除以边缘 |
 
-#### （3）连续型随机变量的相互独立性（Slide P14）
+---
 
-$X_1, \dots, X_n$ 相互独立 $\Longleftrightarrow \forall (x_1, \dots, x_n) \in \mathbb{R}^n$（除零测度集外），联合 PDF 可分解为边缘 PDF 的乘积：
+## 第四节　独立性：联合分布能否分解
 
-$$
-f(x_1, \dots, x_n) = \prod_{i=1}^n f_{X_i}(x_i)
-$$
+### 4.1 定义、直觉和判别公式
 
-> **【实用定理：可分离变量判据（Factorization Criterion）】**
-> 在做题时，无需先求边缘分布即可直接判断独立性：$X, Y$ 相互独立的充要条件是：
->
-> 1. **联合支撑集是矩形区域**（即 $a \le x \le b,\; c \le y \le d$，上下限互不含对方变量）；
->
-> 2. **在支撑集内部，联合密度可拆成纯** $x$ **函数与纯** $y$ **函数的乘积**：$f(x, y) = g(x)h(y)$。
+随机变量 $X,Y$ 独立，表示对任意适当的集合 $A,B$，
 
-#### （4）条件概率密度函数（Conditional PDF, Slide P15）
+$$P(X\in A,Y\in B)=P(X\in A)P(Y\in B).$$
 
-当给定条件点的边缘密度 $f_{\tilde{X}_{-j}}(\tilde{x}_{-j}) > 0$ 时，$X_j$ 的条件 PDF 为：
+直觉上，知道 $Y$ 的信息不会改变对 $X$ 的分布判断。
 
-$$
-f_{X_j \mid \tilde{X}_{-j} = \tilde{x}_{-j}}\left(x_j \mid \tilde{X}_{-j} = \tilde{x}_{-j}\right) = \frac{f(x_1, \dots, x_n)}{f_{\tilde{X}_{-j}}(\tilde{x}_{-j})} = \frac{f(x_1, \dots, x_n)}{\int_{x_j \in \mathbb{R}} f(x_1, \dots, x_n)\,dx_j}
-$$
+**离散判别：**
 
-> **【深度原理解析：连续型随机变量单点概率** $P(Y=y)=0$**，为什么还能定义给定** $Y=y$ **的条件分布？】**
-> 初学者常困惑：在初等条件概率 $P(A\mid B) = \frac{P(AB)}{P(B)}$ 中，若 $B = \{Y = y\}$，则分母 $P(Y=y)=0$，公式直接失效！
-> **严格数学解释**：连续型的条件分布是通过无穷小区间 $\{y \le Y \le y + \Delta y\}$ 取极限定义的：
-> 
->
-> $$
-> F_{X\mid Y}(x \mid y) = \lim_{\Delta y \to 0^+} P(X \le x \mid y \le Y \le y + \Delta y) = \lim_{\Delta y \to 0^+} \frac{\int_{-\infty}^x \left[\int_y^{y+\Delta y} f(u, v)\,dv\right] du}{\int_y^{y+\Delta y} f_Y(v)\,dv}
-> $$
->
-> 
-> 当 $f$ 与 $f_Y$ 连续且 $f_Y(y) > 0$ 时，由积分中值定理，分子约为 $\left(\int_{-\infty}^x f(u, y)\,du\right) \Delta y$，分母约为 $f_Y(y)\Delta y$，约去微元 $\Delta y$ 后对 $x$ 求导，便得到了 $f_{X\mid Y}(x\mid y) = \frac{f(x,y)}{f_Y(y)}$！
+$$\boxed{X\perp Y\iff p_{X,Y}(x,y)=p_X(x)p_Y(y)\quad\text{对所有取值组合成立}.}$$
 
-### 2. 经典例题深度精讲：Example 3.2 & Example 3.3（Slide P16–P21）
+**具有联合密度时：**
 
-#### 例题 3.2：矩形支撑集上的多项式密度（Slide P16–P18）
+$$\boxed{X\perp Y\iff f_{X,Y}(x,y)=f_X(x)f_Y(y)\quad\text{几乎处处成立}.}$$
 
-> **题目（Example 3.2）**：设 $X, Y$ 的联合 PDF 为 $f(x, y) = \frac{4}{3}(1 - xy), \quad \forall x \in [0, 1],\; y \in [0, 1]$（其余区域为 $0$）。
->
-> * (a) 求 $X, Y$ 的边缘 PDF；
->
-> * (b) 判断 $X, Y$ 是否独立；
->
-> * (c) 求给定 $Y = 1$ 时 $X$ 的条件 PDF。
+“几乎处处”表示可忽略二维面积为 0 的集合。密度在孤立点的取值可以任意改变而不影响分布，因此单独一个点上不相等，不足以普遍证明连续变量不独立。
 
-**【完整解析】**
+不过，若两个比较的密度在某个内部点附近连续，且该点不相等，差异就会延续到一个小邻域，因而能证明不独立。本文处理连续例题时直接使用内部点或正概率事件，避免依赖边界取值。
 
-* **(a) 求边缘 PDF**：
+**一般分布的统一判别（补充）：**
 
-  * 对 $\forall x \in [0, 1]$，把 $x$ 看作常数，对 $y$ 在 $[0, 1]$ 上积分：
-    
+$$X\perp Y\iff F_{X,Y}(x,y)=F_X(x)F_Y(y)\quad\text{对所有 }x,y.$$
 
-    $$
-    f_X(x) = \int_0^1 \frac{4}{3}(1 - xy)\,dy = \frac{4}{3}\left[y - \frac{1}{2}xy^2\right]_{y=0}^{y=1} = \frac{4}{3}\left(1 - \frac{x}{2}\right), \quad x \in [0, 1]
-    $$
+### 4.2 独立性与条件分布
 
-  * 由对称性，对 $\forall y \in [0, 1]$：
-    
+若独立，则在条件分布有意义的位置，
 
-    $$
-    f_Y(y) = \int_0^1 \frac{4}{3}(1 - xy)\,dx = \frac{4}{3}\left(1 - \frac{y}{2}\right), \quad y \in [0, 1]
-    $$
+$$p_{X\mid Y}(x\mid y)=p_X(x),\qquad
+f_{X\mid Y}(x\mid y)=f_X(x).$$
 
-  > **【书写规范提醒】** 考试答题时务必注明定义域（即当 $x \notin [0,1]$ 时 $f_X(x) = 0$）。
+反过来，如果上述相等对所有相关条件值成立，连续情形按几乎处处理解，也可推出独立性。
 
-* **(b) 独立性判定**：
-  虽然支撑集 $[0,1]\times[0,1]$ 是矩形，但 $1 - xy$ 无法分解为 $g(x)h(y)$。取特殊点 $x = 1, y = 1$：
-  
+所以“条件分布不依赖 $y$”应当是对一整族条件值的陈述；只在某个特定 $y$ 恰好等于边缘，通常不能证明独立。
 
-  $$
-  f(1, 1) = \frac{4}{3}(1 - 1\times 1) = 0, \qquad f_X(1) = f_Y(1) = \frac{4}{3}\left(1 - \frac{1}{2}\right) = \frac{2}{3}
-  $$
+### 4.3 可分离表达式还必须连同区域一起检查
 
-  
-  显然 $f(1, 1) = 0 \ne f_X(1)f_Y(1) = \frac{4}{9}$，故 $X, Y$ **不独立**。
+若完整密度可以写成
 
-* **(c) 条件 PDF** $f_{X\mid Y=1}(x\mid Y=1)$：
-  已知 $f_Y(1) = \frac{2}{3}$，$f(x, 1) = \frac{4}{3}(1 - x)$，故：
-  
+$$f(x,y)=a(x)b(y)\mathbf1_{A\times B}(x,y),$$
 
-  $$
-  f_{X\mid Y=1}(x \mid Y = 1) = \frac{f(x, 1)}{f_Y(1)} = \frac{\frac{4}{3}(1 - x)}{2/3} = \begin{cases} 2(1 - x), & \text{if } x \in [0, 1] \\ 0, & \text{otherwise} \end{cases}
-  $$
+其中 $a,b$ 非负，且密度已归一化，那么 $X,Y$ 独立。因为设
 
-#### 例题 3.3：非矩形（梯形）支撑集与分段边缘积分（Slide P19–P21，本章高频易错核心题！）
+$$A_0=\int_A a(x)\,dx,\qquad B_0=\int_B b(y)\,dy,$$
 
-> **题目（Example 3.3）**：设 $X, Y$ 的联合 PDF 为：
-> 
->
-> $$
-> f(x, y) = \begin{cases} c x^2 y, & \text{if } 0 \le y \le 1,\; -y \le x \le 1 \\ 0, & \text{otherwise} \end{cases}
-> $$
->
-> * (a) 求归一化常数 $c$；
->
-> * (b) 求 $X, Y$ 的边缘 PDF；
->
-> * (c) 判断 $X, Y$ 是否独立；
->
-> * (d) 求给定 $Y = 1/2$ 时 $X$ 的条件 PDF。
+有 $A_0B_0=1$，而
 
-**【疑难拆解与完整解析】**
+$$f_X(x)=a(x)B_0\mathbf1_A(x),\qquad
+f_Y(y)=b(y)A_0\mathbf1_B(y).$$
 
-##### 第一步：画出支撑集几何图形（做非矩形区域题目的灵魂！）
+两者相乘正好得到联合密度。
 
-不等式组 $\begin{cases} 0 \le y \le 1 \\ -y \le x \le 1 \end{cases}$ 在 $(x, y)$ 平面上围成一个**直角梯形区域**（见 Slide P21 右上角 Figure 1）：
+但如果只有区域内部的代数式能分离，区域本身仍包含 $x<y$、$x+y<1$ 等耦合限制，就不能直接推出独立。
 
-* 上底：$y = 1$（从 $(-1, 1)$ 到 $(1, 1)$，长度为 $2$）
+例如 $f(x,y)=2$，$0<x<y<1$，代数式虽为常数，完整密度却是
 
-* 下底：$y = 0$（从 $(0, 0)$ 到 $(1, 0)$，长度为 $1$）
+$$2\mathbf1_{\{0<x<y<1\}},$$
 
-* 左斜边：$x = -y \Longleftrightarrow y = -x$（连接 $(-1, 1)$ 与 $(0, 0)$）
+指示函数无法忽略。这对变量并不独立。
 
-* 右直边：$x = 1$（连接 $(1, 0)$ 与 $(1, 1)$）
+还需避免另一种过度概括：“支持集必须是矩形”是初等题中的方便说法。更准确的是独立密度的正值区域应当具有乘积结构（允许零测集差异）；一维集合若为若干区间的并，乘积区域也不必是一个单独矩形。
 
-##### (a) 求常数 $c$（利用归一性二重积分）
+### 4.4 证明独立和证明不独立的工作量不同
 
-由于 $y$ 的范围是常数区间 $[0, 1]$，而 $x$ 的范围 $[-y, 1]$ 依赖于 $y$，因此**先对** $x$ **积分、后对** $y$ **积分**不用分段（注意 Slide P20 第一行积分上限写成了 $-y \le x \le 1-$，末尾多了一个横杠，属于排版小笔误）：
+- **证明独立：** 要验证完整分解关系，或使用适用的独立性定理。
+- **证明不独立：** 只需找一组事件，使联合概率不等于概率乘积；离散情形也可以找一个取值组合。
+- **连续密度反证：** 应证明差异发生在有正面积的区域，或由内部点的连续性保证这一点。
 
-$$
-\int_{\mathbb{R}^2} f(x, y)\,dx\,dy = \int_0^1 \left(\int_{-y}^1 c x^2 y\,dx\right) dy = \int_0^1 c y \left[\frac{x^3}{3}\right]_{x=-y}^{x=1} dy = \int_0^1 \frac{c}{3} y (1 + y^3)\,dy
-$$
+### 4.5 多维推广与两两独立（补充）
 
-$$
-= \frac{c}{3} \int_0^1 (y + y^4)\,dy = \frac{c}{3}\left[\frac{y^2}{2} + \frac{y^5}{5}\right]_0^1 = \frac{c}{3} \cdot \frac{7}{10} = \frac{7c}{30} = 1 \implies c = \frac{30}{7}
-$$
+对 $n$ 个随机变量，相互独立意味着联合 PMF 或密度能够分解成所有边缘的乘积。
 
-##### (b) 求边缘 PDF（重点攻克：为什么求 $f_X(x)$ 必须分成两段？）
+$$f_{X_1,\ldots,X_n}(x_1,\ldots,x_n)=\prod_{i=1}^n f_{X_i}(x_i).$$
 
-* **求** $f_X(x) = \int_{-\infty}^{+\infty} f(x, y)\,dy$**（固定横坐标** $x$**，作一条竖直线向上穿过阴影梯形）**：
-  观察梯形的下边界：
+多维边缘分布则由对所有不保留的变量求和或积分得到。若 $\boldsymbol X_{-j}$ 表示除 $X_j$ 外的变量组，则
 
-  * **当** $x \in [-1, 0]$ **时**：竖直线从左斜边 $y = -x$ 进入阴影区，从上边界 $y = 1$ 穿出！因此 $y$ 的积分区间为 $[-x, 1]$：
-    
+$$f_{X_j\mid\boldsymbol X_{-j}}(x_j\mid\boldsymbol x_{-j})
+=\frac{f_{\boldsymbol X}(\boldsymbol x)}{f_{\boldsymbol X_{-j}}(\boldsymbol x_{-j})},$$
 
-    $$
-    f_X(x) = \int_{-x}^1 \frac{30}{7} x^2 y\,dy = \frac{30}{7} x^2 \left[\frac{y^2}{2}\right]_{y=-x}^{y=1} = \frac{15}{7} x^2 (1 - x^2), \quad x \in [-1, 0]
-    $$
+分母要求大于 0。
 
-  * **当** $x \in [0, 1]$ **时**：竖直线从横轴 $y = 0$ 进入阴影区，从上边界 $y = 1$ 穿出！因此 $y$ 的积分区间为 $[0, 1]$：
-    
+**两两独立不能代替相互独立。** 例如 $A,B$ 是独立公平的 0—1 变量，$C=(A+B)\bmod2$。任意一对都独立，但给定 $A,B$ 就能完全确定 $C$。特别地，
 
-    $$
-    f_X(x) = \int_0^1 \frac{30}{7} x^2 y\,dy = \frac{30}{7} x^2 \left[\frac{y^2}{2}\right]_{y=0}^{y=1} = \frac{15}{7} x^2, \quad x \in [0, 1]
-    $$
+$$P(A=0,B=0,C=0)=\frac14\ne\frac18=P(A=0)P(B=0)P(C=0).$$
 
-  * 汇总得 $X$ 的分段边缘 PDF：
-    
+---
 
-    $$
-    f_X(x) = \begin{cases} \dfrac{15}{7}x^2(1 - x^2), & \text{if } x \in [-1, 0] \\[6pt] \dfrac{15}{7}x^2, & \text{if } x \in [0, 1] \\[6pt] 0, & \text{otherwise} \end{cases}
-    $$
+## 第五节　课件例 3.1：两骰子的最小值与最大值
 
-* **求** $f_Y(y) = \int_{-\infty}^{+\infty} f(x, y)\,dx$**（固定纵坐标** $y \in [0, 1]$**，作一条水平线向右穿过阴影梯形）**：
-  无论 $y$ 在 $[0, 1]$ 何处，水平线始终从左斜边 $x = -y$ 进入，从右边界 $x = 1$ 穿出，无需分段：
-  
+**题目（第 8—10 页）。** 独立掷两颗公平骰子，令 $X$ 为较小点数，$Y$ 为较大点数。求联合 PMF、两个边缘 PMF，判断是否独立，并求给定 $Y=4$ 时 $X$ 的条件 PMF。
 
-  $$
-  f_Y(y) = \begin{cases} \displaystyle\int_{-y}^1 \frac{30}{7} x^2 y\,dx = \frac{10}{7}(y + y^4), & \text{if } y \in [0, 1] \\[8pt] 0, & \text{otherwise} \end{cases}
-  $$
+### 5.1 联合分布：先数原始结果
 
-##### (c) 独立性判定
+原始有序点数 $(D_1,D_2)$ 一共有 36 种，每种概率为 $1/36$。
 
-* **课件反例法**：取 $x = 1, y = 1$，有 $f(1, 1) = \frac{30}{7}$，$f_X(1) = \frac{15}{7}$，$f_Y(1) = \frac{20}{7}$。因为 $\frac{30}{7} \ne \frac{15}{7} \times \frac{20}{7}$，所以 $X, Y$ **不独立**。
+- 若 $x=y$，仅有原始结果 $(x,x)$。
+- 若 $x<y$，有 $(x,y)$、$(y,x)$ 两种。
+- 若 $x>y$，不可能。
 
-* **支撑集直观结论**：因为支撑集是梯形（非矩形），例えば取点 $(-0.5, 0.2)$，此时 $x \in [-1,1], y \in [0,1]$ 使得 $f_X(-0.5)>0, f_Y(0.2)>0$，但因 $x < -y$ 在梯形外，故 $f(-0.5, 0.2) = 0$，必然不独立。
+因此
 
-##### (d) 求给定 $Y = 1/2$ 时 $X$ 的条件 PDF（含课件勘误与速算技巧）
+$$p_{X,Y}(x,y)=
+\begin{cases}
+1/36,&1\le x=y\le6,\\
+2/36,&1\le x<y\le6,\\
+0,&\text{其他}.
+\end{cases}$$
 
-* **常规代公式法**：
+其中 $x,y$ 取整数。以下表格将所有概率乘以 36，便于查看：
 
-  1. 先计算 $y = 1/2$ 处的边缘密度：
-     
+| $36p(x,y)$ | $y=1$ | $y=2$ | $y=3$ | $y=4$ | $y=5$ | $y=6$ | 行和 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| $x=1$ | 1 | 2 | 2 | 2 | 2 | 2 | 11 |
+| $x=2$ | 0 | 1 | 2 | 2 | 2 | 2 | 9 |
+| $x=3$ | 0 | 0 | 1 | 2 | 2 | 2 | 7 |
+| $x=4$ | 0 | 0 | 0 | 1 | 2 | 2 | 5 |
+| $x=5$ | 0 | 0 | 0 | 0 | 1 | 2 | 3 |
+| $x=6$ | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
+| 列和 | 1 | 3 | 5 | 7 | 9 | 11 | 36 |
 
-     $$
-     f_Y\left(\frac{1}{2}\right) = \frac{10}{7}\left(\frac{1}{2} + \left(\frac{1}{2}\right)^4\right) = \frac{10}{7} \times \frac{9}{16} = \frac{45}{56}
-     $$
+归一化也可由 $6\times1+15\times2=36$ 直接验证。
 
-  2. 当 $Y = 1/2$ 时，由 $-y \le x \le 1$ 知 $x$ 的有效支撑集变为 $x \in [-1/2, 1]$，且分子为：
-     
+### 5.2 边缘分布
 
-     $$
-     f\left(x, \frac{1}{2}\right) = \frac{30}{7} x^2 \left(\frac{1}{2}\right) = \frac{15}{7} x^2, \quad x \in \left[-\frac{1}{2}, 1\right]
-     $$
+固定 $x$ 后，允许 $y=x,x+1,\ldots,6$，所以
 
-  3. 相除得条件 PDF：
-     
+$$\boxed{p_X(x)=\frac{1+2(6-x)}{36}=\frac{13-2x}{36},\quad x=1,\ldots,6.}$$
 
-     $$
-     f_{X\mid Y=1/2}\left(x \;\middle|\; Y = \frac{1}{2}\right) = \frac{f(x, 1/2)}{f_Y(1/2)} = \frac{\frac{15}{7}x^2}{\frac{45}{56}} = \begin{cases} \dfrac{8}{3}x^2, & \text{if } x \in \left[-\dfrac{1}{2}, 1\right] \\[6pt] 0, & \text{otherwise} \end{cases}
-     $$
+固定 $y$ 后，允许 $x=1,\ldots,y$，所以
 
-> **【课件勘误提醒（Slide P21 (d)）】**
-> Slide P21 最后一行在书写公式左端与中间分式时，误将 $Y = 1/2$ 写成了 $Y = 1$（印成了 $f_{X\mid Y=1}(x\mid Y=1) = \frac{f(x,1)}{f_Y(1)}$），但右端计算结果 $\frac{8}{3}x^2, x \in [-1/2, 1]$ 实际上对应的是正确的 $Y = 1/2$（若真是 $Y=1$，结果应为 $\frac{30/7 x^2}{20/7} = \frac{3}{2}x^2, x \in [-1, 1]$）。复习时务必修正左端记号！
+$$\boxed{p_Y(y)=\frac{1+2(y-1)}{36}=\frac{2y-1}{36},\quad y=1,\ldots,6.}$$
 
-> **【秒杀技巧：条件密度“核函数（Kernel）归一化法”】**
-> 观察联合密度 $f(x, y) = \frac{30}{7} x^2 y$，当固定 $Y = 1/2$ 时，关于变量 $x$ 的函数形状（核，Kernel）正比于 $x^2$，且支撑集为 $x \in [-1/2, 1]$。
-> 因此 $f_{X\mid Y=1/2}(x \mid 1/2) = k \cdot x^2$。由 $\int_{-1/2}^1 k x^2\,dx = k \left[\frac{x^3}{3}\right]_{-1/2}^1 = k \cdot \frac{1 + 1/8}{3} = \frac{3}{8}k = 1 \implies k = \frac{8}{3}$，无需先算 $f_Y(1/2)$ 即可直接秒出答案并用于验算！
+直观检查：最小值更可能较小，故 $p_X(x)$ 递减；最大值更可能较大，故 $p_Y(y)$ 递增。
 
-## 四、3.3 多维随机变量的函数变换与三大导出分布（Change of Variables & Derived Distributions）
+**另一种推导（补充）：** 由最小值的尾概率，
 
-### 1. 多维连续型随机变量变换公式与雅可比行列式（Slide P23–P24）
+$$P(X\ge x)=\left(\frac{7-x}{6}\right)^2,$$
 
-#### （1）定理与公式表述
+相邻尾概率相减得到 $p_X(x)$；由最大值的 CDF，
 
-设 $\mathbf{X} = (X_1, \dots, X_n)^T$ 为连续型随机向量，联合 PDF 为 $f_{\mathbf{X}}(\mathbf{x})$，支撑集为 $S_X \subset \mathbb{R}^n$。
-设变换 $\mathbf{Y} = g(\mathbf{X})$ 将 $S_X$ 一一映射（可逆映射，Invertible Mapping）到 $S_Y \subset \mathbb{R}^n$，其逆变换为 $\mathbf{X} = g^{-1}(\mathbf{Y})$ 且连续可微。
+$$P(Y\le y)=\left(\frac y6\right)^2,$$
 
-* **正向雅可比矩阵（Slide P24）**：
-  
+相邻 CDF 值相减得到 $p_Y(y)$。这与第二章的 CDF 方法直接衔接。
 
-  $$
-  J_{x \to y} \stackrel{\text{def}}{=} \frac{\partial(y_1, \dots, y_n)}{\partial(x_1, \dots, x_n)} = \begin{bmatrix} \dfrac{\partial y_1}{\partial x_1} & \cdots & \dfrac{\partial y_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \dfrac{\partial y_n}{\partial x_1} & \cdots & \dfrac{\partial y_n}{\partial x_n} \end{bmatrix}
-  $$
+### 5.3 不独立：利用不可能的组合
 
-  
-  *(注：Slide P24 分子写成* $\partial(y_1,\dots,y_m)$*，其中* $m$ *应为* $n$*，因为可逆方阵要求维数相同)*。
+取 $x=6,y=1$，则
 
-* **逆向雅可比矩阵（实际代入公式所使用的矩阵！）**：
-  
+$$p_{X,Y}(6,1)=0,\qquad p_X(6)p_Y(1)=\frac1{1296}>0.$$
 
-  $$
-  J_{y \to x} \stackrel{\text{def}}{=} \frac{\partial(x_1, \dots, x_n)}{\partial(y_1, \dots, y_n)} = \begin{bmatrix} \dfrac{\partial x_1}{\partial y_1} & \cdots & \dfrac{\partial x_1}{\partial y_n} \\ \vdots & \ddots & \vdots \\ \dfrac{\partial x_n}{\partial y_1} & \cdots & \dfrac{\partial x_n}{\partial y_n} \end{bmatrix} = \left(J_{x \to y}\right)^{-1}
-  $$
+所以不独立。虽然每个变量单独都能取 1 或 6，它们不能任意组合取值。
 
-* **变换后的联合概率密度公式**：
-  
+### 5.4 条件分布：选取 $Y=4$ 的一列
 
-  $$
-  f_{\mathbf{Y}}(\mathbf{y}) = \begin{cases} f_{\mathbf{X}}\big(g^{-1}(\mathbf{y})\big) \cdot \left|\det J_{y \to x}\right|, & \mathbf{y} \in S_Y \\ 0, & \text{otherwise} \end{cases}
-  $$
+$$P(Y=4)=\frac7{36}.$$
 
-#### （2）核心疑难解析：为什么乘的是 $\left|\det J_{y \to x}\right|$ 且要加绝对值？
+该列中 $x=1,2,3$ 的联合概率各为 $2/36$，$x=4$ 时为 $1/36$。除以列和后，
 
-1. **源于多元微积分换元法**：
-   在计算区域概率 $\int_A f_{\mathbf{X}}(\mathbf{x})\,d\mathbf{x}$ 时，将积分变量从 $\mathbf{x}$ 换为 $\mathbf{y}$，微元体积（面积）的缩放关系为：
-   
+$$\boxed{p_{X\mid Y}(x\mid4)=
+\begin{cases}
+2/7,&x=1,2,3,\\
+1/7,&x=4,\\
+0,&\text{其他}.
+\end{cases}}$$
 
-   $$
-   dx_1 \dots dx_n = \left|\det \frac{\partial(x_1, \dots, x_n)}{\partial(y_1, \dots, y_n)}\right| dy_1 \dots dy_n = \left|\det J_{y \to x}\right| dy_1 \dots dy_n
-   $$
+验证：$3\times2/7+1/7=1$。这里条件分布不是均匀分布，因为对角点只有一种原始结果，其余点各有两种。
 
-2. **为什么要加绝对值** $|\cdot|$**？**
-   行列式的正负号代表坐标变换是否翻转了空间定向（如镜像反射会使行列式为负），而概率密度和体积微元必须始终**非负**，因此必须取绝对值。
+**本题应掌握：** 随机变量变换后，原始等可能结果未必仍对应等可能的取值；需要按每个新取值的原像数量累加。
 
-3. **如果直接求** $J_{x \to y}$ **更容易怎么办？**
-   由逆矩阵行列式性质，有 $\det J_{y \to x} = \frac{1}{\det J_{x \to y}}$。若反解 $x = g^{-1}(y)$ 后的偏导不好算，也可以先算 $\det J_{x \to y}$ 再取倒数！
+---
 
-#### （3）降维变换的“辅助变量法（Auxiliary Variable Method）”标准五步流程
+## 第六节　课件例 3.2：正方形支持集也不保证独立
 
-在实际问题中（如求 $T = \frac{X}{\sqrt{Y/\nu}}$ 或 $F = \frac{X/u}{Y/v}$ 的一维分布），已知的是**二维**随机变量 $(X, Y)$，要求的只是**一维**目标变量 $T = h(X, Y)$ 的分布。为了使用可逆变换公式，标准操作五步法如下：
+**题目（第 16—18 页）。** 已知
 
-1. **引入辅助变量**：设目标变量为 $U = h(X, Y)$，人为补充一个简单的辅助变量 $W = Y$（或 $W = X$），凑成 $\mathbb{R}^2 \to \mathbb{R}^2$ 的双射 $(X, Y) \mapsto (U, W)$。
+$$f(x,y)=\frac43(1-xy),\qquad 0\le x\le1,\ 0\le y\le1,$$
 
-2. **反解原变量并确定新支撑集**：用 $(U, W)$ 表示 $(X, Y)$，即写出 $X = x(U, W), Y = W$，并由 $(X, Y)$ 的原取值范围推导出 $(U, W)$ 的取值范围 $S_{U,W}$。
+其余位置为 0。求边缘密度，判断独立性，并求给定 $Y=1$ 时的条件密度。
 
-3. **计算雅可比行列式**：因为 $Y = W$，二阶雅可比矩阵的第二行必为 $\begin{bmatrix} \frac{\partial Y}{\partial U} & \frac{\partial Y}{\partial W} \end{bmatrix} = \begin{bmatrix} 0 & 1 \end{bmatrix}$，从而行列式极易计算：
-   
+### 6.1 先检查它是否为合法密度
 
-   $$
-   |J| = \left|\det \begin{bmatrix} \dfrac{\partial X}{\partial U} & \dfrac{\partial X}{\partial W} \\ 0 & 1 \end{bmatrix}\right| = \left|\frac{\partial X}{\partial U}\right|
-   $$
+区域内 $0\le xy\le1$，故密度非负。又
 
-4. **写出联合 PDF**：$f_{U,W}(u, w) = f_{X,Y}\big(x(u, w), w\big) \cdot |J|$。
+$$\int_0^1\int_0^1\frac43(1-xy)\,dx\,dy
+=\frac43\left(1-\frac14\right)=1.$$
 
-5. **积分消去辅助变量** $W$：求边缘密度 $f_U(u) = \int_{-\infty}^{+\infty} f_{U,W}(u, w)\,dw$。
+这一步也提醒我们：密度在 $(0,0)$ 为 $4/3>1$ 完全合法。
 
-### 2. 推导 $t$ 分布与 $F$ 分布的终极武器：凑 Gamma 密度积分法（Gamma Trick）
+### 6.2 计算边缘密度
 
-在 Slide P30–P31（推导 $t$ 分布）和 Slide P42–P43（推导 $F$ 分布）中，最核心的计算难点都是第 5 步对辅助变量 $w \in (0, \infty)$ 的积分。掌握以下**Gamma 分布核积分公式**，所有推导将迎刃而解！
+$$\begin{aligned}
+f_X(x)&=\int_0^1\frac43(1-xy)\,dy\\
+&=\frac43\left[y-\frac{xy^2}{2}\right]_0^1
+=\frac43\left(1-\frac x2\right),\quad 0\le x\le1.
+\end{aligned}$$
 
-* **Gamma 分布** $\text{Gam}(a, b)$ **的概率密度函数**（采用形状参数 $a > 0$，速率参数 $b > 0$）：
-  
+对称地，
 
-  $$
-  f(w; a, b) = \frac{b^a}{\Gamma(a)} w^{a-1} e^{-b w}, \quad w > 0
-  $$
+$$f_Y(y)=\frac43\left(1-\frac y2\right),\quad 0\le y\le1.$$
 
-* **利用归一性** $\int_0^\infty f(w; a, b)\,dw = 1$**，移项即得万能积分恒等式**：
-  
+各自区间外为 0。
 
-  $$
-  \boxed{\int_0^\infty w^{a-1} e^{-b w}\,dw = \frac{\Gamma(a)}{b^a}}
-  $$
+### 6.3 判断独立性：用内部点比较
 
-* **考场速记口诀**：看到 $\int_0^\infty w^{\text{幂次}-1} e^{-\text{系数}\cdot w}\,dw$，无需分部积分，直接套用 $\frac{\Gamma(\text{幂次})}{(\text{系数})^{\text{幂次}}}$！
+在内部点 $(1/2,1/2)$，
 
-### 3. 三大统计导出分布深度推导与剖析（Slide P25–P43）
+$$f(1/2,1/2)=1,\qquad f_X(1/2)f_Y(1/2)=1.$$
 
-#### （1）Student's $t$ 分布（Slide P26–P31）
+这个点恰好相等，**不能由此推出独立**。改取 $(1/4,1/4)$：
 
-##### ① 定义（Slide P26）
+$$f(1/4,1/4)=\frac54=\frac{45}{36},$$
 
-设 $X \sim N(0, 1)$（标准正态分布），$Y \sim \chi^2(\nu)$（自由度为 $\nu$ 的卡方分布），且 $X$ **与** $Y$ **相互独立**。定义随机变量：
+$$f_X(1/4)f_Y(1/4)=\left(\frac76\right)^2=\frac{49}{36}.$$
 
-$$
-T = \frac{X}{\sqrt{Y / \nu}}
-$$
+二者不相等，且两个表达式在该内部点附近连续，故差异存在于正面积邻域，所以 $X,Y$ 不独立。
 
+本题展示两个容易混淆的判断：支持集是乘积区域，仍不保证独立；密度在某个点等于边缘乘积，也不保证独立。
 
-则称 $T$ 服从自由度为 $\nu$ 的 $t$ **分布（Student's** $t$**-distribution）**，记作 $T \sim t(\nu)$。
+### 6.4 先求一般条件密度，再代入条件值
 
-##### ② Example 3.4：推导 $T \sim t(\nu)$ 的概率密度函数（Slide P27–P31）
+对 $0\le y\le1$，按给定密度版本，
 
-* **已知条件**：
+$$f_{X\mid Y}(x\mid y)=\frac{1-xy}{1-y/2},\qquad 0\le x\le1.$$
 
-  * $X \sim N(0,1)$ 的 PDF：$f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}}, \quad x \in \mathbb{R}$
+于是
 
-  * $Y \sim \chi^2(\nu)$ 的 PDF：$f_Y(y) = \frac{1}{\Gamma(\nu/2) 2^{\nu/2}} y^{\frac{\nu}{2}-1} e^{-\frac{y}{2}}, \quad y \ge 0$
+$$\boxed{f_{X\mid Y}(x\mid1)=2(1-x),\qquad 0\le x\le1,}$$
 
-  * 由 $X \perp Y$，联合 PDF 为 $f_{X,Y}(x, y) = f_X(x) f_Y(y)$。
+其余位置为 0。这个条件密度在 $x$ 较小时较大，且积分为 1。
 
-* **Step 1 & 2（引入辅助变量与求逆变换）**：
-  令：
-  
+作为计算练习，
 
-  $$
-  \begin{cases} T = X \sqrt{\dfrac{\nu}{Y}} \\[6pt] W = Y \end{cases} \quad \Longleftrightarrow \quad \begin{cases} X = T \sqrt{\dfrac{W}{\nu}} \\[6pt] Y = W \end{cases}, \quad (t \in \mathbb{R},\; w > 0)
-  $$
+$$P(X\le1/2\mid Y=1)=\int_0^{1/2}2(1-x)\,dx=\frac34.$$
 
-* **Step 3（计算雅可比行列式）**：
-  
+而边缘概率为
 
-  $$
-  J = \begin{bmatrix} \dfrac{\partial X}{\partial T} & \dfrac{\partial X}{\partial W} \\[8pt] \dfrac{\partial Y}{\partial T} & \dfrac{\partial Y}{\partial W} \end{bmatrix} = \begin{bmatrix} \sqrt{\dfrac{w}{\nu}} & \dfrac{t}{2\nu\sqrt{w/\nu}} \\[8pt] 0 & 1 \end{bmatrix} \implies |J| = \sqrt{\frac{w}{\nu}} = \nu^{-1/2} w^{1/2}
-  $$
+$$P(X\le1/2)=\int_0^{1/2}\frac43\left(1-\frac x2\right)dx=\frac7{12}.$$
 
-* **Step 4（写出** $(T, W)$ **的联合 PDF）**：
-  
+两者不同，说明给定的信息会改变分布。关于边界条件值 $Y=1$ 的版本约定，参见第三节。
 
-  $$
-  f_{T,W}(t, w) = f_X\left(t\sqrt{\frac{w}{\nu}}\right) \cdot f_Y(w) \cdot |J|
-  $$
+---
 
-  $$
-  = \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2 w}{2\nu}} \cdot \frac{1}{\Gamma(\nu/2) 2^{\nu/2}} w^{\frac{\nu}{2}-1} e^{-\frac{w}{2}} \cdot \frac{w^{1/2}}{\sqrt{\nu}}
-  $$
+## 第七节　课件例 3.3：非矩形区域与分段边缘密度
 
-  
-  合并常数项与关于 $w$ 的幂次项、指数项：
-  
+**题目（第 19—21 页）。** 已知
 
-  $$
-  f_{T,W}(t, w) = \frac{1}{\sqrt{2\pi\nu}\,\Gamma(\nu/2) 2^{\nu/2}} \cdot w^{\frac{\nu+1}{2}-1} \cdot \exp\left[-\frac{1}{2}\left(\frac{t^2}{\nu} + 1\right)w\right]
-  $$
+$$f(x,y)=
+\begin{cases}
+cx^2y,&0\le y\le1,\ -y\le x\le1,\\
+0,&\text{其他}.
+\end{cases}$$
 
-* **Step 5（对** $w$ **积分求** $T$ **的边缘密度，使用 Gamma 积分公式）**：
-  
+求常数 $c$、边缘密度，判断独立性，并求 $X\mid Y=1/2$ 的条件密度。
 
-  $$
-  f_T(t) = \int_0^\infty f_{T,W}(t, w)\,dw = \frac{1}{\sqrt{2\pi\nu}\,\Gamma(\nu/2) 2^{\nu/2}} \int_0^\infty w^{\frac{\nu+1}{2}-1} \exp\left[-\frac{1}{2}\left(\frac{t^2}{\nu} + 1\right)w\right] dw
-  $$
+### 7.1 先认识支持集
 
-  
-  识别被积函数为 Gamma 分布 $\text{Gam}(a, b)$ 的核，其中参数为：
-  
+区域满足
 
-  $$
-  a = \frac{\nu + 1}{2}, \qquad b = \frac{1}{2}\left(\frac{t^2}{\nu} + 1\right)
-  $$
+$$0\le y\le1,\qquad -y\le x\le1.$$
 
-  
-  代入 $\int_0^\infty w^{a-1} e^{-bw}\,dw = \frac{\Gamma(a)}{b^a}$：
-  
+其边界围成顶点为 $(0,0),(1,0),(1,1),(-1,1)$ 的梯形。投影为 $-1\le x\le1$ 与 $0\le y\le1$。
 
-  $$
-  f_T(t) = \frac{1}{\sqrt{2\pi\nu}\,\Gamma(\nu/2) 2^{\nu/2}} \cdot \frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\left[\frac{1}{2}\left(\frac{t^2}{\nu} + 1\right)\right]^{\frac{\nu+1}{2}}}
-  $$
+固定 $y$ 时，$x$ 总在 $[-y,1]$ 内。固定 $x$ 时，则必须分两段：
 
-  
-  注意到分母中 $\sqrt{2} \cdot 2^{\nu/2} \cdot \left(\frac{1}{2}\right)^{\frac{\nu+1}{2}} = 2^{\frac{\nu+1}{2}} \cdot 2^{-\frac{\nu+1}{2}} = 1$，化简得到 $t(\nu)$ **的标准 PDF**：
-  
+- $-1\le x<0$：条件 $x\ge-y$ 等价于 $y\ge-x$，所以 $-x\le y\le1$。
+- $0\le x\le1$：因为 $-y\le0\le x$，这项限制自动满足，所以 $0\le y\le1$。
 
-  $$
-  \boxed{f_T(t) = \frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\nu\pi}} \left(1 + \frac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}}, \quad t \in \mathbb{R}}
-  $$
+这就是边缘密度需要在 $x=0$ 处分段的原因。
 
-> **【补充拓展：**$t$ **分布的重要性质】**
->
-> 1. **偶函数对称性**：$f_T(-t) = f_T(t)$，关于 $t = 0$ 对称（当 $\nu > 1$ 时 $E(T) = 0$；当 $\nu > 2$ 时 $\text{Var}(T) = \frac{\nu}{\nu-2}$）。
->
-> 2. **厚尾特性与正态极限**：相比于 $N(0,1)$，$t$ 分布尾部更厚；当自由度 $\nu \to \infty$ 时，由 $\lim_{\nu\to\infty}(1 + \frac{t^2}{\nu})^{-\frac{\nu+1}{2}} = e^{-t^2/2}$，有 $t(\nu) \xrightarrow{d} N(0, 1)$。
->
-> 3. **特例** $\nu = 1$：$t(1)$ 的密度为 $f(t) = \frac{1}{\pi(1+t^2)}$，即著名的**标准柯西分布（Cauchy Distribution）**，其数学期望与方差均不存在。
+![例 3.3 的分段积分区域与例 3.6 的变量变换区域](C:/Users/yang/Documents/ChatGPT/概率论/output/chapter3_supports.png)
 
-#### （2）卡方分布 $\chi^2(k)$（Slide P32–P36）
+图左展示求 $f_X$ 的两类竖直截面；图中、图右提前展示第九节的三角形到正方形变换。图中不区分零概率边界的开闭，密度仍按各题给定的区域理解。
 
-##### ① 定义与 Gamma 分布的关系（Slide P32）
+### 7.2 归一化求 $c$
 
-* **定义**：设 $X_1, \dots, X_k \stackrel{\text{i.i.d.}}{\sim} N(0, 1)$（相互独立的标准正态随机变量），则它们的平方和：
-  
+$$\begin{aligned}
+1&=\int_0^1\int_{-y}^1cx^2y\,dx\,dy\\
+&=\frac c3\int_0^1 y(1+y^3)\,dy\\
+&=\frac c3\left(\frac12+\frac15\right)=\frac{7c}{30}.
+\end{aligned}$$
 
-  $$
-  Y = \sum_{i=1}^k X_i^2 \sim \chi^2(k)
-  $$
+所以
 
-  
-  服从自由度为 $k$ 的**卡方分布（Chi-squared Distribution）**。
+$$\boxed{c=\frac{30}{7}.}$$
 
-* **与 Gamma 分布的等价关系**：自由度为 $k$ 的 $\chi^2(k)$ 分布，本质上就是形状参数为 $\alpha = \frac{k}{2}$、速率参数为 $\beta = \frac{1}{2}$ 的 Gamma 分布：
-  
+选取“固定 $y$，先积 $x$”的次序可以避免分段，说明合理选择积分顺序能够显著简化计算。
 
-  $$
-  Y \sim \chi^2(k) \Longleftrightarrow Y \sim \text{Gam}\left(\frac{k}{2}, \frac{1}{2}\right), \qquad f_Y(y) = \frac{1}{2^{k/2}\Gamma(k/2)} y^{\frac{k}{2}-1} e^{-\frac{y}{2}}, \quad y > 0
-  $$
+### 7.3 求 $f_X$：分段积分
 
-##### ② Example 3.5（第一部分）：推导 $\chi^2(k)$ 的概率密度函数（Slide P33–P36）
+当 $-1\le x<0$ 时，
 
-> **【核心疑难解析：为什么课件说“这里直接用多维变量代换并不容易”，而采用了** $k$ **维超球壳体积微元法？】**
-> 如果对 $Y = \sum_{i=1}^k X_i^2$ 强行使用雅可比变换，需要引入 $k-1$ 个辅助变量（即 $k$ 维广义球坐标变换 $r, \theta_1, \dots, \theta_{k-1}$），不仅由于平方项 $X_i^2$ 在正负半轴上**不是一一映射**（$2^k$ 对 $1$），而且 $k$ 维球坐标雅可比行列式的积分推导极为繁琐。因此，课件巧妙地采用了**几何微元法（超球壳体积法，Elemental Shell Volume Method）**！
+$$f_X(x)=\int_{-x}^1\frac{30}{7}x^2y\,dy
+=\frac{15}{7}x^2(1-x^2).$$
 
-* **超球壳体积微元法逐步拆解（Slide P34–P36）**：
+当 $0\le x\le1$ 时，
 
-  1. **微分关系（附 Slide P34 勘误）**：
-     设 $Y = \sum_{i=1}^k X_i^2$ 的 CDF 为 $F_Y(y) = P(Y \le y)$，PDF 为 $f_Y(y) = F_Y'(y)$。
-     当 $Y$ 落在无穷小区间 $[y, y + dy]$ 内时，概率微元为：
-     
+$$f_X(x)=\int_0^1\frac{30}{7}x^2y\,dy
+=\frac{15}{7}x^2.$$
 
-     $$
-     dF_Y(y) = \frac{dF_Y(y)}{dy}\,dy = f_Y(y)\,dy
-     $$
+因此
 
-     
-     *(注：Slide P34 第 6 行印成了* $F_Y(y) = \frac{F_Y(y)}{dy}dy = f_Y(y)dy$*，左端和分子漏写了微分算子* $d$*，正确写法如上)*。
+$$\boxed{f_X(x)=
+\begin{cases}
+\frac{15}{7}x^2(1-x^2),&-1\le x<0,\\
+\frac{15}{7}x^2,&0\le x\le1,\\
+0,&\text{其他}.
+\end{cases}}$$
 
-  2. **转化为** $k$ **维球壳** $V$ **上的重积分**：
-     满足 $y \le x_1^2 + \dots + x_k^2 \le y + dy$ 的点集 $\mathbf{x} = (x_1, \dots, x_k) \in \mathbb{R}^k$ 构成一个半径为 $r = \sqrt{y}$、厚度为 $dr$ 的$k$ 维无穷薄球壳 $V$。
-     由于 $X_1, \dots, X_k \stackrel{\text{i.i.d.}}{\sim} N(0, 1)$，其联合密度在球壳 $V$ 上的积分为：
-     
+归一化检查：
 
-     $$
-     f_Y(y)\,dy = \int_V \prod_{i=1}^k \left(\frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}x_i^2}\,dx_i\right) = \int_V \frac{1}{(2\pi)^{k/2}} \exp\left[-\frac{1}{2}(x_1^2 + \dots + x_k^2)\right] dx_1 \dots dx_k
-     $$
+$$\int_{-1}^0f_X(x)dx=\frac27,\qquad
+\int_0^1f_X(x)dx=\frac57.$$
 
-  3. **利用球面上** $\sum_{i=1}^k x_i^2 = y$ **为常数提出指数项**：
-     在无穷薄球壳 $V$ 上，$x_1^2 + \dots + x_k^2 = y$ 是常数，可直接提到积分号外：
-     
+### 7.4 求 $f_Y$：不需要分段
 
-     $$
-     f_Y(y)\,dy = \frac{e^{-y/2}}{(2\pi)^{k/2}} \underbrace{\int_V dx_1 \dots dx_k}_{\text{球壳 } V \text{ 的体积 } dV} \qquad \text{--- 式 (2)}
-     $$
+$$\begin{aligned}
+f_Y(y)&=\int_{-y}^1\frac{30}{7}x^2y\,dx\\
+&=\frac{10}{7}(y+y^4),\qquad0\le y\le1.
+\end{aligned}$$
 
-  4. **计算球壳体积** $dV = \text{球面表面积 } A \times \text{球壳厚度 } dr$：
+区间外为 0，且
 
-     * 半径为 $r = \sqrt{y}$ 的 $k$ 维球体，其边界（即 $(k-1)$ 维超球面）的表面积公式为：
-       
+$$\int_0^1f_Y(y)dy=\frac{10}{7}\left(\frac12+\frac15\right)=1.$$
 
-       $$
-       A = \frac{2\pi^{k/2}}{\Gamma(k/2)} r^{k-1} \qquad \text{--- 式 (3)}
-       $$
+### 7.5 判断独立性：区域排除了某些联合事件
 
-       
-       *(验证特例：当* $k=2$ *时，圆周长* $A = \frac{2\pi^1}{\Gamma(1)}r^1 = 2\pi r$*；当* $k=3$ *时，球表面积* $A = \frac{2\pi^{3/2}}{\Gamma(3/2)}r^2 = \frac{2\pi^{3/2}}{\frac{1}{2}\sqrt{\pi}}r^2 = 4\pi r^2$*，完全吻合！)*
+若 $X<-1/2$，由 $X\ge-Y$ 必有 $Y>1/2$。所以
 
-     * 由 $r = y^{1/2}$ 求微分，得球壳厚度：
-       
+$$P(X<-1/2,Y<1/2)=0.$$
 
-       $$
-       \frac{dr}{dy} = \frac{1}{2}y^{-1/2} \iff dr = \frac{dy}{2\sqrt{y}} \qquad \text{--- 式 (4)}
-       $$
+但两件事各自都有正概率。因此联合概率不等于边缘概率乘积，$X,Y$ 不独立。
 
-  5. **回代化简得出最终结果（Slide P36）**：
-     将式 (3)、式 (4) 及 $r = \sqrt{y}$ 代入式 (2)：
-     
+这比在边界上比较密度更直接，也揭示了依赖来源：$X$ 能向负方向取多远，受 $Y$ 的取值限制。
 
-     $$
-     f_Y(y)\,dy = \frac{e^{-y/2}}{(2\pi)^{k/2}} \cdot A\,dr = \frac{e^{-y/2}}{2^{k/2}\pi^{k/2}} \cdot \left(2 (\sqrt{y})^{k-1} \frac{\pi^{k/2}}{\Gamma(k/2)}\right) \cdot \frac{dy}{2\sqrt{y}}
-     $$
+### 7.6 求条件密度：截面加归一化
 
-     
-     约去 $\pi^{k/2}$ 和常数 $2$，并合并 $\frac{(\sqrt{y})^{k-1}}{\sqrt{y}} = (\sqrt{y})^{k-2} = y^{\frac{k}{2}-1}$：
-     
+先给出一般形式。对 $0<y\le1$，
 
-     $$
-     f_Y(y)\,dy = \frac{1}{2^{k/2}\Gamma(k/2)} y^{\frac{k}{2}-1} e^{-y/2}\,dy \implies \boxed{f_Y(y) = \frac{1}{2^{k/2}\Gamma(k/2)} y^{\frac{k}{2}-1} e^{-y/2}, \quad y > 0}
-     $$
+$$f_{X\mid Y}(x\mid y)=
+\frac{(30/7)x^2y}{(10/7)(y+y^4)}
+=\frac{3x^2}{1+y^3},\qquad -y\le x\le1.$$
 
-> **【补充：考场上更简单的替代证法——单变量变换 + Gamma 可加性 / 矩母函数法】**
-> 如果考试不强制要求使用超球面面积公式，可通过以下两步轻松推导：
->
-> 1. **先证** $k=1$ **时** $Z = X_1^2 \sim \chi^2(1) = \text{Gam}\left(\frac{1}{2}, \frac{1}{2}\right)$：
->    对 $z > 0$，$F_Z(z) = P(-\sqrt{z} \le X_1 \le \sqrt{z}) = 2\Phi(\sqrt{z}) - 1$。求导得：
->    
->
->    $$
->    f_Z(z) = 2\phi(\sqrt{z}) \cdot \frac{1}{2\sqrt{z}} = \frac{1}{\sqrt{2\pi}} z^{-\frac{1}{2}} e^{-\frac{z}{2}} = \frac{(1/2)^{1/2}}{\Gamma(1/2)} z^{\frac{1}{2}-1} e^{-\frac{1}{2}z} \sim \text{Gam}\left(\frac{1}{2}, \frac{1}{2}\right)
->    $$
->
->    
->    （这里用到了欧拉余元公式结论 $\Gamma(1/2) = \sqrt{\pi}$）。
->
-> 2. **再利用独立同速率 Gamma 分布的可加性（或 MGF 乘积性质）**：
->    因为 $X_i^2 \stackrel{\text{i.i.d.}}{\sim} \text{Gam}\left(\frac{1}{2}, \frac{1}{2}\right)$，其矩母函数为 $M_{X_i^2}(t) = (1 - 2t)^{-1/2}$。
->    故 $Y = \sum_{i=1}^k X_i^2$ 的矩母函数为 $M_Y(t) = \prod_{i=1}^k (1 - 2t)^{-1/2} = (1 - 2t)^{-k/2}$，唯一对应 $\text{Gam}\left(\frac{k}{2}, \frac{1}{2}\right) = \chi^2(k)$！
+特别地，
 
-#### （3）Snedecor's $F$ 分布（Slide P37–P43）
+$$f_Y(1/2)=\frac{10}{7}\left(\frac12+\frac1{16}\right)=\frac{45}{56}.$$
 
-##### ① 定义（Slide P37）
+故
 
-设 $X_1 \sim \chi^2(d_1)$，$X_2 \sim \chi^2(d_2)$，且 $X_1$ **与** $X_2$ **相互独立**。则它们各自除以自身自由度之比：
+$$\boxed{f_{X\mid Y}(x\mid1/2)=
+\begin{cases}
+\frac83x^2,&-\frac12\le x\le1,\\
+0,&\text{其他}.
+\end{cases}}$$
 
-$$
-Y = \frac{X_1 / d_1}{X_2 / d_2} \sim F(d_1, d_2) \quad (d_1, d_2 > 0)
-$$
+检验：
 
+$$\int_{-1/2}^{1}\frac83x^2dx
+=\frac89\left(1+\frac18\right)=1.$$
 
-称为服从第一自由度（分子自由度）为 $d_1$、第二自由度（分母自由度）为 $d_2$ 的 $F$ **分布**（又称 Snedecor's $F$-distribution 或 Fisher–Snedecor distribution）。
+**注意：** 条件给定 $Y=1/2$，不表示 $X$ 也固定为 $1/2$。此时 $X$ 仍在整段 $[-1/2,1]$ 上变化。
 
-##### ② Theorem 3.1：核心性质与证明（Slide P38）
+### 7.7 用这个例题贯通三种概率（补充练习）
 
-* **性质 (a)（倒数对称性）**：若 $X \sim F(d_1, d_2)$，则 $\dfrac{1}{X} \sim F(d_2, d_1)$。
+**边缘概率：**
 
-  * **证明**：设 $X = \frac{U_1/d_1}{U_2/d_2}$，其中 $U_1 \sim \chi^2(d_1) \perp U_2 \sim \chi^2(d_2)$。则：
-    
+$$P(X>0)=\int_0^1\frac{15}{7}x^2dx=\frac57.$$
 
-    $$
-    \frac{1}{X} = \frac{U_2 / d_2}{U_1 / d_1}
-    $$
+**给定精确条件值：**
 
-    
-    分子是自由度为 $d_2$ 的卡方除以 $d_2$，分母是独立的自由度为 $d_1$ 的卡方除以 $d_1$，由定义直接有 $\frac{1}{X} \sim F(d_2, d_1)$。
+$$P(X>0\mid Y=1/2)=\int_0^1\frac83x^2dx=\frac89.$$
 
-  * **【重要推论：分位数倒数公式】**：在查 $F$ 分布表时，左侧下分位数通常不印在表上，需用此性质转换：
-    
+**给定区间事件：**
 
-    $$
-    F_{1-\alpha}(d_1, d_2) = \frac{1}{F_\alpha(d_2, d_1)}
-    $$
+$$P(X>0\mid Y<1/2)
+=\frac{P(X>0,Y<1/2)}{P(Y<1/2)}.$$
 
-* **性质 (b)（与** $t$ **分布的平方关系）**：若 $X \sim t(\nu)$，则 $X^2 \sim F(1, \nu)$。
+分子为
 
-  * **证明**：由 $t(\nu)$ 定义，可设 $X = \frac{Z}{\sqrt{V/\nu}}$，其中 $Z \sim N(0, 1) \perp V \sim \chi^2(\nu)$。
-    两边平方得：
-    
+$$\int_0^{1/2}\int_0^1\frac{30}{7}x^2y\,dx\,dy=\frac5{28},$$
 
-    $$
-    X^2 = \frac{Z^2 / 1}{V / \nu}
-    $$
+分母为
 
-    
-    由于 $Z \sim N(0, 1) \implies Z^2 \sim \chi^2(1)$，且 $Z^2$ 与 $V \sim \chi^2(\nu)$ 相互独立，故由 $F$ 分布定义立得 $X^2 \sim F(1, \nu)$。
+$$\int_0^{1/2}\frac{10}{7}(y+y^4)dy=\frac3{16},$$
 
-##### ③ Example 3.5（第二部分）：推导 $F(u, v)$ 的概率密度函数（Slide P39–P43）
+所以条件概率为 $20/21$。给定 $Y=1/2$ 与给定 $Y<1/2$ 是不同的信息，答案当然可以不同。
 
-*(注：课件将 P33 和 P39 两个例题都编号为 Example 3.5，这里自由度记为* $u, v$*)*。
+---
 
-* **已知条件**：$X \sim \chi^2(u)$，$Y \sim \chi^2(v)$，且 $X \perp Y$。
-  
+## 第八节　多元变量变换：改变坐标，保留概率
 
-  $$
-  f_X(x) = \frac{1}{\Gamma(u/2) 2^{u/2}} x^{\frac{u}{2}-1} e^{-\frac{x}{2}}, \quad f_Y(y) = \frac{1}{\Gamma(v/2) 2^{v/2}} y^{\frac{v}{2}-1} e^{-\frac{y}{2}}, \quad (x > 0, y > 0)
-  $$
+### 8.1 为什么出现雅可比行列式
 
-* **Step 1 & 2（引入辅助变量与求逆变换）**：
-  
+设
 
-  $$
-  \begin{cases} F = \dfrac{X / u}{Y / v} \\[8pt] W = Y \end{cases} \quad \Longleftrightarrow \quad \begin{cases} X = \dfrac{u}{v} F W \\[6pt] Y = W \end{cases}, \quad (f > 0,\; w > 0)
-  $$
+$$U=g_1(X,Y),\qquad V=g_2(X,Y),$$
 
-* **Step 3（计算雅可比行列式）**：
-  
+并且在研究区域内能唯一反解为
 
-  $$
-  J = \begin{bmatrix} \dfrac{\partial X}{\partial F} & \dfrac{\partial X}{\partial W} \\[8pt] \dfrac{\partial Y}{\partial F} & \dfrac{\partial Y}{\partial W} \end{bmatrix} = \begin{bmatrix} \dfrac{u}{v}W & \dfrac{u}{v}F \\[6pt] 0 & 1 \end{bmatrix} \implies |J| = \frac{u}{v}w \quad (w > 0)
-  $$
+$$X=h_1(U,V),\qquad Y=h_2(U,V).$$
 
-* **Step 4（写出** $(F, W)$ **的联合 PDF）**：
-  
+变换不改变同一批样本结果的概率，但会改变平面面积。逆变换的雅可比矩阵是
 
-  $$
-  f_{F,W}(f, w) = f_X\left(\frac{u}{v}fw\right) \cdot f_Y(w) \cdot |J|
-  $$
+$$\frac{\partial(x,y)}{\partial(u,v)}=
+\begin{pmatrix}
+\partial x/\partial u&\partial x/\partial v\\
+\partial y/\partial u&\partial y/\partial v
+\end{pmatrix}.$$
 
-  $$
-  = \frac{1}{\Gamma(u/2) 2^{u/2}} \left(\frac{u}{v}fw\right)^{\frac{u}{2}-1} e^{-\frac{1}{2}\left(\frac{u}{v}fw\right)} \cdot \frac{1}{\Gamma(v/2) 2^{v/2}} w^{\frac{v}{2}-1} e^{-\frac{w}{2}} \cdot \frac{u}{v}w
-  $$
+其行列式绝对值描述局部面积缩放：
 
-  
-  整理关于 $f$ 的因式和关于 $w$ 的幂次与指数（注意 $\left(\frac{u}{v}\right)^{\frac{u}{2}-1} \cdot \frac{u}{v} = \left(\frac{u}{v}\right)^{\frac{u}{2}}$，且 $w^{\frac{u}{2}-1} \cdot w^{\frac{v}{2}-1} \cdot w = w^{\frac{u+v}{2}-1}$）：
-  
+$$dx\,dy=\left|\det\frac{\partial(x,y)}{\partial(u,v)}\right|du\,dv.$$
 
-  $$
-  f_{F,W}(f, w) = \frac{\left(\frac{u}{v}\right)^{u/2} f^{\frac{u}{2}-1}}{\Gamma(u/2)\Gamma(v/2) 2^{(u+v)/2}} \cdot w^{\frac{u+v}{2}-1} \exp\left[-\frac{1}{2}\left(\frac{u}{v}f + 1\right)w\right]
-  $$
+把概率元素 $f_{X,Y}(x,y)dxdy$ 改写成新变量，得到
 
-* **Step 5（对** $w$ **积分求** $F$ **的边缘密度，再次使用 Gamma 积分公式）**：
-  
+$$\boxed{f_{U,V}(u,v)=
+f_{X,Y}(h_1(u,v),h_2(u,v))
+\left|\det\frac{\partial(x,y)}{\partial(u,v)}\right|,\quad (u,v)\in D_{U,V}.}$$
 
-  $$
-  f_F(f) = \int_0^\infty f_{F,W}(f, w)\,dw = \frac{\left(\frac{u}{v}\right)^{u/2} f^{\frac{u}{2}-1}}{\Gamma(u/2)\Gamma(v/2) 2^{(u+v)/2}} \int_0^\infty w^{\frac{u+v}{2}-1} \exp\left[-\frac{1}{2}\left(\frac{u}{v}f + 1\right)w\right] dw
-  $$
+新区域外密度为 0。这是一元公式 $f_U(u)=f_X(h(u))|h'(u)|$ 的二维版本。
 
-  
-  识别被积函数为 $\text{Gam}(a, b)$ 的核，其中：
-  
+绝对值不可省略，因为概率与面积不能为负；行列式正负只反映坐标方向是否翻转。
 
-  $$
-  a = \frac{u + v}{2}, \qquad b = \frac{1}{2}\left(\frac{u}{v}f + 1\right)
-  $$
+### 8.2 公式适用的条件
 
-  
-  代入 $\int_0^\infty w^{a-1} e^{-bw}\,dw = \frac{\Gamma(a)}{b^a}$，约去分母中的 $2^{(u+v)/2}$，即得 $F(u, v)$ **的标准 PDF**：
-  
+基础题通常在某个区域内要求：
 
-  $$
-  \boxed{f_F(f) = \frac{\Gamma\left(\frac{u+v}{2}\right)}{\Gamma\left(\frac{u}{2}\right)\Gamma\left(\frac{v}{2}\right)} \left(\frac{u}{v}\right)^{\frac{u}{2}} f^{\frac{u}{2}-1} \left(\frac{u}{v}f + 1\right)^{-\frac{u+v}{2}}, \quad f > 0}
-  $$
+1. 新旧变量维数相同。
+2. 变换一一对应，可以反解。
+3. 变换及逆变换足够光滑，区域内部雅可比行列式非零。
 
-  
-  *(注：利用 Beta 函数* $B\left(\frac{u}{2}, \frac{v}{2}\right) = \frac{\Gamma(u/2)\Gamma(v/2)}{\Gamma((u+v)/2)}$*，前置常数项也常简写为* $\frac{1}{B(u/2, v/2)}$*)*。
+更一般的定理允许按若干光滑分支处理，也允许忽略某些零测集上的异常。做题时应先确认基本条件，不能把公式当成对任意函数都可直接套用的代数规则。
 
-### 4. 经典例题深度精讲：Example 3.6（区域边界映射与“算术依赖但概率独立”现象，Slide P44–P46）
+### 8.3 最稳定的六步法
 
-> **题目（Example 3.6，源自 Hogg 教材 Section 5.2 Example 1）**：
-> 设 $X_1, X_2$ 的联合 PDF 为：
-> 
->
-> $$
-> f(x_1, x_2) = 2, \quad 0 < x_1 < x_2 < 1 \quad (\text{其余区域为 } 0)
-> $$
->
-> 
-> 考虑变换：$Y_1 = \dfrac{X_1}{X_2}, \quad Y_2 = X_2$。求 $(Y_1, Y_2)$ 的联合 PDF，并讨论其独立性。
+**第一步：写原区域。** 明确 $D_{X,Y}$，包括所有不等式。
 
-#### 【深度解析与三大疑难突破】
+**第二步：写变换和逆变换。** 解出 $x=h_1(u,v),y=h_2(u,v)$。
 
-##### 1. 逆变换与雅可比行列式计算
+**第三步：求新区域。** 将逆变换代入原不等式，化简出 $D_{U,V}$；必要时验证区域内每个点都有合法原像。
 
-由 $\begin{cases} y_1 = x_1 / x_2 \\ y_2 = x_2 \end{cases}$ 反解得逆变换：
+**第四步：算逆雅可比。** 明确求的是 $\partial(x,y)/\partial(u,v)$ 的行列式，最后取绝对值。
 
-$$
-x_1 = y_1 y_2, \qquad x_2 = y_2
-$$
+**第五步：代入联合密度。** 旧变量必须全部换成新变量，保留新区域限制。
 
+**第六步：按需要边缘化并检查。** 若只求 $U$ 的密度，继续对 $v$ 积分；检查非负、取值范围和积分为 1。
 
-计算逆向雅可比行列式：
+### 8.4 正向与逆向雅可比不能混用
 
-$$
-J = \det \begin{bmatrix} \dfrac{\partial x_1}{\partial y_1} & \dfrac{\partial x_1}{\partial y_2} \\[8pt] \dfrac{\partial x_2}{\partial y_1} & \dfrac{\partial x_2}{\partial y_2} \end{bmatrix} = \det \begin{bmatrix} y_2 & y_1 \\ 0 & 1 \end{bmatrix} = y_2
-$$
+在可逆且行列式非零的位置，
 
-##### 2. 疑难一：三角形支撑集 $S_X$ 是如何变成正方形支撑集 $S_Y$ 的？
+$$\det\frac{\partial(x,y)}{\partial(u,v)}
+=\left(\det\frac{\partial(u,v)}{\partial(x,y)}\right)^{-1},$$
 
-* **代数不等式推导法（最快、最稳）**：
-  将逆变换 $x_1 = y_1 y_2, x_2 = y_2$ 代入原支撑集不等式 $0 < x_1 < x_2 < 1$：
-  
+两边必须在彼此对应的点上计算。密度换元式直接乘的是**逆变换行列式的绝对值**。
 
-  $$
-  0 < y_1 y_2 < y_2 < 1
-  $$
+例如 $U=2X,V=3Y$，则逆变换是 $X=U/2,Y=V/3$，所以
 
-  * 由右半部分 $0 < y_2 < 1$，知 $y_2 \in (0, 1)$ 且 $y_2 > 0$；
+$$f_{U,V}(u,v)=\frac16 f_{X,Y}(u/2,v/3).$$
 
-  * 将左半部分 $0 < y_1 y_2 < y_2$ 同时除以正数 $y_2$，立即得到 $0 < y_1 < 1$！
+新区域面积扩大 6 倍，密度应缩小为原来的 $1/6$，这是检查方向的直观方法。
 
-  * 因此，新支撑集为开正方形区域：$S_Y = \{(y_1, y_2) : 0 < y_1 < 1,\; 0 < y_2 < 1\}$。
+### 8.5 只求一个函数的分布：为什么要增加辅助变量
 
-* **边界线段几何映射追踪法（Slide P45 Figure 5.2-1 的直观含义）**：
-  观察原三角形 $S_X$ 的三条边界在变换下的去向：
+若只要求 $U=g(X,Y)$，原变量二维，新变量一维，不能直接对一个 $1\times2$ 矩阵取行列式。
 
-  1. 左竖直边 $x_1 = 0, 0 < x_2 < 1 \implies y_1 = 0, 0 < y_2 < 1$（正方形的左边界）；
+可以增加辅助变量 $V$，使 $(X,Y)\mapsto(U,V)$ 可逆；求出联合密度后，再将 $V$ 积掉。课件对 t、F 分布的推导都使用这个办法。
 
-  2. 上水平边 $x_2 = 1, 0 \le x_1 < 1 \implies y_2 = 1, 0 \le y_1 < 1$（正方形的上边界）；
+辅助变量通常选择原来的某个变量，例如 $V=Y$。选择标准是：逆变换容易、区域简单、雅可比容易算。
 
-  3. 斜边 $0 < x_1 = x_2 \le 1 \implies y_1 = 1, 0 < y_2 \le 1$（正方形的右边界）；
+### 8.6 多对一变换必须累加各分支（补充）
 
-  4. **那正方形的下边界（**$y_2 = 0, 0 \le y_1 < 1$**）对应哪里？**
-     当 $y_2 = 0$ 时，无论 $y_1 \in [0, 1)$ 取何值，都有 $x_1 = y_1 \cdot 0 = 0, x_2 = 0$！也就是说，**正方形底边整条线段上的无穷多个点** $(y_1, 0)$**，全部坍缩映射到了原平面的同一个原点** $(0, 0)$！
+若同一个 $(u,v)$ 对应多个合法原像，不能只取其中一个。对于有限个合适的光滑分支，
 
-##### 3. 疑难二：既然在 $y_2 = 0$ 处是“多对一映射（Many-to-One）”，为什么还能用要求“一一映射”的雅可比定理？（Slide P46）
+$$f_{U,V}(u,v)=\sum_{\text{合法分支 }h_j}
+f_{X,Y}(h_j(u,v))\left|\det Dh_j(u,v)\right|.$$
 
-* **核心原因**：原支撑集 $S_X = \{(x_1, x_2) : 0 < x_1 < x_2 < 1\}$ 是一个**开集（不包含边界）**！
+例如 $U=X^2,V=Y$，在 $u>0$ 时的分支是 $x=\sqrt u$ 和 $x=-\sqrt u$，于是
 
-* 在开集内部（$y_2 > 0$），映射 $(x_1, x_2) \leftrightarrow (y_1, y_2)$ 是严格一一对应（双射）的；而发生坍缩的边界 $\{y_2 = 0\}$ 和 $\{x_1 = x_2 = 0\}$ 在二维平面上的面积（勒贝格测度）为 $0$，对连续型随机变量的积分概率没有任何影响！
+$$f_{U,V}(u,v)=
+\frac{f_{X,Y}(\sqrt u,v)+f_{X,Y}(-\sqrt u,v)}{2\sqrt u},$$
 
-##### 4. 疑难三：为什么 $Y_1 = X_1/X_2$ 在公式里明显含有 $Y_2 = X_2$，但 $Y_1$ 和 $Y_2$ 却相互独立？（Slide P46 结尾）
+其中只有落在原区域内的分支才贡献密度。平方变换会在卡方分布中再次出现。
 
-* **计算联合 PDF 与边缘 PDF**：
-  
+### 8.7 和的分布：变量变换与卷积（补充）
 
-  $$
-  g(y_1, y_2) = f(y_1 y_2, y_2) \cdot |J| = 2 y_2, \quad 0 < y_1 < 1,\; 0 < y_2 < 1
-  $$
+令 $S=X+Y,V=Y$，则 $x=s-v,y=v$，逆雅可比绝对值为 1。因此
 
-  
-  求边缘密度：
-  
+$$f_S(s)=\int_{-\infty}^{\infty} f_{X,Y}(s-v,v)\,dv.$$
 
-  $$
-  g_1(y_1) = \int_0^1 2y_2\,dy_2 = 1 \quad (0 < y_1 < 1, \text{ 即 } Y_1 \sim U(0, 1))
-  $$
+若 $X,Y$ 独立，才进一步变成卷积：
 
-  $$
-  g_2(y_2) = \int_0^1 2y_2\,dy_1 = 2y_2 \quad (0 < y_2 < 1)
-  $$
+$$\boxed{f_{X+Y}(s)=\int_{-\infty}^{\infty} f_X(s-v)f_Y(v)\,dv.}$$
 
-  
-  显然在 $S_Y = (0,1)\times(0,1)$ 上恒有 $g(y_1, y_2) = 1 \cdot 2y_2 = g_1(y_1)g_2(y_2)$，故 $Y_1$ **与** $Y_2$ **相互独立**！
+**前一个联合密度公式不要求独立；后一个乘积形式要求独立。** 有效积分范围仍由两个变量的取值限制共同决定。
 
-* **物理与几何直观解释（消除反直觉感）**：
+---
 
-  * 原变量 $(X_1, X_2)$ 在三角形 $0 < x_1 < x_2 < 1$ 上服从**均匀分布**。
+## 第九节　课件例 3.6：比值变换把依赖变量变成独立变量
 
-  * 当固定 $X_2 = y_2$ 时，$X_1$ 在区间 $(0, y_2)$ 上均匀分布，其绝对取值范围虽然受 $y_2$ 限制（所以 $X_1$ 与 $X_2$ 不独立），但**相对比例** $Y_1 = \frac{X_1}{X_2}$ 相当于把区间 $(0, y_2)$ 按比例缩放到标准区间 $(0, 1)$！
+**题目（第 44—46 页）。** 已知
 
-  * 无论 $Y_2 = y_2$ 是大是小，$X_1$ 占 $X_2$ 的相对百分比 $Y_1$ 永远在 $(0, 1)$ 上均匀分布，与 $Y_2$ 的具体数值毫无关系。这就是 Slide P46 所强调的：**“尽管** $Y_1$ **的代数计算依赖于** $Y_2$**，但在概率意义上** $Y_1$ **与** $Y_2$ **是完全独立的！”**
+$$f_{X_1,X_2}(x_1,x_2)=2,\qquad0<x_1<x_2<1,$$
 
-## 五、三大抽样分布（$\chi^2, t, F$）横向对比与全章课件勘误汇总
+其余位置为 0。令
 
-### 1. 三大导出抽样分布核心特征对比表
+$$Y_1=\frac{X_1}{X_2},\qquad Y_2=X_2,$$
 
-| 分布名称 | 记号与自由度 | 标准构造定义（前提：分子分母相互独立） | 支撑集（取值范围） | 概率密度函数（PDF）核心结构 | 典型关联性质 | 
-| ----- | ----- | ----- | ----- | ----- | ----- | 
-| **卡方分布**  ($\chi^2$-distribution) | $\chi^2(k)$  （自由度 $k$） | $Y = \sum_{i=1}^k X_i^2$  其中 $X_i \stackrel{\text{i.i.d.}}{\sim} N(0,1)$ | $y \in (0, +\infty)$ | $\frac{1}{2^{k/2}\Gamma(k/2)} y^{\frac{k}{2}-1} e^{-y/2}$ | 1\. 等价于 $\text{Gam}\left(\frac{k}{2}, \frac{1}{2}\right)$  2\. 独立可加性：$\chi^2(k_1)+\chi^2(k_2)=\chi^2(k_1+k_2)$ | 
-| **学生** $t$ **分布**  (Student's $t$) | $t(\nu)$  （自由度 $\nu$） | $T = \dfrac{X}{\sqrt{Y/\nu}}$  其中 $X \sim N(0,1) \perp Y \sim \chi^2(\nu)$ | $t \in (-\infty, +\infty)$ | $\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\nu\pi}} \left(1 + \frac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}}$ | 1\. 关于 $0$ 对称，$\nu\to\infty$ 趋于 $N(0,1)$  2\. $T \sim t(\nu) \implies T^2 \sim F(1, \nu)$ | 
-| $F$ **分布**  (Snedecor's $F$) | $F(u, v)$  （自由度 $u, v$） | $F = \dfrac{X/u}{Y/v}$  其中 $X \sim \chi^2(u) \perp Y \sim \chi^2(v)$ | $f \in (0, +\infty)$ | $\frac{\Gamma\left(\frac{u+v}{2}\right)}{\Gamma\left(\frac{u}{2}\right)\Gamma\left(\frac{v}{2}\right)} \left(\frac{u}{v}\right)^{\frac{u}{2}} f^{\frac{u}{2}-1}\left(\frac{u}{v}f + 1\right)^{-\frac{u+v}{2}}$ | 1\. $X \sim F(u, v) \implies \frac{1}{X} \sim F(v, u)$  2\. 分位数：$F_{1-\alpha}(u,v) = \frac{1}{F_\alpha(v,u)}$ | 
+求 $Y_1,Y_2$ 的联合密度。
 
-### 2. 本课件（Chapter 3 Slides）公式笔误与易混点勘误汇总表
+### 9.1 原区域与逆变换
 
-在复习原版课件时，以下 6 处排版或计算笔误需要特别留意，避免被误导：
+原区域是单位正方形内、直线 $x_1=x_2$ 上方的三角形。其面积为 $1/2$，密度为 2，归一化正确。
 
-| 课件页码 | 原课件内容（含笔误） | 修正后正确内容 | 原因说明 | 
-| ----- | ----- | ----- | ----- | 
-| **Slide P5** | $f_{X_2}(b_j) = \sum_i P(X_1=a_i, X_2=b_j) = \sum_j p_{ij} = p_{\cdot j}$ | $\dots = \sum_i p_{ij} = p_{\cdot j}$ | 求 $X_2$ 的边缘分布应固定列 $j$，对行标 $i$ 求和 | 
-| **Slide P9 (b)** | $f_X(1)f_Y(2) = \frac{11}{36} \times \frac{1}{36} \ne \frac{2}{36}$ | $f_X(1)f_Y(2) = \frac{11}{36} \times \frac{3}{36} \ne \frac{2}{36}$ | 将 $f_Y(2) = \frac{2(2-1)+1}{36} = \frac{3}{36}$ 误写成了 $f_Y(1) = \frac{1}{36}$ | 
-| **Slide P20 (a)** | $\int_{0\le y\le 1} \int_{-y\le x\le 1-} f(x,y)dxdy = 1$ | $\int_{0\le y\le 1} \int_{-y\le x\le 1} f(x,y)dxdy = 1$ | 内层积分上限 $1-$ 末尾多打了一个负号 | 
-| **Slide P21 (d)** | $f_{X\mid Y=1}(x\mid Y=1) = \frac{f(x,1)}{f_Y(1)} = \begin{cases} \frac{8}{3}x^2, & x\in[-1/2, 1] \\ 0, & \text{otherwise} \end{cases}$ | $f_{X\mid Y=1/2}(x\mid Y=1/2) = \frac{f(x,1/2)}{f_Y(1/2)} = \dots$ | 题目要求给定 $Y=1/2$，右侧结果也是按 $Y=1/2$ 算的，仅左端符号误印成了 $Y=1$ | 
-| **Slide P24** | $J_{x\to y} \stackrel{\text{def}}{=} \frac{\partial(y_1,\dots,y_m)}{\partial(x_1,\dots,x_n)}$ | $J_{x\to y} \stackrel{\text{def}}{=} \frac{\partial(y_1,\dots,y_n)}{\partial(x_1,\dots,x_n)}$ | 映射为 $\mathbb{R}^n \to \mathbb{R}^n$，分子分母变量个数均为 $n$ | 
-| **Slide P34** | $F_Y(y) = \frac{F_Y(y)}{dy}dy = f_Y(y)dy$ | $dF_Y(y) = \frac{dF_Y(y)}{dy}dy = f_Y(y)dy$ | 概率微元等于分布函数的微分 $dF_Y(y)$，原式漏写了微分符号 $d$ | 
+因为 $x_2>0$，比值有定义，且
+
+$$x_1=y_1y_2,\qquad x_2=y_2.$$
+
+### 9.2 新区域必须从不等式推出
+
+把逆变换代入 $0<x_1<x_2<1$：
+
+$$0<y_1y_2<y_2<1.$$
+
+由 $y_2>0$，可除以 $y_2$，得到
+
+$$\boxed{0<y_1<1,\qquad0<y_2<1.}$$
+
+反过来，满足上述条件的 $(y_1,y_2)$ 确实产生 $0<x_1<x_2<1$。因此新区域恰好是整个单位正方形内部，没有遗漏其他限制。
+
+### 9.3 计算逆雅可比并写出联合密度
+
+$$\frac{\partial(x_1,x_2)}{\partial(y_1,y_2)}=
+\begin{pmatrix}y_2&y_1\\0&1\end{pmatrix},
+\qquad |J|=y_2.$$
+
+所以
+
+$$\boxed{f_{Y_1,Y_2}(y_1,y_2)=
+\begin{cases}
+2y_2,&0<y_1<1,\ 0<y_2<1,\\
+0,&\text{其他}.
+\end{cases}}$$
+
+验证：$\int_0^1\int_0^1 2y_2\,dy_1dy_2=1$。
+
+### 9.4 边缘与独立性
+
+$$f_{Y_1}(y_1)=\int_0^12y_2\,dy_2=1,\quad0<y_1<1,$$
+
+$$f_{Y_2}(y_2)=\int_0^12y_2\,dy_1=2y_2,\quad0<y_2<1.$$
+
+新区域是乘积区域，并且完整联合密度等于边缘乘积，因此
+
+$$\boxed{Y_1\sim U(0,1),\qquad Y_1\perp Y_2.}$$
+
+### 9.5 为什么公式里出现同一个变量，却仍然独立
+
+$Y_1=X_1/X_2$ 的计算使用 $X_2$，但独立性判断的是分布能否分解，不能仅凭表达式中是否出现同一个符号判断。
+
+更直观地，原分布下
+
+$$f_{X_2}(x_2)=\int_0^{x_2}2\,dx_1=2x_2,$$
+
+故
+
+$$f_{X_1\mid X_2}(x_1\mid x_2)=\frac1{x_2},\qquad0<x_1<x_2.$$
+
+给定任意 $X_2=x_2$，$X_1$ 都在 $(0,x_2)$ 上均匀；除以 $x_2$ 后，相对位置 $X_1/x_2$ 总是在 $(0,1)$ 上均匀，其条件分布不随 $x_2$ 改变。这就是独立性的原因。
+
+**与常用定理的区别（补充）：** 若 $X,Y$ 原本独立，那么只分别作用的函数 $a(X),b(Y)$ 仍独立。但混合两个变量的变换没有普遍保证，必须重新检查。此题恰好说明，适当的混合变换也可以从依赖变量中构造独立变量。
+
+---
+
+## 第十节　卡方分布：独立标准正态的平方和
+
+> 课件先介绍 t，再介绍卡方。这里调整顺序，因为 t 和 F 的定义都以卡方为基础。
+
+### 10.1 构造性定义与自由度
+
+若 $Z_1,\ldots,Z_k$ 是**相互独立的标准正态变量**，则
+
+$$\boxed{Q=\sum_{i=1}^kZ_i^2\sim\chi^2(k).}$$
+
+此时 $k$ 称为自由度。在这个构造中，它等于独立标准正态平方项的个数。
+
+必须同时检查“正态、标准化、独立”三个条件。一般正态变量的平方和，或不独立的标准正态变量的平方和，都不能直接按这个定义判断为 $\chi^2(k)$。
+
+通过 Gamma 密度，还可把卡方分布推广到任意正实自由度；“$k$ 个平方项”的字面构造对应正整数 $k$。
+
+### 10.2 密度及 Gamma 参数
+
+卡方密度为
+
+$$\boxed{f_Q(q)=\frac1{2^{k/2}\Gamma(k/2)}q^{k/2-1}e^{-q/2},\qquad q>0,}$$
+
+其余位置为 0。这里
+
+$$\Gamma(a)=\int_0^\infty t^{a-1}e^{-t}dt,\quad a>0,$$
+
+且 $\Gamma(a+1)=a\Gamma(a)$、$\Gamma(1/2)=\sqrt\pi$。
+
+与第二章的 Gamma 密度比较，
+
+$$\boxed{\chi^2(k)=\operatorname{Gamma}\left(\text{shape}=\frac k2,\ \text{rate}=\frac12\right).}$$
+
+若使用尺度参数，scale 为 2。**速率 $1/2$ 和尺度 2 表示同一个分布；不能把二者混成同一数值。**
+
+### 10.3 先从一个平方项推导（补充理解）
+
+设 $Z\sim N(0,1)$，$Q=Z^2$。对 $q>0$，原像为 $\sqrt q$ 与 $-\sqrt q$，两支都要相加：
+
+$$\begin{aligned}
+f_Q(q)
+&=\frac{\phi(\sqrt q)+\phi(-\sqrt q)}{2\sqrt q}\\
+&=\frac1{\sqrt{2\pi}}q^{-1/2}e^{-q/2}.
+\end{aligned}$$
+
+这就是 $\chi^2(1)=\operatorname{Gamma}(1/2,\text{rate}=1/2)$。
+
+再利用“独立、同速率 Gamma 变量相加时形状参数相加”的结论，可得到一般卡方密度。作为后续章节的另一种证明，也可以使用矩母函数。
+
+### 10.4 课件例 3.5 的几何推导：球壳法
+
+**课件位置：第 33—36 页。** 下面将课件中的微分记号写得更准确。
+
+独立标准正态向量 $\boldsymbol Z=(Z_1,\ldots,Z_k)$ 的联合密度为
+
+$$f_{\boldsymbol Z}(\boldsymbol z)
+=(2\pi)^{-k/2}\exp\left(-\frac12\sum_{i=1}^kz_i^2\right).$$
+
+令 $R=\|\boldsymbol Z\|$，则 $Q=R^2$。密度只依赖半径 $r$，所以同一球面上密度相同。半径为 $r$ 的 $(k-1)$ 维球面面积为
+
+$$A_{k-1}(r)=\frac{2\pi^{k/2}}{\Gamma(k/2)}r^{k-1}.$$
+
+因此半径变量的密度为
+
+$$f_R(r)=(2\pi)^{-k/2}e^{-r^2/2}A_{k-1}(r),\qquad r>0.$$
+
+这是“球面上的共同密度 × 球壳体积变化率”。接着用一元变换 $r=\sqrt q$：
+
+$$\left|\frac{dr}{dq}\right|=\frac1{2\sqrt q}.$$
+
+于是
+
+$$\begin{aligned}
+f_Q(q)
+&=f_R(\sqrt q)\frac1{2\sqrt q}\\
+&=(2\pi)^{-k/2}e^{-q/2}
+\frac{2\pi^{k/2}}{\Gamma(k/2)}
+q^{(k-1)/2}\frac1{2\sqrt q}\\
+&=\frac1{2^{k/2}\Gamma(k/2)}q^{k/2-1}e^{-q/2}.
+\end{aligned}$$
+
+也可以从
+
+$$F_Q(q)=\int_{\|\boldsymbol z\|\le\sqrt q}
+f_{\boldsymbol Z}(\boldsymbol z)d\boldsymbol z$$
+
+出发再求导。这里应使用 $dF_Q(q)=f_Q(q)dq$，不能把 CDF 本身写成密度乘微分。
+
+### 10.5 需要记住的形状与性质
+
+- 只取非负值；通常右偏。
+- $k=1$ 时密度在 0 附近趋于无穷，但积分仍有限；$k=2$ 时就是速率为 $1/2$ 的指数分布。
+- 随着自由度增加，相对偏斜减弱。
+- 若 $Q_1\sim\chi^2(k_1),Q_2\sim\chi^2(k_2)$ 且独立，则 $Q_1+Q_2\sim\chi^2(k_1+k_2)$。独立是必要的使用条件。
+
+**与期望、方差章节的联系（补充）：**
+
+$$E(Q)=k,\qquad\operatorname{Var}(Q)=2k.$$
+
+可直接由 Gamma 分布的期望与方差公式得到，也可利用独立平方项的和推导。
+
+---
+
+## 第十一节　t 分布：标准正态除以独立随机尺度
+
+### 11.1 定义与结构
+
+若
+
+$$Z\sim N(0,1),\qquad Q\sim\chi^2(\nu),\qquad Z\perp Q,$$
+
+则
+
+$$\boxed{T=\frac{Z}{\sqrt{Q/\nu}}\sim t(\nu).}$$
+
+必须同时记住：分母有平方根；卡方先除以自由度；分子分母对应的原变量独立。
+
+与标准正态相比，t 的分母不是常数，而是随机尺度。分母偶尔偏小，会放大比值，因此 t 分布的尾部比标准正态更厚。
+
+### 11.2 课件例 3.4：密度的完整推导
+
+**课件位置：第 27—31 页。** 以下使用辅助变量 $W=Q$，将问题保持为二维变换。
+
+**第一步：写原联合密度。** 由独立性，
+
+$$f_{Z,Q}(z,q)=
+\frac1{\sqrt{2\pi}}e^{-z^2/2}
+\frac1{2^{\nu/2}\Gamma(\nu/2)}q^{\nu/2-1}e^{-q/2},$$
+
+其中 $z\in\mathbb R,q>0$。
+
+**第二步：写正反变换和新区域。**
+
+$$T=Z\sqrt{\nu/Q},\quad W=Q;
+\qquad Z=T\sqrt{W/\nu},\quad Q=W.$$
+
+由于 $Z$ 可正可负而 $Q>0$，新区域为
+
+$$t\in\mathbb R,\qquad w>0.$$
+
+**第三步：计算逆雅可比。**
+
+$$\frac{\partial(z,q)}{\partial(t,w)}=
+\begin{pmatrix}
+\sqrt{w/\nu}&t/(2\sqrt{\nu w})\\
+0&1
+\end{pmatrix},\qquad |J|=\sqrt{w/\nu}.$$
+
+**第四步：代入得到联合密度。**
+
+$$\begin{aligned}
+f_{T,W}(t,w)
+&=f_{Z,Q}\left(t\sqrt{w/\nu},w\right)\sqrt{w/\nu}\\
+&=\frac{w^{(\nu+1)/2-1}}
+{\sqrt{2\pi\nu}\,2^{\nu/2}\Gamma(\nu/2)}
+\exp\left[-\frac w2\left(1+\frac{t^2}{\nu}\right)\right].
+\end{aligned}$$
+
+这里 $w$ 的幂来自原卡方密度的 $w^{\nu/2-1}$ 与雅可比的 $w^{1/2}$ 相乘。
+
+**第五步：积分消去 $w$。** 反复使用的 Gamma 积分是
+
+$$\boxed{\int_0^\infty w^{a-1}e^{-bw}dw=\frac{\Gamma(a)}{b^a},\qquad a,b>0.}$$
+
+它由代换 $r=bw$ 立即得到，是本章推导 t、F 密度的共同工具。
+
+在本题中，令
+
+$$a=\frac{\nu+1}{2},\qquad b=\frac12\left(1+\frac{t^2}{\nu}\right).$$
+
+于是
+
+$$\begin{aligned}
+f_T(t)
+&=\frac1{\sqrt{2\pi\nu}\,2^{\nu/2}\Gamma(\nu/2)}
+\frac{\Gamma((\nu+1)/2)}
+{[\frac12(1+t^2/\nu)]^{(\nu+1)/2}}\\
+&=\boxed{\frac{\Gamma((\nu+1)/2)}
+{\sqrt{\nu\pi}\,\Gamma(\nu/2)}
+\left(1+\frac{t^2}{\nu}\right)^{-(\nu+1)/2}},\quad t\in\mathbb R.
+\end{aligned}$$
+
+化简常数时，$2^{(\nu+1)/2}/[\sqrt2\,2^{\nu/2}]=1$；这能帮助检查是否漏了根号或 2 的幂。
+
+### 11.3 分布性质与理解
+
+密度只含 $t^2$，所以关于 0 对称。对 $a>0$，
+
+$$P(T<-a)=P(T>a),\qquad P(|T|>a)=2P(T>a).$$
+
+当 $|t|$ 很大时，
+
+$$f_T(t)\text{ 按 }|t|^{-(\nu+1)}\text{ 的量级衰减},$$
+
+而正态密度按指数形式 $e^{-t^2/2}$ 衰减。这就是“厚尾”的数学含义。
+
+当 $\nu=1$ 时，
+
+$$f_T(t)=\frac1{\pi(1+t^2)},$$
+
+即标准柯西分布。自由度越大，t 分布越接近标准正态；若通过独立标准正态平方和构造 $Q$，则 $Q/\nu$ 随自由度增大集中在 1 附近，因此随机尺度的影响逐渐减弱。
+
+**与期望、方差章节的联系（补充）：**
+
+$$E(T)=0\quad(\nu>1),$$
+
+$$\operatorname{Var}(T)=\frac{\nu}{\nu-2}\quad(\nu>2).$$
+
+$\nu\le1$ 时通常意义下的期望不存在；$\nu\le2$ 时没有有限方差。关于 0 对称本身不保证期望存在，$t(1)$ 正是反例。
+
+---
+
+## 第十二节　F 分布：两个独立卡方除以各自自由度后作比值
+
+### 12.1 定义与自由度顺序
+
+设
+
+$$A\sim\chi^2(d_1),\qquad B\sim\chi^2(d_2),\qquad A\perp B.$$
+
+定义
+
+$$\boxed{R=\frac{A/d_1}{B/d_2}\sim F(d_1,d_2).}$$
+
+$d_1$ 是分子自由度，$d_2$ 是分母自由度，顺序不能交换。因为两个卡方变量几乎必然为正，所以 $R>0$。
+
+这里有一个容易记忆的结构区别：t 是“正态 / 卡方的平方根尺度”，F 是“卡方尺度 / 卡方尺度”。
+
+### 12.2 课件 F 分布例题：密度的完整推导
+
+**课件位置：第 39—43 页。** 课件再次使用了例号 3.5，本文按内容称为 F 分布例题。
+
+为缩短记号，设 $u=d_1,v=d_2$，并取辅助变量 $W=B$。
+
+**第一步：逆变换和区域。**
+
+$$R=\frac{A/u}{B/v},\quad W=B;
+\qquad A=\frac uv RW,\quad B=W.$$
+
+原区域 $a>0,b>0$ 对应
+
+$$r>0,\qquad w>0.$$
+
+**第二步：逆雅可比。**
+
+$$\frac{\partial(a,b)}{\partial(r,w)}=
+\begin{pmatrix}(u/v)w&(u/v)r\\0&1\end{pmatrix},
+\qquad |J|=\frac uv w.$$
+
+**第三步：联合密度。** 由 $A,B$ 独立，
+
+$$\begin{aligned}
+f_{R,W}(r,w)
+&=f_A\left(\frac uv rw\right)f_B(w)\frac uv w\\
+&=\frac{(u/v)^{u/2}r^{u/2-1}}
+{2^{(u+v)/2}\Gamma(u/2)\Gamma(v/2)}
+w^{(u+v)/2-1}
+\exp\left[-\frac w2\left(1+\frac uv r\right)\right].
+\end{aligned}$$
+
+幂次可逐项检查：$w^{u/2-1}$、$w^{v/2-1}$ 与雅可比中的 $w$ 相乘，得到 $w^{(u+v)/2-1}$。
+
+**第四步：积分消去 $w$。** 取
+
+$$a_0=\frac{u+v}{2},\qquad b_0=\frac12\left(1+\frac uv r\right),$$
+
+利用 Gamma 积分公式，得到
+
+$$\boxed{
+f_R(r)=\frac{\Gamma((u+v)/2)}{\Gamma(u/2)\Gamma(v/2)}
+\left(\frac uv\right)^{u/2}r^{u/2-1}
+\left(1+\frac uv r\right)^{-(u+v)/2},\quad r>0.}$$
+
+其余位置为 0。推导的结构与 t 分布完全相同：增加辅助变量 → 求逆雅可比 → 写联合密度 → 用 Gamma 积分边缘化。
+
+### 12.3 定理 3.1(a)：取倒数时交换自由度
+
+由定义，
+
+$$R=\frac{A/d_1}{B/d_2}
+\quad\Longrightarrow\quad
+\frac1R=\frac{B/d_2}{A/d_1}.$$
+
+独立性仍然成立，故
+
+$$\boxed{R\sim F(d_1,d_2)\Longrightarrow1/R\sim F(d_2,d_1).}$$
+
+这不是“取倒数后分布总不变”；只有 $d_1=d_2$ 时参数才保持不变。
+
+它可以将下尾概率化为交换自由度后的上尾概率。若 $G_{a,b}$ 表示 $F(a,b)$ 的 CDF，则对 $r>0$，
+
+$$G_{d_1,d_2}(r)=1-G_{d_2,d_1}(1/r).$$
+
+这里使用了 F 分布连续，所以端点的严格、不严格不等号没有区别。
+
+### 12.4 定理 3.1(b)：t 的平方是 F
+
+设
+
+$$T=\frac{Z}{\sqrt{Q/\nu}}\sim t(\nu),$$
+
+其中 $Z\sim N(0,1),Q\sim\chi^2(\nu)$ 独立。因为
+
+$$Z^2\sim\chi^2(1),\qquad Z^2\perp Q,$$
+
+所以
+
+$$T^2=\frac{Z^2/1}{Q/\nu}\sim F(1,\nu).$$
+
+即
+
+$$\boxed{T\sim t(\nu)\Longrightarrow T^2\sim F(1,\nu).}$$
+
+注意：从 $R\sim F(1,\nu)$ 不能说 $\sqrt R\sim t(\nu)$，因为平方根只能非负。正确关系是 $\sqrt R$ 与 $|T|$ 同分布；再乘一个独立且等概率取正负的符号，才得到对称的 t 分布。
+
+对应的概率关系为
+
+$$P(|T|>a)=P(F(1,\nu)>a^2),\qquad a>0.$$
+
+### 12.5 形状与矩（补充）
+
+F 分布只在正半轴上取值，一般右偏；自由度较小时右尾可能很长。尽管构造中两项都除以自由度，也不能由“各自均值为 1”推断比值均值为 1，因为通常
+
+$$E(A/B)\ne E(A)/E(B).$$
+
+对于 $R\sim F(d_1,d_2)$，后续章节常用
+
+$$E(R)=\frac{d_2}{d_2-2},\qquad d_2>2,$$
+
+$$\operatorname{Var}(R)=
+\frac{2d_2^2(d_1+d_2-2)}
+{d_1(d_2-2)^2(d_2-4)},\qquad d_2>4.$$
+
+条件不满足时，相应有限矩不存在。均值和方差存在的限制由分母自由度决定，这与分母靠近 0 时会放大比值有关。
+
+---
+
+## 第十三节　三大分布如何连成一条线
+
+### 13.1 构造关系总表
+
+| 分布 | 构造 | 独立条件 | 取值范围 |
+|---|---|---|---|
+| $\chi^2(k)$ | $\sum_{i=1}^k Z_i^2$，各 $Z_i\sim N(0,1)$ | 所有 $Z_i$ 相互独立 | $(0,\infty)$ |
+| $t(\nu)$ | $Z/\sqrt{Q/\nu}$ | $Z\sim N(0,1)$ 与 $Q\sim\chi^2(\nu)$ 独立 | $\mathbb R$ |
+| $F(d_1,d_2)$ | $(A/d_1)/(B/d_2)$ | $A\sim\chi^2(d_1)$ 与 $B\sim\chi^2(d_2)$ 独立 | $(0,\infty)$ |
+
+这里的正半轴写法指常用密度区域；从拓扑支持集角度，卡方和 F 的支持也包含端点 0。
+
+最短的记忆链是：
+
+$$\text{独立标准正态}\xrightarrow{\text{平方求和}}\chi^2,$$
+
+$$\text{标准正态}+\text{独立卡方}\xrightarrow{\text{标准化比值}}t,$$
+
+$$\text{两个独立卡方}\xrightarrow{\text{各除自由度后作比值}}F.$$
+
+再记住
+
+$$t(\nu)^2\ \text{对应}\ F(1,\nu),\qquad
+F(d_1,d_2)^{-1}\ \text{对应}\ F(d_2,d_1).$$
+
+这里的“对应”均表示相应随机变量的分布关系，不能把分布名称当作普通数进行运算。
+
+### 13.2 一个综合识别例（补充）
+
+设 $Z_0,Z_1,\ldots,Z_5$ 相互独立，均服从 $N(0,1)$，令
+
+$$A=Z_1^2+Z_2^2,\qquad B=Z_3^2+Z_4^2+Z_5^2.$$
+
+则
+
+$$A\sim\chi^2(2),\quad B\sim\chi^2(3),\quad A\perp B,$$
+
+因为 $A,B$ 分别只使用了两组互不重叠的独立变量。因此
+
+$$A+B\sim\chi^2(5),$$
+
+$$\frac{Z_0}{\sqrt{(A+B)/5}}\sim t(5),$$
+
+$$\frac{A/2}{B/3}\sim F(2,3).$$
+
+但是
+
+$$\frac A B\sim\frac23F(2,3),$$
+
+这里的右侧表示把一个 $F(2,3)$ 随机变量乘以 $2/3$，一般不能直接写成 $F(2,3)$。此外，$A$ 与 $A+B$ 不独立，不能把二者代入“独立卡方比值”的定义。
+
+### 13.3 为什么它们也叫抽样分布（后续联系，补充）
+
+若 $X_1,\ldots,X_n$ 是来自 $N(\mu,\sigma^2)$ 的独立样本，定义
+
+$$\bar X=\frac1n\sum_{i=1}^nX_i,\qquad
+S^2=\frac1{n-1}\sum_{i=1}^n(X_i-\bar X)^2,$$
+
+则经典正态样本定理给出
+
+$$\frac{\bar X-\mu}{\sigma/\sqrt n}\sim N(0,1),$$
+
+$$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1),$$
+
+并且 $\bar X$ 与 $S^2$ 独立。因此
+
+$$\frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1).$$
+
+其中“样本均值与样本方差独立”是正态样本的专门定理，不能仅由它们各自的边缘分布推出。自由度变成 $n-1$，与残差满足 $\sum_i(X_i-\bar X)=0$ 的一条线性约束有关。
+
+同理，对两个相互独立的正态样本，
+
+$$\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2}\sim F(n_1-1,n_2-1).$$
+
+这解释了它们为什么在均值与方差的统计推断中频繁出现。本段是帮助理解用途的后续联系，不是课件已完成证明的内容。
+
+---
+
+## 第十四节　复习时如何组织解题步骤
+
+### 14.1 看到联合 PMF 或 PDF 时
+
+1. 写清取值集合或区域，标明区域外为 0。
+2. 若有未知常数，先检查非负，再用总概率为 1 求出常数。
+3. 求边缘时消去其他变量，先确定截面范围，必要时分段。
+4. 求条件时固定给定的变量，再除以对应边缘；保留剩余变量的合法范围。
+5. 判断独立时检查完整联合分布，而不只是内部的代数表达式。
+6. 每个新分布至少检查非负和归一化；答案的依赖变量、单位和范围也应合理。
+
+### 14.2 看到“求某函数的分布”时
+
+先判断新旧变量维数与是否可逆。维数相同时尝试逆变换；只求一个函数时增加方便的辅助变量。然后按“逆变换—新区域—逆雅可比—新联合密度—边缘化”依次进行。
+
+有平方或绝对值时先检查是否多对一，有比值时先检查分母的取值与是否可能为 0；边界上为 0 但概率为 0 的异常，不必因此否定区域内部的换元。
+
+### 14.3 看到正态、平方和、比值时
+
+不要一开始就背密度；先识别构造：
+
+- 独立标准正态的平方和：卡方，自由度等于项数。
+- 标准正态除以独立卡方标准化后的平方根：t。
+- 两个独立卡方分别除以自由度后相除：F。
+- t 的平方：$F(1,\nu)$。
+- F 的倒数：交换分子、分母自由度。
+
+如果标准化系数不符合定义，先提取常数；如果原变量有重叠，先检查独立性。
+
+### 14.4 高频错误与对应修正
+
+| 常见错误 | 应如何修正 |
+|---|---|
+| 把联合支持集直接写成边缘范围的笛卡尔积 | 检查 $x<y$、$x+y<1$ 等联合限制 |
+| 求 $f_X$ 时对 $x$ 积分 | 保留 $x$，对 $y$ 积分 |
+| 把边缘化理解为令 $y=0$ | 边缘化必须对所有允许的 $y$ 累加或积分 |
+| 条件密度忘记除边缘 | 固定截面后必须重新归一化 |
+| 条件给定 $Y=y$ 后仍对 $y$ 积分 | 此时 $y$ 是给定参数，对剩余随机变量积分 |
+| 因为密度大于 1 就判不合法 | 密度非负且总积分为 1 即可 |
+| 密度在单独一个点不等于边缘乘积，就普遍判不独立 | 连续情形应证明正面积上的差异，或改用事件概率 |
+| 支持集是矩形就判独立 | 还要检查密度能否分解 |
+| 区域内部代数式可分离就判独立 | 还要检查支持集的乘积结构 |
+| 多个变量两两独立就判相互独立 | 相互独立要求完整联合分解 |
+| 换元乘正向雅可比 | 直接乘逆变换雅可比绝对值 |
+| 换元只换公式，不换区域 | 将逆变换代入全部原区域不等式 |
+| 平方变换只保留正根 | 按实际原区域累加全部合法分支 |
+| 从两个变量的边缘分布直接断言 t 或 F | 必须额外检查独立性 |
+| t 分母少一个平方根 | 是 $\sqrt{Q/\nu}$，不是 $Q/\nu$ |
+| 把 $A/B$ 直接写成 $F(d_1,d_2)$ | 先把二者分别除以自由度 |
+| F 取倒数仍使用原自由度顺序 | 改为 $F(d_2,d_1)$ |
+| 把 Gamma 的 rate 与 scale 混用 | 卡方 rate 为 $1/2$，scale 为 2 |
+
+---
+
+## 第十五节　公式速查与自测
+
+### 15.1 核心公式速查
+
+| 内容 | 离散情形 | 具有联合密度的连续情形 |
+|---|---|---|
+| 归一化 | $\sum_x\sum_y p(x,y)=1$ | $\iint f(x,y)dxdy=1$ |
+| 事件概率 | 对事件内的点求和 | 对事件与支持集交集积分 |
+| $X$ 的边缘 | $p_X(x)=\sum_y p(x,y)$ | $f_X(x)=\int f(x,y)dy$ |
+| $Y$ 的边缘 | $p_Y(y)=\sum_x p(x,y)$ | $f_Y(y)=\int f(x,y)dx$ |
+| $X\mid Y=y$ | $p(x,y)/p_Y(y)$ | $f(x,y)/f_Y(y)$ |
+| 独立性 | $p(x,y)=p_X(x)p_Y(y)$ | $f(x,y)=f_X(x)f_Y(y)$，几乎处处 |
+| 由条件恢复联合 | $p(x,y)=p_{X\mid Y}(x\mid y)p_Y(y)$ | $f(x,y)=f_{X\mid Y}(x\mid y)f_Y(y)$ |
+
+两种条件公式均要求分母大于 0；所有求和与积分范围应服从支持集限制。
+
+多元变换只需牢牢记住一行：
+
+$$\boxed{\text{新密度}=\text{旧密度代入逆变换}\times|\text{逆雅可比行列式}|,\quad\text{在新区域内}.}$$
+
+### 15.2 三大分布密度速查
+
+$$\chi^2(k):\quad
+f(q)=\frac{q^{k/2-1}e^{-q/2}}{2^{k/2}\Gamma(k/2)},\quad q>0.$$
+
+$$t(\nu):\quad
+f(t)=\frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\Gamma(\nu/2)}
+\left(1+\frac{t^2}{\nu}\right)^{-(\nu+1)/2},\quad t\in\mathbb R.$$
+
+$$F(d_1,d_2):\quad
+f(r)=\frac{\Gamma((d_1+d_2)/2)}{\Gamma(d_1/2)\Gamma(d_2/2)}
+\left(\frac{d_1}{d_2}\right)^{d_1/2}
+r^{d_1/2-1}
+\left(1+\frac{d_1r}{d_2}\right)^{-(d_1+d_2)/2},\quad r>0.$$
+
+基础复习应先能根据构造识别分布，再练习推导密度。长密度中的 Gamma 常数可以通过归一化积分重建，不必只靠死记。
+
+### 15.3 自测题（均为补充练习）
+
+建议先遮住答案独立完成。每题不仅写结果，还写出区域或使用定义时的独立条件。
+
+**习题 1：离散分布。** $X,Y\in\{0,1\}$，联合 PMF 为 $p(x,y)=c(x+y)$。求 $c$、边缘 PMF、$P(X=1\mid Y=1)$，并判断独立性。
+
+**习题 2：三角形区域。** 已知 $f(x,y)=2$，$0<x<y<1$。求两个边缘密度、$f_{X\mid Y}(x\mid y)$，判断独立性，并求 $P(X<1/4\mid Y=1/2)$。
+
+**习题 3：和与比例。** 已知 $f(x,y)=2$，$x>0,y>0,x+y<1$。令 $S=X+Y,R=X/(X+Y)$。求联合密度，判断 $S,R$ 是否独立。
+
+**习题 4：线性变换。** $X,Y$ 独立且都服从 $U(0,1)$。令 $U=X+Y,V=X-Y$。求联合密度及新区域，再求 $U$ 的密度。
+
+**习题 5：条件值与条件事件。** 在课件例 3.3 的模型中，分别求 $P(X>0)$、$P(X>0\mid Y=1/2)$ 和 $P(X>0\mid Y<1/2)$。说明为什么这三个数不必相等。
+
+**习题 6：分布识别。** $Z_0,\ldots,Z_4$ 相互独立且均为标准正态。令 $Q=\sum_{i=1}^4Z_i^2$。写出 $Q$、$Z_0/\sqrt{Q/4}$、$Z_0^2/(Q/4)$ 及 $(Z_1^2+Z_2^2)/(Z_3^2+Z_4^2)$ 的分布。
+
+**习题 7：比例常数与倒数。** $A\sim\chi^2(2),B\sim\chi^2(5)$ 独立。$A/B$ 是否服从 $F(2,5)$？哪个常数乘以 $A/B$ 才服从该 F 分布？再写出其倒数的分布。
+
+**习题 8：检查独立条件。** 令 $Z\sim N(0,1)$，$X=Z,Y=Z$。两个边缘是否都是标准正态？是否存在普通二维联合密度？$X^2+Y^2$ 是否服从 $\chi^2(2)$？
+
+**习题 9：对称性与期望。** $T\sim t(1)$，因为分布关于 0 对称，能否推出 $E(T)=0$？若 $R=T^2$，$\sqrt R$ 是否服从 $t(1)$？
+
+**习题 10：Gamma 参数。** $Q\sim\chi^2(8)$。用形状—速率形式写出 $Q$ 和 $Q/2$ 的 Gamma 分布，并说明尺度参数分别是多少。
+
+### 15.4 参考解析
+
+**1.** 四个点的 $x+y$ 之和为 4，故 $c=1/4$。两个边缘相同：
+
+$$p_X(0)=p_Y(0)=\frac14,\qquad
+p_X(1)=p_Y(1)=\frac34.$$
+
+$$P(X=1\mid Y=1)=\frac{1/2}{3/4}=\frac23.$$
+
+而 $p(0,0)=0\ne1/16=p_X(0)p_Y(0)$，故不独立。
+
+**2.** 竖直截面为 $x<y<1$，水平截面为 $0<x<y$，因此
+
+$$f_X(x)=2(1-x),\quad0<x<1;\qquad
+f_Y(y)=2y,\quad0<y<1.$$
+
+$$f_{X\mid Y}(x\mid y)=1/y,\qquad0<x<y.$$
+
+两个边缘的乘积在整个单位正方形内部为正，联合密度却在 $x>y$ 的半个正方形内为 0，故不独立。给定 $Y=1/2$ 后，$X$ 在 $(0,1/2)$ 上均匀，所以所求概率为 $1/2$。
+
+**3.** 逆变换为 $x=sr,y=s(1-r)$，新区域为 $0<s<1,0<r<1$。计算
+
+$$\det\frac{\partial(x,y)}{\partial(s,r)}
+=\det\begin{pmatrix}r&s\\1-r&-s\end{pmatrix}=-s,$$
+
+故逆雅可比绝对值为 $s$。因此
+
+$$f_{S,R}(s,r)=2s,\qquad0<s<1,0<r<1.$$
+
+边缘为 $f_S(s)=2s$、$f_R(r)=1$，联合分解成立，所以 $S,R$ 独立。注意行列式为负不影响密度为正。
+
+**4.** 逆变换为 $x=(u+v)/2,y=(u-v)/2$，逆雅可比绝对值为 $1/2$。由 $0<x,y<1$ 得
+
+$$0<u<2,\qquad -\min(u,2-u)<v<\min(u,2-u).$$
+
+这也是 $0<u+v<2,0<u-v<2$ 所描述的菱形区域。联合密度在该区域内为 $1/2$，区域外为 0。沿 $v$ 积分得到
+
+$$f_U(u)=
+\begin{cases}
+u,&0<u<1,\\
+2-u,&1\le u<2,\\
+0,&\text{其他}.
+\end{cases}$$
+
+新区域不是乘积区域，$U,V$ 并不独立。
+
+**5.** 三个概率依次为 $5/7,8/9,20/21$，推导见第 7.7 小节。它们分别描述没有附加信息、给定一个条件值、给定一个区间事件的三种情形。
+
+**6.** 依次为
+
+$$\chi^2(4),\qquad t(4),\qquad F(1,4),\qquad F(2,2).$$
+
+第一项由 4 个独立标准正态平方构造；第二、三项中 $Z_0$ 与 $Q$ 独立；最后一项分子、分母各是自由度 2 的独立卡方，除以相同自由度后常数抵消。
+
+**7.** $A/B$ 与 $(2/5)F(2,5)$ 同分布，一般不是 $F(2,5)$。应取
+
+$$R=\frac52\frac AB\sim F(2,5),\qquad
+R^{-1}=\frac25\frac BA\sim F(5,2).$$
+
+**8.** 两个边缘都是标准正态，但它们完全相同，不独立。联合概率集中在直线 $y=x$ 上，不能用普通二维密度表示。平方和为 $2Z^2$，即与 $2\chi^2(1)$ 同分布，不能写成 $\chi^2(2)$。例如二者方差分别为 8 和 4，也能看出不相同。
+
+**9.** 不能。$t(1)$ 是标准柯西分布，期望不存在；对称主值为 0 不能替代数学期望。$\sqrt R=|T|$ 非负，也不服从在整个实轴取值的 $t(1)$。
+
+**10.**
+
+$$Q\sim\operatorname{Gamma}(4,\text{rate}=1/2),\qquad
+Q/2\sim\operatorname{Gamma}(4,\text{rate}=1).$$
+
+尺度参数分别为 2 和 1。一般地，$X\sim\operatorname{Gamma}(a,\text{rate}=b)$ 且 $c>0$ 时，$cX\sim\operatorname{Gamma}(a,\text{rate}=b/c)$。
+
+---
+
+## 附录 A　课件勘误与阅读注意
+
+以下按原页图像与文字核对，区分实际笔误和需要补充的数学条件。
+
+| 页码 | 原课件中的情况 | 本文处理 |
+|---|---|---|
+| 4 | 将联合取值空间直接写成各分量空间的笛卡尔积 | 区分整个定义网格与实际非零支持，实际可取组合可能只占其中一部分 |
+| 5 | 第二个边缘公式最后的求和下标误写为 $j$ | $p_Y(b_j)$ 应对 $i$ 求和：$\sum_i p_{ij}$ |
+| 9 | 独立性比较中把 $p_Y(2)$ 写成 $1/36$ | 正确值是 $3/36$；不独立的结论仍然成立 |
+| 12 | 对“$X=x,Y=y$ 的概率密度”的表述容易被读成点概率 | 区分 PDF 与概率，连续点概率为 0，区域概率才用积分 |
+| 14 | 密度独立性判别按所有点相等表述 | 一般应理解为几乎处处相等，或选取合适的密度版本 |
+| 17、21 | 以边界点密度不等说明不独立 | 本文用内部连续点或正概率事件给出直接证明；原题结论正确 |
+| 21 | 题目要求给定 $Y=1/2$，答案的条件符号与比值误写为给定 $Y=1$ | 应统一为 $f_{X\mid Y}(x\mid1/2)=f(x,1/2)/f_Y(1/2)$；原页的 $8x^2/3$ 及区间对应的确实是 $Y=1/2$ |
+| 24 | 雅可比的记号出现 $m,n$ 混写；一般支持集不必是整个 $\mathbb R^n$ | 使用同维变换，明确原区域、新区域及局部可逆条件 |
+| 26、28—31 | PDF 文本提取容易遗漏 t 定义中的根号 | 原页定义为 $Z/\sqrt{Q/\nu}$，根号必须保留 |
+| 32 | 平方和定义需要独立标准正态变量 | 结合该页上方文字一起读，不能只看框内的边缘正态记号 |
+| 34 | 将 CDF 与密度微分关系写混 | 应是 $dF_Q(q)=f_Q(q)dq$；球壳概率来自 CDF 的增量 |
+| 33、39 | 两个不同例题都编号为 3.5 | 本文分别称“卡方推导例”和“F 分布例题” |
+| 44—46 | 例 3.6 的主要题干和解答属于嵌入图像，普通文本提取会漏失 | 已核对原页并完整整理，包括新区域、雅可比与变换后的独立性 |
+
+连续密度在单点或边界的取值通常不影响分布；这既说明为什么边界比较要谨慎，也说明基础密度题中开闭区间的微小差别通常不改变答案。但对于离散 PMF，端点上的点质量必须严格保留。
+
+## 附录 B　建议的复习顺序与达标要求
+
+**第一轮：建立概念框架。** 阅读导论和第一至四节。应能用自己的话解释联合、边缘、条件、独立四者分别回答什么问题，并知道边缘无法一般地恢复联合。
+
+**第二轮：掌握区域与计算。** 独立重做例 3.1、3.2、3.3。重点不是背结果，而是能从区域推出求和或积分上下限，说明为何要分段，并验证答案归一化。
+
+**第三轮：掌握换元。** 阅读第八、九节，重做比值例题与自测第 3、4 题。要求能够独立写出逆变换、新区域及逆雅可比，明确三者缺一不可。
+
+**第四轮：理解三大分布。** 先熟练构造定义及独立条件，再尝试不看答案重建 t、F 的密度推导。应能识别共同的 Gamma 积分结构，并说明 t 平方与 F 倒数关系的理由。
+
+最终达标标准是：看到一个联合分布问题，能够先判断需要联合概率、边缘化、条件化还是变量变换；看到一个统计量，能够依据构造及独立条件判断分布，而不是仅凭外形猜测。
+
+
+
