@@ -4,6 +4,8 @@
 >
 > 原课件：[chapter 5.pdf](<C:/Users/yang/Desktop/大四/概率论/chapter 5.pdf>)。本文页码均为完整版 PDF 的实际页码，从封面第 1 页算起。
 
+[[#5.1 概率不等式|概率不等式]] · [[#5.2 随机变量序列的收敛|三种收敛]] · [[#5.3 大数定律|大数定律]] · [[#5.4 中心极限定理与分布近似|中心极限定理与近似]] · [[#5.5 Delta 方法|Delta 方法]] · [[#第十三节　公式速查、解题路线与自测|公式与自测]]
+
 ## 导论　本章怎样承接第四章
 
 [[chapter 4|第四章]]用期望描述中心，用方差描述波动，用协方差描述变量的共同变化。本章把这些数字特征用于一列随样本量 $n$ 改变的随机变量。记
@@ -61,11 +63,14 @@ $$S_n=\sum_{i=1}^nX_i,\qquad \bar X_n=\frac{S_n}{n}.$$
 
 对非负变量，尾部取值会给均值带来至少 $aP(X\ge a)$ 的贡献。如果 $X\ge a$ 发生得太频繁，仅这部分贡献就会超过已知均值。Markov 不等式把这条限制写成概率上界。
 
-**定理。** 若 $P(X\ge0)=1$（称为 $X\ge0$ 几乎处处）、$E(X)<\infty$，则对每个正阈值 $a>0$，
+> [!important] 定理 5.1 · Markov 不等式
+> 若 $P(X\ge0)=1$（称为 $X\ge0$ 几乎处处）、$E(X)<\infty$，则对每个正阈值 $a>0$，
+>
+> $$\boxed{P(X\ge a)\le \frac{E(X)}a.}$$
 
-$$\boxed{P(X\ge a)\le \frac{E(X)}a.}$$
+##### 证明 · 指示变量与期望
 
-**证明**　对事件 $A=\{X\ge a\}$，定义指示变量 $1_A$，事件发生时取 $1$，其余时候取 $0$。因此 $E(1_A)=P(A)$。在 $A$ 上有 $X\ge a$，在 $A$ 外有 $X\ge0$，所以 $X\ge a\,1_A$ 几乎处处。取期望并除以 $a$，得到
+对事件 $A=\{X\ge a\}$，定义指示变量 $1_A$，事件发生时取 $1$，其余时候取 $0$。因此 $E(1_A)=P(A)$。在 $A$ 上有 $X\ge a$，在 $A$ 外有 $X\ge0$，所以 $X\ge a\,1_A$ 几乎处处。取期望并除以 $a$，得到
 
 $$E(X)\ge E(a\,1_A)=aP(X\ge a)
 \quad\Longrightarrow\quad P(X\ge a)\le E(X)/a.$$
@@ -85,19 +90,25 @@ $$P(X\ge20)\le\frac5{20}=0.25.$$
 
 仅凭非负性和均值，这两种分布都有可能。第二种取到了上界，说明在这个问题里，仅凭现有信息不能把 $25\%$ 进一步降为一个对所有分布都有效的上界。
 
-**非负条件的作用**　若允许负值，事件以外的负数可以抵消右尾的贡献。例如 $X=\pm1$ 各以 $1/2$ 的概率出现，$E(X)=0$，但 $P(X\ge1)=1/2$。有正有负时，要先找一个非负量。求单侧 $P(X\ge a)$ 可对正部 $X^+=\max(X,0)$ 用 Markov，求两侧 $P(|X|\ge a)$ 可对 $|X|$ 或 $X^2$ 用 Markov，后一种的阈值要同时改为 $a^2$。
+> [!warning] Markov 不等式的非负条件
+> 若允许负值，事件以外的负数可以抵消右尾的贡献。例如 $X=\pm1$ 各以 $1/2$ 的概率出现，$E(X)=0$，但 $P(X\ge1)=1/2$。有正有负时，要先找一个非负量。求单侧 $P(X\ge a)$ 可对正部 $X^+=\max(X,0)$ 用 Markov，求两侧 $P(|X|\ge a)$ 可对 $|X|$ 或 $X^2$ 用 Markov，后一种的阈值要同时改为 $a^2$。
 
 #### 1.2 Chebyshev 不等式（推论 5.2，PDF 第 10–11 页）
 
 Chebyshev 不等式处理到均值的距离 $|X-\mu|$，同时计入向上和向下的偏差。如果方差很小，频繁出现大偏差会把平方偏差的平均值推得太高，因此方差能够限制双侧尾概率。
 
-**定理。** 设 $E(X)=\mu$、$\operatorname{Var}(X)=\sigma^2<\infty$。对 $a>0$，
+> [!important] 推论 5.2 · Chebyshev 不等式
+> 设 $E(X)=\mu$、$\operatorname{Var}(X)=\sigma^2<\infty$。对 $a>0$，
+>
+> $$\boxed{P(|X-\mu|\ge a)\le\frac{\sigma^2}{a^2}.}$$
 
-$$\boxed{P(|X-\mu|\ge a)\le\frac{\sigma^2}{a^2}.}$$
+##### 证明 · 将 Markov 用于平方偏差
 
-**证明**　令 $Y=(X-\mu)^2\ge0$。由于 $\{|X-\mu|\ge a\}=\{Y\ge a^2\}$ 且 $E(Y)=\sigma^2$，把 $Y$ 和阈值 $a^2$ 代入 Markov 即得。这个推导也解释了为何 $X$ 本身可取负值，直接应用 Markov 的对象是非负的平方偏差。
+令 $Y=(X-\mu)^2\ge0$。由于 $\{|X-\mu|\ge a\}=\{Y\ge a^2\}$ 且 $E(Y)=\sigma^2$，把 $Y$ 和阈值 $a^2$ 代入 Markov 即得。这个推导也解释了为何 $X$ 本身可取负值，直接应用 Markov 的对象是非负的平方偏差。
 
-**以标准差为尺。** 若 $\sigma>0$，取 $a=k\sigma$ 得
+##### 以标准差为单位的概率界
+
+若 $\sigma>0$，取 $a=k\sigma$ 得
 
 $$P(|X-\mu|\ge k\sigma)\le\frac1{k^2},\qquad
 P(|X-\mu|<k\sigma)\ge1-\frac1{k^2}.$$
@@ -120,7 +131,8 @@ $$P(X\le1\ \text{或}\ X\ge9)\le \frac{2^2}{4^2}=\frac14.$$
 
 #### 2.1 例 5.1　给定均值与方差（PDF 第 12–13 页）
 
-> **题目**　已知随机变量 $X$ 满足 $E(X)=25$、$\operatorname{Var}(X)=16$。
+> [!example] 题目
+> 已知随机变量 $X$ 满足 $E(X)=25$、$\operatorname{Var}(X)=16$。
 >
 > 1. 求 $P(17<X<33)$ 的一个下界。
 > 2. 求 $P(|X-25|\ge12)$ 的一个上界。
@@ -133,7 +145,8 @@ $$P(17<X<33)=1-P(|X-25|\ge8)\ge1-\frac{16}{8^2}=\frac34.$$
 
 #### 2.2 例 5.2　二项比例（PDF 第 14–15 页）
 
-> **题目**　设 $Y\sim\operatorname{Bin}(n,p)$。给定 $\varepsilon>0$，求 $P(|Y/n-p|\ge\varepsilon)$ 的一个上界。$n\to\infty$ 时，这个上界怎样变化？
+> [!example] 题目
+> 设 $Y\sim\operatorname{Bin}(n,p)$。给定 $\varepsilon>0$，求 $P(|Y/n-p|\ge\varepsilon)$ 的一个上界。$n\to\infty$ 时，这个上界怎样变化？
 
 **解答**
 
@@ -151,7 +164,8 @@ $$P(|\hat p_n-p|\ge\varepsilon)\le
 
 #### 2.3 例 5.3　正态精确尾概率与通用界（PDF 第 16–17 页）
 
-> **题目**　设 $Z\sim N(0,1)$。对 $k=1,2,3$，分别比较精确的正态尾概率 $P(|Z|\ge k)=2[1-\Phi(k)]$ 和 Chebyshev 不等式给出的上界。如果对正态分布而言这个上界偏宽，为什么它仍然有用？
+> [!example] 题目
+> 设 $Z\sim N(0,1)$。对 $k=1,2,3$，分别比较精确的正态尾概率 $P(|Z|\ge k)=2[1-\Phi(k)]$ 和 Chebyshev 不等式给出的上界。如果对正态分布而言这个上界偏宽，为什么它仍然有用？
 
 **解答**　由标准正态的对称性得到精确概率，由 $\operatorname{Var}(Z)=1$ 得到上界 $1/k^2$。
 
@@ -165,7 +179,8 @@ $$P(|\hat p_n-p|\ge\varepsilon)\le
 
 #### 2.4 例 5.4　标准正态样本的平均（PDF 第 18–19 页）
 
-> **题目**　设 $Z_1,Z_2,\ldots$ 是相互独立的标准正态随机变量，令 $\bar Z_n=\frac1n\sum_{i=1}^nZ_i$。
+> [!example] 题目
+> 设 $Z_1,Z_2,\ldots$ 是相互独立的标准正态随机变量，令 $\bar Z_n=\frac1n\sum_{i=1}^nZ_i$。
 >
 > 1. 求 $\bar Z_n$ 的精确分布。
 > 2. 求 $P(|\bar Z_n|\ge1)$ 的精确值。
@@ -197,19 +212,22 @@ $$P(|\hat p_n-p|\ge\varepsilon)\le
 
 想象用 $n$ 条观测估计次品率。事先把误差容许范围定为 $1$ 个百分点，再想象反复抽取同样大小的样本，问有多大比例会超出这个范围。依概率收敛要求，随着 $n$ 增大，这个比例趋于零。改用更小的任何固定容许范围，也应成立。
 
-**定义（依概率收敛）**　设 $X_n$ 和 $X$ 定义在同一概率空间上。
-
-$$X_n\xrightarrow{p}X
-\quad\Longleftrightarrow\quad
-\forall\varepsilon>0,\quad P(|X_n-X|>\varepsilon)\longrightarrow0.$$
+> [!info] 定义 · 依概率收敛
+> 设 $X_n$ 和 $X$ 定义在同一概率空间上。
+>
+> $$X_n\xrightarrow{p}X
+> \quad\Longleftrightarrow\quad
+> \forall\varepsilon>0,\quad P(|X_n-X|>\varepsilon)\longrightarrow0.$$
 
 其中 $\varepsilon$ 是先选定的任意正数。使用 $\ge\varepsilon$ 也给出同一个定义，因为 $\{|X_n-X|\ge\varepsilon\}\subseteq\{|X_n-X|>\varepsilon/2\}$。
 
-**参数、估计量与一致性。** 用 $\theta$ 表示总体中固定但未知的数，例如真实次品率。用样本计算的 $T_n$ 称为**估计量**，例如 $\hat p_n=Y/n$。估计量在抽样前是随机变量，代入一次观测数据算出来的数叫**估计值**。若 $T_n\xrightarrow p\theta$，称 $T_n$ 是 $\theta$ 的**一致估计量**。一致性关心样本量增大后估计误差是否消失。**无偏性**则检查给定 $n$ 时 $E(T_n)=\theta$ 是否成立。例如 $\bar X_n+1/n$ 在本章独立同分布、有有限均值的条件下是一致的，但它的期望比 $\mu$ 高 $1/n$。
+> [!info] 参数、估计量与一致性
+> 用 $\theta$ 表示总体中固定但未知的数，例如真实次品率。用样本计算的 $T_n$ 称为**估计量**，例如 $\hat p_n=Y/n$。估计量在抽样前是随机变量，代入一次观测数据算出来的数叫**估计值**。若 $T_n\xrightarrow p\theta$，称 $T_n$ 是 $\theta$ 的**一致估计量**。一致性关心样本量增大后估计误差是否消失。**无偏性**则检查给定 $n$ 时 $E(T_n)=\theta$ 是否成立。例如 $\bar X_n+1/n$ 在本章独立同分布、有有限均值的条件下是一致的，但它的期望比 $\mu$ 高 $1/n$。
 
 **课件例｜估计误差随样本量缩小（PDF 第 23 页）**
 
-> **题目**　设 $\theta$ 为固定参数，估计量为 $T_n=\theta+Z_n/\sqrt n$。对每个 $n$，已知 $E(Z_n)=0$、$\operatorname{Var}(Z_n)=1$。用 Chebyshev 不等式证明 $T_n\xrightarrow p\theta$。
+> [!example] 题目
+> 设 $\theta$ 为固定参数，估计量为 $T_n=\theta+Z_n/\sqrt n$。对每个 $n$，已知 $E(Z_n)=0$、$\operatorname{Var}(Z_n)=1$。用 Chebyshev 不等式证明 $T_n\xrightarrow p\theta$。
 
 **解答**　固定任意 $\varepsilon>0$，将超差事件改写成对 $Z_n$ 的尾概率。
 
@@ -219,13 +237,16 @@ $$P(|T_n-\theta|>\varepsilon)=P(|Z_n|>\sqrt n\,\varepsilon)\le\frac{1}{n\varepsi
 
 #### 3.2 依分布收敛（PDF 第 24–25 页）
 
-**定义**　设 $F_n,F$ 分别是 $X_n,X$ 的累积分布函数。若 $F_n(x)\to F(x)$ 对 $F$ 的**每个连续点** $x$ 成立，就称 $X_n$ **依分布收敛**到 $X$，记为 $X_n\xrightarrow d X$，并称 $X$ 的分布为**极限分布**。这一结论只用到各自的分布，所以可以跨不同试验比较。一个试验的所有可能结果、可讨论的事件以及这些事件的概率，合称为它的**概率空间**。
+> [!info] 定义 · 依分布收敛
+> 设 $F_n,F$ 分别是 $X_n,X$ 的累积分布函数。若 $F_n(x)\to F(x)$ 对 $F$ 的**每个连续点** $x$ 成立，就称 $X_n$ **依分布收敛**到 $X$，记为 $X_n\xrightarrow d X$，并称 $X$ 的分布为**极限分布**。这一结论只用到各自的分布，所以可以跨不同试验比较。一个试验的所有可能结果、可讨论的事件以及这些事件的概率，合称为它的**概率空间**。
 
-为何只检查连续点？如果一块概率在有限样本中落在 $x$ 的右边，随 $n$ 增大逐渐移到 $x$，那么这块概率在每个 $F_n(x)$ 中都可能没被计入，却在 $F(x)$ 中被计入。下面的 $1/n$ 例子正是这种情况。正态分布的 CDF 处处连续，所以趋向正态时，可以在每一个固定阈值上读取对应的概率极限。
+> [!warning] 分布收敛只检查极限 CDF 的连续点
+> 如果一块概率在有限样本中落在 $x$ 的右边，随 $n$ 增大逐渐移到 $x$，那么这块概率在每个 $F_n(x)$ 中都可能没被计入，却在 $F(x)$ 中被计入。下面的 $1/n$ 例子正是这种情况。正态分布的 CDF 处处连续，所以趋向正态时，可以在每一个固定阈值上读取对应的概率极限。
 
 **课件例｜方差变化的正态分布（PDF 第 25 页）**
 
-> **题目**　设 $X_n\sim N(0,1+1/n)$，$Z\sim N(0,1)$。写出 $X_n$ 的分布函数，并据此证明 $X_n\xrightarrow d Z$。
+> [!example] 题目
+> 设 $X_n\sim N(0,1+1/n)$，$Z\sim N(0,1)$。写出 $X_n$ 的分布函数，并据此证明 $X_n\xrightarrow d Z$。
 
 **解答**　用 $X_n$ 的标准差 $\sqrt{1+1/n}$ 做标准化。
 
@@ -237,17 +258,19 @@ $$F_n(x)=\Phi\!\left(\frac{x}{\sqrt{1+1/n}}\right)\longrightarrow\Phi(x),$$
 
 把一次无限抽样的全部结果记为 $\omega$。例如，连续抛硬币时，$\omega$ 可以是一整串正反面，而 $X_n(\omega)$ 可以是这串结果前 $n$ 次的正面比例。固定 $\omega$ 后，$X_1(\omega),X_2(\omega),\ldots$ 就是一条数值序列，称为一条**样本路径**。
 
-**定义（几乎处处收敛）**　设 $X_n$ 和 $X$ 定义在同一概率空间上。
-
-$$X_n\xrightarrow{\mathrm{a.s.}}X
-\quad\Longleftrightarrow\quad
-P\{\omega:X_n(\omega)\to X(\omega)\}=1.$$
+> [!info] 定义 · 几乎处处收敛
+> 设 $X_n$ 和 $X$ 定义在同一概率空间上。
+>
+> $$X_n\xrightarrow{\mathrm{a.s.}}X
+> \quad\Longleftrightarrow\quad
+> P\{\omega:X_n(\omega)\to X(\omega)\}=1.$$
 
 “几乎处处”（almost surely，简记 a.s.）指能够收敛的路径合起来的概率为 $1$。沿着其中一条路径，给定 $\varepsilon>0$，可以找到一个起点，从此以后每一项都在 $X(\omega)$ 的 $\varepsilon$ 范围内。起点可以因路径和容许误差而异。依概率和几乎处处收敛都需要在同一概率空间上比较 $X_n$ 与 $X$。
 
 **课件例｜同一个均匀变量的幂（PDF 第 27 页）**
 
-> **题目**　取 $U\sim U(0,1)$，用同一个 $U$ 定义 $X_n=U^n$。证明 $X_n$ 几乎处处收敛到 $0$，并说明端点 $U=1$ 对结论有何影响。
+> [!example] 题目
+> 取 $U\sim U(0,1)$，用同一个 $U$ 定义 $X_n=U^n$。证明 $X_n$ 几乎处处收敛到 $0$，并说明端点 $U=1$ 对结论有何影响。
 
 **解答**　固定一个结果，若 $0\le U<1$，则数列 $U^n\to0$。在 $U=1$ 时，每一项都是 $1$，但 $P(U=1)=0$，因此 $P(U^n\to0)=1$。
 
@@ -255,12 +278,13 @@ P\{\omega:X_n(\omega)\to X(\omega)\}=1.$$
 
 ### 第四节　收敛关系与反例（定理 5.6，PDF 第 28–33 页）
 
-**定理 5.6**　若 $X_n$ 和 $X$ 定义在同一概率空间上，以下蕴含关系成立。
-
-$$\boxed{X_n\xrightarrow{\mathrm{a.s.}}X\ \Longrightarrow\
-X_n\xrightarrow p X\ \Longrightarrow\ X_n\xrightarrow d X.}$$
-
-**常数极限**　若 $c$ 是常数，则 $X_n\xrightarrow d c$ 与 $X_n\xrightarrow p c$ 等价。
+> [!important] 定理 5.6 · 三种收敛的蕴含关系
+> 若 $X_n$ 和 $X$ 定义在同一概率空间上，以下蕴含关系成立。
+>
+> $$\boxed{X_n\xrightarrow{\mathrm{a.s.}}X\ \Longrightarrow\
+> X_n\xrightarrow p X\ \Longrightarrow\ X_n\xrightarrow d X.}$$
+>
+> **常数极限**　若 $c$ 是常数，则 $X_n\xrightarrow d c$ 与 $X_n\xrightarrow p c$ 等价。
 
 按路径收敛可以推出大误差出现得越来越少，进而可以推出分布函数收敛。若目标本身是常数 $c$，判断误差是否超过 $\varepsilon$，只需要知道 $X_n$ 落在 $c-\varepsilon$ 左边或 $c+\varepsilon$ 右边的概率，所以分布信息就足够。极限也是随机变量时，要计算 $|X_n-X|$，还需要知道二者怎样在同一次试验中取值。
 
@@ -279,7 +303,8 @@ X_n\xrightarrow p X\ \Longrightarrow\ X_n\xrightarrow d X.}$$
 
 #### 4.2 课件反例：同分布的两条路径可以相差很远（PDF 第 31–32 页）
 
-> **题目**　设 $X\sim N(0,1)$，并对每个 $n$ 定义 $X_n=-X$。证明 $X_n\xrightarrow d X$，并说明为何 $X_n$ 不依概率收敛到 $X$。
+> [!example] 题目
+> 设 $X\sim N(0,1)$，并对每个 $n$ 定义 $X_n=-X$。证明 $X_n\xrightarrow d X$，并说明为何 $X_n$ 不依概率收敛到 $X$。
 
 **解答**　正态对称性给出 $X_n\stackrel d=X$，这里的等号表示“同分布”。因此每个 $n$ 的分布函数都和 $X$ 相同，自然有 $X_n\xrightarrow d X$。要判断依概率收敛，还须计算二者在同一次试验中的差。
 
@@ -301,13 +326,14 @@ $$P(|X_n-X|>\varepsilon)=2[1-\Phi(\varepsilon/2)]>0,$$
 
 估计出一个量后，常常还要用它计算另一个量。例如由 $\bar X_n$ 估计 $\mu$，再用 $e^{\bar X_n}$ 估计 $e^\mu$。**连续性**保证输入足够靠近目标时，输出也能任意靠近目标。连续映射定理把这个想法用于随机变量的收敛。
 
-**定理 5.7（连续映射）**　设函数 $g$ 可测，且 $X$ 落在 $g$ 的连续点上的概率为 $1$。若 $X_n\xrightarrow p X$，则 $g(X_n)\xrightarrow p g(X)$。若 $X_n\xrightarrow d X$，则 $g(X_n)\xrightarrow d g(X)$。几乎处处收敛时，可以沿每条收敛路径直接应用连续性。
+> [!important] 连续映射定理
+> 设函数 $g$ 可测，且 $X$ 落在 $g$ 的连续点上的概率为 $1$。若 $X_n\xrightarrow p X$，则 $g(X_n)\xrightarrow p g(X)$。若 $X_n\xrightarrow d X$，则 $g(X_n)\xrightarrow d g(X)$。几乎处处收敛时，可以沿每条收敛路径直接应用连续性。
 
 对同一概率空间上的 $X_n\xrightarrow p X$ 和 $Y_n\xrightarrow p Y$，两个误差中至少有一个超过阈值的概率，至多为各自超出阈值的概率之和。这两个概率都趋于零，所以两个坐标能一起依概率收敛，即 $(X_n,Y_n)\xrightarrow p(X,Y)$。再对这个向量应用加法或乘法，就得到和与积的依概率收敛。
 
 **课件例｜对极限作连续变换（PDF 第 35 页）**
 
-> **题目**
+> [!example] 题目
 >
 > 1. 设 $X_n\xrightarrow p\mu$，其中 $\mu$ 是常数。求 $X_n^2$ 和 $e^{X_n}$ 的依概率极限。若 $\mu\ne0$，再求 $1/X_n$ 的依概率极限。
 > 2. 另设 $X_n\xrightarrow d X$，求 $|X_n|$ 的分布极限。
@@ -323,16 +349,18 @@ $$P(|X_n-X|>\varepsilon)=2[1-\Phi(\varepsilon/2)]>0,$$
 
 标准化样本均值时，理论公式常包含未知的总体标准差 $\sigma$。实际计算可以从样本估计它。问题在于，替换后分子和分母都随机，甚至来自同一批数据。Slutsky 定理说明，只要估计出的分母越来越稳定地靠近一个非零常数，替换后的分布极限就等于直接使用那个常数所得的极限。
 
-**定理 5.7（Slutsky）**　若 $X_n\xrightarrow d X$ 且 $Y_n\xrightarrow p c$，其中 $c$ 是常数，则
-
-$$X_n+Y_n\xrightarrow d X+c,\qquad X_nY_n\xrightarrow d cX,\qquad
-\frac{X_n}{Y_n}\xrightarrow d\frac Xc\quad(c\ne0).$$
+> [!important] Slutsky 定理
+> 若 $X_n\xrightarrow d X$ 且 $Y_n\xrightarrow p c$，其中 $c$ 是常数，则
+>
+> $$X_n+Y_n\xrightarrow d X+c,\qquad X_nY_n\xrightarrow d cX,\qquad
+> \frac{X_n}{Y_n}\xrightarrow d\frac Xc\quad(c\ne0).$$
 
 常数极限使 $(X_n,Y_n)\xrightarrow d(X,c)$，因此可以用连续映射取和、积和比。$X_n$ 和 $Y_n$ 可以来自同一批样本。商式在分母为零的事件上可以用任意值补定义，该事件概率趋于零。
 
 **课件例｜用估计标准差做标准化（PDF 第 37 页）**
 
-> **题目**　设 $\sqrt n(\hat\theta_n-\theta)/\sigma\xrightarrow d N(0,1)$，且 $s_n\xrightarrow p\sigma$，其中 $\sigma>0$。求将分母 $\sigma$ 换成 $s_n$ 后，$\sqrt n(\hat\theta_n-\theta)/s_n$ 的分布极限。
+> [!example] 题目
+> 设 $\sqrt n(\hat\theta_n-\theta)/\sigma\xrightarrow d N(0,1)$，且 $s_n\xrightarrow p\sigma$，其中 $\sigma>0$。求将分母 $\sigma$ 换成 $s_n$ 后，$\sqrt n(\hat\theta_n-\theta)/s_n$ 的分布极限。
 
 **解答**　由连续映射，$\sigma/s_n\xrightarrow p1$。把原统计量乘上这一因子，再应用 Slutsky 定理。
 
@@ -344,11 +372,13 @@ $$\frac{\sqrt n(\hat\theta_n-\theta)}{s_n}
 
 #### 5.3 边缘的分布极限不足以计算和的极限
 
-随机向量 $(X,Y)$ 的**边缘分布**分别描述 $X$ 或 $Y$ 各自怎样取值。**联合分布**描述它们如何同时取值，例如 $P(X\le x,Y\le y)$。分布意义下的**联合收敛**，指这些联合分布函数在极限联合分布函数的连续点收敛。只有边缘分布时，仍不知道一项取大值时另一项倾向于取大值还是小值，因而很难判断它们相加时是相互抵消还是一起波动。
+> [!warning] 边缘分布与联合分布
+> 随机向量 $(X,Y)$ 的**边缘分布**分别描述 $X$ 或 $Y$ 各自怎样取值。**联合分布**描述它们如何同时取值，例如 $P(X\le x,Y\le y)$。分布意义下的**联合收敛**，指这些联合分布函数在极限联合分布函数的连续点收敛。只有边缘分布时，仍不知道一项取大值时另一项倾向于取大值还是小值，因而很难判断它们相加时是相互抵消还是一起波动。
 
 **课件反例｜边缘收敛与和的极限（PDF 第 38 页）**
 
-> **题目**　设 $Z\sim N(0,1)$，对每个 $n$ 取 $X_n=Z$、$Y_n=-Z$。分别求两列的边缘分布极限和 $X_n+Y_n$ 的分布极限。若 $X,Y$ 是两个独立的标准正态变量，仅凭 $X_n\xrightarrow d X$、$Y_n\xrightarrow d Y$，能否推出 $X_n+Y_n\xrightarrow d X+Y$？
+> [!example] 题目
+> 设 $Z\sim N(0,1)$，对每个 $n$ 取 $X_n=Z$、$Y_n=-Z$。分别求两列的边缘分布极限和 $X_n+Y_n$ 的分布极限。若 $X,Y$ 是两个独立的标准正态变量，仅凭 $X_n\xrightarrow d X$、$Y_n\xrightarrow d Y$，能否推出 $X_n+Y_n\xrightarrow d X+Y$？
 
 **解答**　两者各自的边缘都是标准正态，但和恒为 $0$，分布极限集中在 $0$。题设中独立的 $X,Y$ 之和服从 $N(0,2)$，所以两个边缘收敛不足以确定和的极限。这里的 $(X_n,Y_n)$ 依分布收敛到 $(Z,-Z)$，这个极限向量的两个分量仍完全反向变化。
 
@@ -368,9 +398,12 @@ $$\frac{\sqrt n(\hat\theta_n-\theta)}{s_n}
 
 **“弱”指结论采用依概率收敛。** 对任意预先规定的误差范围，样本平均超出范围的机会趋于零。下面先用方差刻画样本平均的波动，再用 Chebyshev 把波动转换为概率上界。
 
-**定理 5.3**　设 $X_1,X_2,\ldots$ 独立同分布（i.i.d.），$E(X_i)=\mu$、$\operatorname{Var}(X_i)=\sigma^2<\infty$。则 $\bar X_n\xrightarrow p\mu$。
+> [!important] 有限方差下的弱大数定律
+> 设 $X_1,X_2,\ldots$ 独立同分布（i.i.d.），$E(X_i)=\mu$、$\operatorname{Var}(X_i)=\sigma^2<\infty$。则 $\bar X_n\xrightarrow p\mu$。
 
-**证明**　期望的线性与独立时方差可加给出
+##### 证明 · 均值、方差与 Chebyshev 界
+
+期望的线性与独立时方差可加给出
 
 $$E(\bar X_n)=\mu,\qquad
 \operatorname{Var}(\bar X_n)=\frac{1}{n^2}\sum_{i=1}^n\sigma^2=\frac{\sigma^2}{n}.$$
@@ -387,9 +420,12 @@ $$P(|\bar X_n-\mu|\ge\varepsilon)\le
 
 独立抽取的观测也可能来自不同来源。比如将不同班级的独立测量值放在一起，每个班的总体均值可以不同。此时应问样本平均是否靠近各来源均值的平均值。只要各项方差不会变得任意大，就仍能让平均后的波动缩小。
 
-**定理 5.4**　设 $X_i$ 独立、$E(X_i)=\mu_i$，且有一个与 $i$ 无关的有限常数 $C$ 使 $\operatorname{Var}(X_i)\le C$。则 $\bar X_n-\frac1n\sum_{i=1}^n\mu_i\xrightarrow p0$。
+> [!important] 独立样本的 Chebyshev 弱律
+> 设 $X_i$ 独立、$E(X_i)=\mu_i$，且有一个与 $i$ 无关的有限常数 $C$ 使 $\operatorname{Var}(X_i)\le C$。则 $\bar X_n-\frac1n\sum_{i=1}^n\mu_i\xrightarrow p0$。
 
-**证明**　独立性使各项方差相加。平均值的方差至多是 $nC/n^2=C/n$，因此
+##### 证明 · 独立性与统一的方差上界
+
+独立性使各项方差相加。平均值的方差至多是 $nC/n^2=C/n$，因此
 
 $$\operatorname{Var}(\bar X_n)\le C/n,\qquad
 P\!\left(\left|\frac1n\sum_{i=1}^n(X_i-\mu_i)\right|>\varepsilon\right)\le\frac{C}{n\varepsilon^2}.$$
@@ -400,15 +436,20 @@ P\!\left(\left|\frac1n\sum_{i=1}^n(X_i-\mu_i)\right|>\varepsilon\right)\le\frac{
 
 **方差判据**把前两种弱律的证明提炼成一个可直接检查的条件。即使观测之间存在依赖，只要整个平均值的方差仍然趋于零，Chebyshev 就能保证平均值集中在它自己的期望附近。
 
-**定理 5.5**　若各 $X_i$ 有有限二阶矩，且
+> [!important] 大数定律的方差判据
+> 若各 $X_i$ 有有限二阶矩，且
+>
+> $$\frac{\operatorname{Var}(S_n)}{n^2}=\operatorname{Var}(\bar X_n)\to0,$$
+>
+> 就有 $\bar X_n-E(\bar X_n)\xrightarrow p0$。课件也提到这一结果有时称为 **Markov 大数定律**。
 
-$$\frac{\operatorname{Var}(S_n)}{n^2}=\operatorname{Var}(\bar X_n)\to0,$$
+##### 证明 · 中心化后控制尾概率
 
-就有 $\bar X_n-E(\bar X_n)\xrightarrow p0$。课件也提到这一结果有时称为 **Markov 大数定律**。
-
-**课件证明。** 令 $T_n=\frac1n\sum_{i=1}^n[X_i-E(X_i)]=\bar X_n-E(\bar X_n)$。这一步叫**中心化**，把随机量减去它自己的均值。$E(T_n)=0$，而减去常数不改变方差，所以 $\operatorname{Var}(T_n)=\operatorname{Var}(S_n)/n^2\to0$。对每个固定的 $\varepsilon>0$，Chebyshev 给出
+令 $T_n=\frac1n\sum_{i=1}^n[X_i-E(X_i)]=\bar X_n-E(\bar X_n)$。这一步叫**中心化**，把随机量减去它自己的均值。$E(T_n)=0$，而减去常数不改变方差，所以 $\operatorname{Var}(T_n)=\operatorname{Var}(S_n)/n^2\to0$。对每个固定的 $\varepsilon>0$，Chebyshev 给出
 
 $$P(|T_n|>\varepsilon)\le \frac{\operatorname{Var}(T_n)}{\varepsilon^2}\longrightarrow0.$$
+
+##### 存在依赖时计算总方差
 
 整个证明只检查总和的方差，因此即使有依赖也能使用。存在依赖时，用第四章的公式计算
 
@@ -426,19 +467,24 @@ $$S_n=Z_1+2\sum_{i=2}^nZ_i+Z_{n+1},\qquad
 
 **“强”指几乎处处收敛。** 弱律控制给定样本量下的误差概率，强律描述一条无限样本路径的长期行为。这里的强弱来自第四节的逻辑蕴含关系。具体误差缩小的速度需要单独研究。
 
-**定理 5.8**　若 $X_1,X_2,\ldots$ i.i.d.，且 $E|X_1|<\infty$、$\mu=E(X_1)$，则
-
-$$\boxed{\bar X_n\xrightarrow{\mathrm{a.s.}}\mu.}$$
+> [!important] 强大数定律
+> 若 $X_1,X_2,\ldots$ i.i.d.，且 $E|X_1|<\infty$、$\mu=E(X_1)$，则
+>
+> $$\boxed{\bar X_n\xrightarrow{\mathrm{a.s.}}\mu.}$$
 
 在概率为 $1$ 的一组完整样本序列上，对每个给定容忍度，平均值从某一步开始一直落在容忍范围内。起始步可以随样本序列而变。这里要求 $E|X_1|<\infty$，所以即使方差不存在，样本均值仍可按强律收敛。
 
-**为什么弱律的证明还不够？** 给定 $\varepsilon>0$，设 $A_n=\{|\bar X_n-\mu|>\varepsilon\}$。弱律让单次的 $P(A_n)$ 趋于零。强律还需要排除一条路径上出现无穷多次大偏差。一个足以做到这一点的条件是 $\sum_n P(A_n)<\infty$。此时由并集的概率上界，
+##### 强律中的路径条件
+
+给定 $\varepsilon>0$，设 $A_n=\{|\bar X_n-\mu|>\varepsilon\}$。弱律让单次的 $P(A_n)$ 趋于零。强律还需要排除一条路径上出现无穷多次大偏差。一个足以做到这一点的条件是 $\sum_n P(A_n)<\infty$。此时由并集的概率上界，
 
 $$P\!\left(\bigcup_{n\ge m} A_n\right)\le\sum_{n\ge m}P(A_n)\longrightarrow0,$$
 
 也就是从 $m$ 开始还会出现至少一次大偏差的概率趋于零。若能对 $\varepsilon=1,1/2,1/3,\ldots$ 都排除无穷多次大偏差，就得到几乎处处收敛。第 6.1 节的 Chebyshev 上界只按 $1/n$ 衰减，而 $\sum_n1/n$ 发散，所以那个估计无法完成这一步。
 
-**课件的证明说明。** 仅有 $E|X_1|<\infty$ 时，一种证明思路是先做**截断**，例如用 $X_i1_{\{|X_i|\le b_i\}}$ 暂时代替 $X_i$，让新变量有有限方差，再控制去掉的大值对整条路径的影响。它需要进一步的概率工具。第 48 页列出 N. Etemadi（1981）作为参考，本课重点是强律的条件、含义和应用。
+##### 截断与强律的证明思路
+
+仅有 $E|X_1|<\infty$ 时，一种证明思路是先做**截断**，例如用 $X_i1_{\{|X_i|\le b_i\}}$ 暂时代替 $X_i$，让新变量有有限方差，再控制去掉的大值对整条路径的影响。它需要进一步的概率工具。第 48 页列出 N. Etemadi（1981）作为参考，本课重点是强律的条件、含义和应用。
 
 **补充｜均值有限但方差无限。** 若 $X$ 在 $x\ge1$ 上的密度是 $f(x)=\tfrac32x^{-5/2}$，则 $E(X)=\tfrac32\int_1^\infty x^{-3/2}\,dx=3$，而 $E(X^2)=\tfrac32\int_1^\infty x^{-1/2}\,dx=\infty$。对这个分布独立重复抽样，强律给出 $\bar X_n\xrightarrow{\mathrm{a.s.}}3$，但第 8 节的有限方差 CLT 不适用。这个例子说明“平均值会稳定”和“误差按标准正态规律波动”各自需要什么条件。
 
@@ -448,13 +494,15 @@ $$P\!\left(\bigcup_{n\ge m} A_n\right)\le\sum_{n\ge m}P(A_n)\longrightarrow0,$$
 
 #### 7.1 例 5.5　次品率的一致估计（PDF 第 49 页）
 
-> **题目**　逐件独立检验产品，每件成为次品的概率都是 $p$。令 $X_i=1_{\{\text{第 }i\text{ 件为次品}\}}$，观测次品比例为 $\hat p_n=\frac1n\sum_{i=1}^nX_i$。用大数定律说明 $\hat p_n$ 为什么是 $p$ 的一致估计量。若 $p=0.02$，写出用误差概率表示的一致性结论。
+> [!example] 题目
+> 逐件独立检验产品，每件成为次品的概率都是 $p$。令 $X_i=1_{\{\text{第 }i\text{ 件为次品}\}}$，观测次品比例为 $\hat p_n=\frac1n\sum_{i=1}^nX_i$。用大数定律说明 $\hat p_n$ 为什么是 $p$ 的一致估计量。若 $p=0.02$，写出用误差概率表示的一致性结论。
 
 **解答**　各 $X_i$ 独立且服从 $\operatorname{Bernoulli}(p)$，均值为 $p$，方差为 $p(1-p)$。观测比例 $\hat p_n$ 是这些指示变量的样本均值。由弱律 $\hat p_n\xrightarrow p p$，由强律还可得 $\hat p_n\xrightarrow{\mathrm{a.s.}}p$。当 $p=0.02$，对每个固定的 $\varepsilon>0$，有 $P(|\hat p_n-0.02|>\varepsilon)\to0$。
 
 #### 7.2 例 5.6　Monte Carlo 积分（PDF 第 50 页）
 
-> **题目**　设 $U_1,U_2,\ldots$ 独立同分布，且 $U_i\sim U(0,1)$。定义 $Y_i=4\sqrt{1-U_i^2}$。计算 $E(Y_i)$，并用大数定律说明为什么 $\hat\pi_n=\frac4n\sum_{i=1}^n\sqrt{1-U_i^2}$ 可以用来近似 $\pi$。
+> [!example] 题目
+> 设 $U_1,U_2,\ldots$ 独立同分布，且 $U_i\sim U(0,1)$。定义 $Y_i=4\sqrt{1-U_i^2}$。计算 $E(Y_i)$，并用大数定律说明为什么 $\hat\pi_n=\frac4n\sum_{i=1}^n\sqrt{1-U_i^2}$ 可以用来近似 $\pi$。
 
 **解答**
 
@@ -481,17 +529,21 @@ $$\operatorname{Var}(\hat\pi_n)=\frac{32/3-\pi^2}{n},\qquad
 
 设总体均值是 $\mu$。大数定律告诉我们，样本均值偏离 $\mu$ 超过固定距离的机会会变小。若想估算一次调查的误差概率，还需要知道在当前样本量下，误差大致分布在多宽的范围、曲线是什么形状。**中心极限定理（CLT）**把许多独立观测相加造成的波动放在同一尺度上比较，并在本节条件下给出标准正态极限。观测本身可以来自只取 $0$ 和 $1$ 的伯努利分布。
 
-- **抽样分布**是固定总体和样本量、反复抽样时，所算统计量（如 $\bar X_n$）的概率分布。单个 $X_i$ 的总体分布描述观测之间的差异，$\bar X_n$ 的抽样分布描述一批数据与另一批数据算出的平均值有多大差异。
-- **标准误**（standard error，SE）是估计量在重复抽样下的标准差。独立同分布抽样时，单个观测的标准差是 $\sigma$，样本均值的标准误是 $\sigma/\sqrt n$。例如 $\sigma=10$ 时，$n=25$ 的均值标准误为 $2$，$n=100$ 时为 $1$。
-- **中心化与标准化。** 从随机量中减去它的均值叫中心化，再除以它的标准差叫标准化。样本均值标准化后，数值 $1.5$ 表示“本次样本均值比总体均值高 $1.5$ 个标准误”。标准化后的量没有单位。
+> [!info] 抽样分布、标准误与标准化
+> - **抽样分布**是固定总体和样本量、反复抽样时，所算统计量（如 $\bar X_n$）的概率分布。单个 $X_i$ 的总体分布描述观测之间的差异，$\bar X_n$ 的抽样分布描述一批数据与另一批数据算出的平均值有多大差异。
+> - **标准误**（standard error，SE）是估计量在重复抽样下的标准差。独立同分布抽样时，单个观测的标准差是 $\sigma$，样本均值的标准误是 $\sigma/\sqrt n$。例如 $\sigma=10$ 时，$n=25$ 的均值标准误为 $2$，$n=100$ 时为 $1$。
+> - **中心化与标准化。** 从随机量中减去它的均值叫中心化，再除以它的标准差叫标准化。样本均值标准化后，数值 $1.5$ 表示“本次样本均值比总体均值高 $1.5$ 个标准误”。标准化后的量没有单位。
 
 #### 8.1 i.i.d. CLT（定理 5.9，PDF 第 52、58–59 页）
 
-**定理 5.9**　设 $X_1,X_2,\ldots$ i.i.d.，$E(X_i)=\mu$、$0<\operatorname{Var}(X_i)=\sigma^2<\infty$。则
+> [!important] 中心极限定理
+> 设 $X_1,X_2,\ldots$ i.i.d.，$E(X_i)=\mu$、$0<\operatorname{Var}(X_i)=\sigma^2<\infty$。则
+>
+> $$\boxed{\frac{S_n-n\mu}{\sigma\sqrt n}
+> =\frac{\bar X_n-\mu}{\sigma/\sqrt n}
+> \xrightarrow d N(0,1).}$$
 
-$$\boxed{\frac{S_n-n\mu}{\sigma\sqrt n}
-=\frac{\bar X_n-\mu}{\sigma/\sqrt n}
-\xrightarrow d N(0,1).}$$
+##### 渐近误差的尺度
 
 等价地，$\sqrt n(\bar X_n-\mu)\xrightarrow d N(0,\sigma^2)$。大数定律看固定容许误差下的超出概率。CLT 把允许范围和标准误一起缩小，例如问“平均值落在总体均值左右各一个标准误内的概率是多少”。对任意固定 $a>0$，
 
@@ -500,21 +552,27 @@ $$P\!\left(|\bar X_n-\mu|\le\frac{a\sigma}{\sqrt n}\right)
 
 取 $a=1$，右边约为 $0.6827$。在上面的 $\sigma=10$ 例中，$n$ 从 $25$ 增至 $100$，一个标准误的范围由左右各 $2$ 缩为左右各 $1$。原始误差在缩小，而以标准误衡量的误差趋向稳定的标准正态分布。
 
+##### 总和与均值的正态近似
+
 在有限样本题中，常用以下近似：
 
 $$\bar X_n\approx N(\mu,\sigma^2/n),\qquad
 \bar X_n-\mu\approx N(0,\sigma^2/n),\qquad
 S_n\approx N(n\mu,n\sigma^2).$$
 
-三个正态分布的参数均对应当前样本量。写分布收敛时，右边应是一个固定分布。例如 $\bar X_n\xrightarrow d\mu$ 是大数定律的推论，全部极限概率集中在 $\mu$，称为**退化分布**。放大后的误差极限有正的方差，称为**非退化**的正态极限。**渐近正态**指经过适当中心化与缩放后，统计量的分布在 $n\to\infty$ 时趋向正态。
+> [!warning] 区分极限分布和有限样本近似
+> 三个正态分布的参数均对应当前样本量。写分布收敛时，右边应是一个固定分布。例如 $\bar X_n\xrightarrow d\mu$ 是大数定律的推论，全部极限概率集中在 $\mu$，称为**退化分布**。放大后的误差极限有正的方差，称为**非退化**的正态极限。**渐近正态**指经过适当中心化与缩放后，统计量的分布在 $n\to\infty$ 时趋向正态。
 
 #### 8.2 矩母函数收敛与 CLT 的证明思路（引理 5.9A，PDF 第 53 页）
 
 **矩母函数**（MGF）定义为 $M_X(t)=E(e^{tX})$。若它在零附近有限，在零处的各阶导数给出相应的原点矩，例如 $M_X'(0)=E(X)$、$M_X''(0)=E(X^2)$。它适合研究独立和，因为 $e^{t(X+Y)}=e^{tX}e^{tY}$，取期望后可把独立和的 MGF 写成乘积。
 
-**引理 5.9A**　若 $M_{X_n}$ 和 $M_X$ 在包含 $0$ 的同一开区间内有限，且 $M_{X_n}(t)\to M_X(t)$ 对该区间内每个 $t$ 成立，则 $X_n\xrightarrow d X$。第四章的 MGF 唯一性是“函数相等则分布相等”，此处的连续性引理允许用函数的极限识别分布的极限。
+> [!important] 矩母函数收敛引理
+> 若 $M_{X_n}$ 和 $M_X$ 在包含 $0$ 的同一开区间内有限，且 $M_{X_n}(t)\to M_X(t)$ 对该区间内每个 $t$ 成立，则 $X_n\xrightarrow d X$。第四章的 MGF 唯一性是“函数相等则分布相等”，此处的连续性引理允许用函数的极限识别分布的极限。
 
-**补充推导｜额外假定 MGF 在零点附近有限。** 设 $W_i=(X_i-\mu)/\sigma$，则 $M_W(u)=1+u^2/2+o(u^2)$，一次项消失是因为 $E(W_i)=0$，二次项来自 $E(W_i^2)=1$。这里 $o(u^2)$ 表示比 $u^2$ 更小的余项，除以 $u^2$ 后在 $u\to0$ 时趋于零。标准化总和中每个 $W_i$ 都乘了 $1/\sqrt n$，所以 MGF 里的参数变为 $t/\sqrt n$。独立性给出
+##### 补充推导 · 矩母函数在零点附近有限
+
+设 $W_i=(X_i-\mu)/\sigma$，则 $M_W(u)=1+u^2/2+o(u^2)$，一次项消失是因为 $E(W_i)=0$，二次项来自 $E(W_i^2)=1$。这里 $o(u^2)$ 表示比 $u^2$ 更小的余项，除以 $u^2$ 后在 $u\to0$ 时趋于零。标准化总和中每个 $W_i$ 都乘了 $1/\sqrt n$，所以 MGF 里的参数变为 $t/\sqrt n$。独立性给出
 
 $$M_{\frac1{\sqrt n}\sum_iW_i}(t)
 =\left[M_W\left(\frac{t}{\sqrt n}\right)\right]^n
@@ -537,7 +595,10 @@ $$P(a\le\bar X_n\le b)\approx
 
 #### 8.4 连续性修正（PDF 第 61 页）
 
-**连续性修正**是在用连续分布近似整数计数时，对计算边界作半格调整。整数变量在 $k$ 上可能有正的概率 $P(Y=k)$，但连续正态曲线在单个点上的面积为零。把整数 $k$ 想象成一根以 $k$ 为中心、宽度为 $1$ 的柱子，就能用正态曲线在 $[k-0.5,k+0.5]$ 上的面积代替这根柱子的概率。例如 $Y\le3$ 包含 $3$ 这根柱子，面积要算到柱子右缘 $3.5$。而 $Y<3$ 只算到 $2$ 这根柱子的右缘 $2.5$。
+> [!info] 连续性修正
+> **连续性修正**是在用连续分布近似整数计数时，对计算边界作半格调整。整数变量在 $k$ 上可能有正的概率 $P(Y=k)$，但连续正态曲线在单个点上的面积为零。把整数 $k$ 想象成一根以 $k$ 为中心、宽度为 $1$ 的柱子，就能用正态曲线在 $[k-0.5,k+0.5]$ 上的面积代替这根柱子的概率。例如 $Y\le3$ 包含 $3$ 这根柱子，面积要算到柱子右缘 $3.5$。而 $Y<3$ 只算到 $2$ 这根柱子的右缘 $2.5$。
+
+##### 整数事件的半格修正
 
 若 $Y$ 是整数变量且可用 $N(m,s^2)$ 近似，下表的阈值先按事件确定，再标准化。
 
@@ -565,11 +626,14 @@ $$P(Y=k)=e^{-\lambda}\frac{\lambda^k}{k!},\qquad k=0,1,2,\ldots.$$
 
 泊松分布的方差也等于 $\lambda$。例如 $\lambda=0.5$ 表示平均每批发生半次，实际每批的次数仍然是整数。这个分布可以用来描述许多次低概率试验合起来的事件数。
 
-**Poisson 极限定理**　若 $Y_n\sim\operatorname{Bin}(n,p_n)$，且 $np_n\to\lambda\in(0,\infty)$，则 $Y_n\xrightarrow d\operatorname{Poisson}(\lambda)$。例如可对足够大的 $n$ 取 $p_n=\lambda/n$。
+> [!important] Poisson 极限定理
+> 若 $Y_n\sim\operatorname{Bin}(n,p_n)$，且 $np_n\to\lambda\in(0,\infty)$，则 $Y_n\xrightarrow d\operatorname{Poisson}(\lambda)$。例如可对足够大的 $n$ 取 $p_n=\lambda/n$。
 
 这里 $p_n$ 随 $n$ 增大而趋于零。试验越来越多，但每批的平均事件数 $np_n$ 仍接近固定的 $\lambda$。这一条件解释了为什么总次数可以直接趋向一个固定的计数分布。
 
-**课件证明。** 一次 Bernoulli 试验的结果只能是 $0$ 或 $1$，其 MGF 是 $(1-p_n)e^{0t}+p_ne^t=1+p_n(e^t-1)$。$Y_n$ 是 $n$ 次独立试验的和，所以
+##### 证明 · 二项分布矩母函数的极限
+
+一次 Bernoulli 试验的结果只能是 $0$ 或 $1$，其 MGF 是 $(1-p_n)e^{0t}+p_ne^t=1+p_n(e^t-1)$。$Y_n$ 是 $n$ 次独立试验的和，所以
 
 $$M_{Y_n}(t)=[1+p_n(e^t-1)]^n.$$
 
@@ -581,7 +645,8 @@ $$\log M_{Y_n}(t)=n\log(1+u_n)=nu_n+O(nu_n^2)\to\lambda(e^t-1).$$
 
 #### 9.2 例 5.6　同均值的三个二项分布（PDF 第 56–57 页）
 
-> **题目**　比较 $\operatorname{Bin}(50,0.1)$、$\operatorname{Bin}(20,0.25)$、$\operatorname{Bin}(10,0.5)$ 与 $\operatorname{Poisson}(5)$。这四个分布的均值均为 $5$。三个二项分布中，哪一个预计最适合用 $\operatorname{Poisson}(5)$ 近似？说明理由。
+> [!example] 题目
+> 比较 $\operatorname{Bin}(50,0.1)$、$\operatorname{Bin}(20,0.25)$、$\operatorname{Bin}(10,0.5)$ 与 $\operatorname{Poisson}(5)$。这四个分布的均值均为 $5$。三个二项分布中，哪一个预计最适合用 $\operatorname{Poisson}(5)$ 近似？说明理由。
 
 **解答**
 
@@ -602,7 +667,8 @@ $$\log M_{Y_n}(t)=n\log(1+u_n)=nu_n+O(nu_n^2)\to\lambda(e^t-1).$$
 
 #### 9.3 例 5.7　50 件物品的次品数（PDF 第 62–64 页）
 
-> **题目**　一箱有 $50$ 件物品。各件是否为次品相互独立，每件为次品的概率都是 $0.01$。记箱中次品件数为 $Y$。分别用下列方法求 $P(Y\le3)$。
+> [!example] 题目
+> 一箱有 $50$ 件物品。各件是否为次品相互独立，每件为次品的概率都是 $0.01$。记箱中次品件数为 $Y$。分别用下列方法求 $P(Y\le3)$。
 >
 > 1. 用二项分布精确计算。
 > 2. 用 Poisson 分布近似。
@@ -621,7 +687,9 @@ $$\log M_{Y_n}(t)=n\log(1+u_n)=nu_n+O(nu_n^2)\to\lambda(e^t-1).$$
 
 本题采用 Poisson 近似更合适。平均次品数只有 $np=0.5$，分布明显右偏，Poisson 给出的结果也最接近精确值。
 
-**补充｜用右尾看清误差。** 左侧概率都很接近 $1$。如果关心一箱里出现超过 $3$ 件次品的机会，直接比较它们的补集。
+##### 补充比较 · 近似误差与右尾概率
+
+左侧概率都很接近 $1$。如果关心一箱里出现超过 $3$ 件次品的机会，直接比较它们的补集。
 
 | 方法 | $P(Y\le3)$ | $P(Y>3)$ |
 |---|---:|---:|
@@ -644,7 +712,8 @@ $$\log M_{Y_n}(t)=n\log(1+u_n)=nu_n+O(nu_n^2)\to\lambda(e^t-1).$$
 
 #### 10.1 例 5.8　卡方的正态近似（PDF 第 66–67 页）
 
-> **题目**　设 $Y_n\sim\chi^2(n)$。
+> [!example] 题目
+> 设 $Y_n\sim\chi^2(n)$。
 >
 > 1. 用中心极限定理证明 $(Y_n-n)/\sqrt{2n}\xrightarrow d N(0,1)$。
 > 2. 给出 $Y_n$ 的累积分布函数的正态近似。
@@ -664,7 +733,8 @@ P(Y_n\le y)\approx\Phi\!\left(\frac{y-n}{\sqrt{2n}}\right).$$
 
 #### 10.2 例 5.9(a)　团体寿险赔付的 90% 分位数（PDF 第 68–70 页）
 
-> **题目**　某保险公司的团体寿险有以下两类被保险人。假设每个人的死亡指示变量相互独立。
+> [!example] 题目
+> 某保险公司的团体寿险有以下两类被保险人。假设每个人的死亡指示变量相互独立。
 >
 > | 类别 | 每人死亡概率 | 每人死亡时的赔付额 | 人数 |
 > |---|---:|---:|---:|
@@ -692,7 +762,9 @@ $$q\approx350{,}000+z_{0.90}(73{,}586.68)
 
 课件第 70 页代入 $z_{0.90}\approx1.28155$，中间写成约 $444{,}310$ 美元。按该式实际计算约为 $444{,}305$ 美元，取到百位都是课件给出的 **$444{,}300$ 美元**。两类赔付分布不同，可以分别用正态近似两组独立二项，再把两组独立正态相加。第 10.5 节也给出了用独立非同分布 CLT 解释的条件。
 
-**补充｜精确分位数怎样算？** 赔付只会落在间隔 $10{,}000$ 美元的一系列金额上，这样等间距的离散取值称为**格点**。以 $10{,}000$ 美元为一个单位，$L/10{,}000=2A+B$。先假定已知甲类赔付了 $a$ 人，剩下的阈值是 $k-2a$。再用全概率公式把甲类的各种人数加起来，
+##### 补充计算 · 离散赔付的精确分位数
+
+赔付只会落在间隔 $10{,}000$ 美元的一系列金额上，这样等间距的离散取值称为**格点**。以 $10{,}000$ 美元为一个单位，$L/10{,}000=2A+B$。先假定已知甲类赔付了 $a$ 人，剩下的阈值是 $k-2a$。再用全概率公式把甲类的各种人数加起来，
 
 $$P(L\le 10{,}000k)=P(2A+B\le k)
 =\sum_{a=0}^{\min(1000,\lfloor k/2\rfloor)}P(A=a)P(B\le k-2a),\qquad k\ge0.$$
@@ -701,7 +773,8 @@ $$P(L\le 10{,}000k)=P(2A+B\le k)
 
 #### 10.3 例 5.9(b)　病假预算（PDF 第 71–72 页）
 
-> **题目**　每位员工的年度病假天数的均值为 $10$ 天、标准差为 $2$ 天。某公司有 $20$ 位员工，各人的年度病假天数相互独立。公司应为所有员工合计预算多少天病假，使总病假天数超过预算的概率约低于 $20\%$？
+> [!example] 题目
+> 每位员工的年度病假天数的均值为 $10$ 天、标准差为 $2$ 天。某公司有 $20$ 位员工，各人的年度病假天数相互独立。公司应为所有员工合计预算多少天病假，使总病假天数超过预算的概率约低于 $20\%$？
 
 **解答**　设 $S$ 为总病假天数，则 $E(S)=200$，$\operatorname{Var}(S)=20\cdot2^2=80$。按课件采用总和的正态近似，超预算概率为 $1-\Phi((b-200)/\sqrt{80})$。
 
@@ -713,7 +786,8 @@ b\gtrsim200+z_{0.80}\sqrt{80}\approx207.53.$$
 
 #### 10.4 例 5.9(c)　肺炎病例（PDF 第 73–74 页）
 
-> **题目**　设成人肺炎病例中有 $70\%$ 由肺炎球菌引起。从成人肺炎患者中随机抽取 $84$ 人，令 $X$ 为其中由肺炎球菌引起的病例数。用正态近似估计 $P(X\le52)$，并使用连续性修正。
+> [!example] 题目
+> 设成人肺炎病例中有 $70\%$ 由肺炎球菌引起。从成人肺炎患者中随机抽取 $84$ 人，令 $X$ 为其中由肺炎球菌引起的病例数。用正态近似估计 $P(X\le52)$，并使用连续性修正。
 
 **解答**　按课件的独立抽样模型，$X\sim\operatorname{Bin}(84,0.7)$。$52$ 包含在所求事件内，所以连续性修正后的阈值为 $52.5$。
 
@@ -750,18 +824,23 @@ $$P(X\le52)\approx\Phi\!\left(\frac{52.5-58.8}{4.2}\right)
 
 #### 11.1 定理 5.12（PDF 第 76–79 页）
 
-**定理 5.12**　设 $\theta$ 为真值，$\sqrt n(T_n-\theta)\xrightarrow d N(0,\tau^2)$，其中 $\tau^2$ 是**放大后误差的极限分布的方差**。回到原尺度，正态近似给出的标准误为 $\tau/\sqrt n$。若 $g$ 在 $\theta$ 可微，且 $g(T_n)$ 已定义或可在概率趋零的事件上补定义，则
-
-$$\boxed{\sqrt n[g(T_n)-g(\theta)]\xrightarrow d
-N\!\left(0,[g'(\theta)]^2\tau^2\right).}$$
+> [!important] 一元 Delta 方法
+> 设 $\theta$ 为真值，$\sqrt n(T_n-\theta)\xrightarrow d N(0,\tau^2)$，其中 $\tau^2$ 是**放大后误差的极限分布的方差**。回到原尺度，正态近似给出的标准误为 $\tau/\sqrt n$。若 $g$ 在 $\theta$ 可微，且 $g(T_n)$ 已定义或可在概率趋零的事件上补定义，则
+>
+> $$\boxed{\sqrt n[g(T_n)-g(\theta)]\xrightarrow d
+> N\!\left(0,[g'(\theta)]^2\tau^2\right).}$$
 
 若 $\tau>0$ 且 $g'(\theta)\ne0$，可用 $|g'(\theta)|\tau$ 标准化放大后的误差，
 
 $$\frac{\sqrt n[g(T_n)-g(\theta)]}{|g'(\theta)|\tau}\xrightarrow d N(0,1).$$
 
+##### 正态近似与近似标准误
+
 回到有限样本的原尺度，可用中心为 $g(\theta)$、方差为 $[g'(\theta)]^2\tau^2/n$ 的正态分布近似 $g(T_n)$ 的抽样分布。近似标准误为 $|g'(\theta)|\tau/\sqrt n$。斜率的符号决定小误差的方向，斜率的绝对值决定标准误的倍数。方差乘以斜率的平方，因为随机变量乘上一个常数时，平方偏差也要乘上这个常数的平方。近似描述的是大样本下的波动，有限样本的均值和远尾概率要根据实际分布判断。
 
 #### 11.2 补充推导：Taylor 展开与 Slutsky
+
+##### 一阶 Taylor 展开
 
 $\sqrt n(T_n-\theta)$ 收敛到一个正态分布，因此在概率意义下有界，记为 $O_p(1)$。这表示只要选一个足够大的固定范围，就能让放大后的误差在大样本下以很高的概率落在范围内。再除以 $\sqrt n$，范围在原尺度上缩为零，得到 $T_n\xrightarrow p\theta$。可微性给出
 
@@ -777,9 +856,12 @@ $$\sqrt n[g(T_n)-g(\theta)]
 
 #### 11.3 标准误的估计与零导数
 
+##### 代入估计
+
 若 $\hat\tau_n\xrightarrow p\tau$ 且 $g'$ 在 $\theta$ 连续，可用 $|g'(T_n)|\hat\tau_n/\sqrt n$ 估计标准误。这种将未知参数换成相应估计量的做法称为**代入估计**。
 
-若 $g'(\theta)=0$，函数在真值处的切线是水平的，输入发生小变化时，一阶项消失。此时 $\sqrt n[g(T_n)-g(\theta)]\xrightarrow p0$，要看到非零的波动，需寻找更合适的放大倍数。
+> [!warning] 一阶导数为零
+> 若 $g'(\theta)=0$，函数在真值处的切线是水平的，输入发生小变化时，一阶项消失。此时 $\sqrt n[g(T_n)-g(\theta)]\xrightarrow p0$，要看到非零的波动，需寻找更合适的放大倍数。
 
 **补充例：** 取 $g(t)=t^2$、$\theta=0$，且 $\sqrt n T_n\xrightarrow d N(0,\tau^2)$。直接对放大后的量平方，
 
@@ -793,7 +875,8 @@ $$nT_n^2=(\sqrt nT_n)^2\xrightarrow d\tau^2\chi^2(1).$$
 
 #### 12.1 例 5.11　样本均值的指数（PDF 第 80–81 页）
 
-> **题目**　设 $X_1,X_2,\ldots$ 独立同分布，$E(X_i)=\mu$，且 $0<\operatorname{Var}(X_i)=\sigma^2<\infty$。令 $W_n=e^{\bar X_n}$，其中 $\bar X_n=\frac1n\sum_{i=1}^nX_i$。
+> [!example] 题目
+> 设 $X_1,X_2,\ldots$ 独立同分布，$E(X_i)=\mu$，且 $0<\operatorname{Var}(X_i)=\sigma^2<\infty$。令 $W_n=e^{\bar X_n}$，其中 $\bar X_n=\frac1n\sum_{i=1}^nX_i$。
 >
 > 1. 求 $n$ 增大时 $W_n$ 所趋近的值。
 > 2. 给出 $W_n$ 的大样本正态近似。
@@ -812,7 +895,8 @@ $$nT_n^2=(\sqrt nT_n)^2\xrightarrow d\tau^2\chi^2(1).$$
 
 #### 12.2 课件补充例　样本均值的对数（PDF 第 82–83 页）
 
-> **题目**　在本节独立同分布的抽样设定下，设 $X_i>0$ 几乎处处，$E(X_i)=\mu>0$，且 $0<\operatorname{Var}(X_i)=\sigma^2<\infty$。记样本均值为 $\bar X_n$。求 $\log\bar X_n$ 的渐近分布，并给出由样本数据计算的标准误估计式。
+> [!example] 题目
+> 在本节独立同分布的抽样设定下，设 $X_i>0$ 几乎处处，$E(X_i)=\mu>0$，且 $0<\operatorname{Var}(X_i)=\sigma^2<\infty$。记样本均值为 $\bar X_n$。求 $\log\bar X_n$ 的渐近分布，并给出由样本数据计算的标准误估计式。
 
 **解答**　$\bar X_n>0$ 保证可以取对数。由 LLN 与连续映射，$\log\bar X_n\xrightarrow p\log\mu$。取 $g(x)=\log x$，$g'(\mu)=1/\mu$，得
 
