@@ -1,598 +1,673 @@
-# Math1212 概率论与数理统计 I (Probability and Statistics I)
-## 第二章：一维随机变量及其分布 课程讲义全景精要与深度解析笔记
-
-> **课程信息**：Math1212 Probability and Statistics I (Fall 2025/2026)  
-> **授课机构**：上海科技大学 数学科学学院 (Institute of Mathematical Sciences, ShanghaiTech University)  
-> **主讲教师**：王世家 (Shijia Wang)  
-> **参考教材**：
-> 1. Robert V. Hogg, Elliot A. Tanis, Dale Zimmerman, *Probability and Statistical Inference* (9th/10th ed.), Ch. 2.1, 2.4–2.6, 3.1–3.3, 5.1
-> 2. 魏宗舒 等，《概率论与数理统计教程》（第三版），高等教育出版社，Ch. 2.1, 2.3, 3.1, 3.4
-> 3. Larry Wasserman, *All of Statistics*, Springer, Ch. 2.1, 2.2
-
----
-
-## 目录与知识架构
-
-1. **引言：为什么需要随机变量？(Motivation & Philosophical Foundation)**
-   - 1.1 从样本空间到实数轴的映射
-   - 1.2 随机变量的严格数学定义与测度论可测性
-   - 1.3 随机变量的代数运算与代数封闭性
-2. **累积分布函数 (Cumulative Distribution Function, CDF)**
-   - 2.1 CDF 的定义与直观意义
-   - 2.2 CDF 的充要公理化性质 (定理 2.3)
-   - 2.3 定理 2.3 的严格测度连续性证明
-   - 2.4 随机变量的两大基本类型：离散型与连续型
-3. **第一节：一维离散型随机变量与概率质量函数 (2.1 Discrete Random Variables & PMF)**
-   - 3.1 概率质量函数 (PMF) 的定义与公理化性质
-   - 3.2 PMF 与 CDF 的阶梯对应关系
-   - 3.3 经典案例剖析：双骰子极大值分布的推导与图示
-   - 3.4 离散分布的可视化：折线图 (Line Graph) 与概率直方图 (Histogram)
-4. **第二节：一维连续型随机变量与概率密度函数 (2.2 Continuous Random Variables & PDF)**
-   - 4.1 概率密度函数 (PDF) 的严格定义与物理意义
-   - 4.2 微积分基本定理下的 PDF 与 CDF 对偶关系
-   - 4.3 核心本质辨析：为什么连续型 PDF 的值不是概率？
-   - 4.4 连续均匀分布与三角/多项式密度典型案例
-5. **第三节：随机变量函数的分布 (2.3 Distributions of Functions of Random Variables)**
-   - 5.1 变量代换方法论：CDF 法 (Distribution Function Technique)
-   - 5.2 单调可逆变换定理 (定理 2.4, 2.5, 2.6) 与雅可比因子 (Jacobian)
-   - 5.3 经典连续代换案例深度解析：
-     - Gamma 到 Loggamma 的指数变换
-     - 旋转指针与标准柯西分布 (Cauchy) 的几何生成
-     - 非单调变换：平方变换 $Y = X^2$ 与两分支求和法
-   - 5.4 概率积分变换与逆变换抽样定理 (Theorems 2.7 & 2.8)
-   - 5.5 离散型随机变量的代换技巧及与连续型的关键差异
-6. **第四节：常见离散型随机变量分布 (2.4.1 Common Discrete Distributions)**
-   - 6.1 离散均匀分布 (Discrete Uniform Distribution)
-   - 6.2 伯努利分布 (Bernoulli Distribution)
-   - 6.3 二项分布 (Binomial Distribution) 及其偏度形态
-   - 6.4 负二项分布 (Negative Binomial) 与几何分布 (Geometric)
-   - 6.5 泊松分布 (Poisson Distribution) 与发生率模型
-   - 6.6 泊松极限定理 (Poisson Theorem / 稀有事件定律) 的严格证明与近似分析
-7. **第五节：常见连续型随机变量分布 (2.4.2 Common Continuous Distributions)**
-   - 7.1 连续均匀分布 (Continuous Uniform Distribution)
-   - 7.2 柯西分布 (Cauchy Distribution)：厚尾特性与矩不存在悖论
-   - 7.3 指数分布 (Exponential Distribution) 与无记忆性 (Memoryless Property) 的唯一定理
-   - 7.4 伽马分布 (Gamma Distribution) 与不完全 Gamma 函数
-   - 7.5 卡方分布 (Chi-square Distribution) 作为 Gamma 分布的特例
-   - 7.6 正态分布 (Normal Distribution) 与标准化变换定理
-8. **核心公式速查与易错知识点深度辨析 (Summary & Pitfalls)**
-
----
-
-## 1. 引言：为什么需要随机变量？(Motivation & Philosophical Foundation)
-
-### 1.1 从样本空间到实数轴的映射
-在第一章中，我们建立了概率空间 $(\Omega, \mathcal{F}, P)$。然而在实际随机试验中，样本点 $\omega \in \Omega$ 往往是**非数值化的定性描述**。例如：
-- 抛硬币：$\omega \in \{\text{"Head"}, \text{"Tail"}\}$；
-- 医疗诊断：$\omega \in \{\text{"治愈"}, \text{"复发"}, \text{"死亡"}\}$；
-- 产品质检：$\omega \in \{\text{"合格品"}, \text{"次品"}\}$。
-
-若直接使用样本点集合来描述复杂的复合事件（如 $n$ 重伯努利试验中“正面次数总和大于 5”），只能依靠穷举枚举法或文字长句，无法借助微积分、线性代数和函数分析等强大的现代数学工具。  
-因此，必须在样本空间 $\Omega$ 与实数集 $\mathbb{R}$ 之间建立一座数学桥梁——**将抽象的定性结果数值化**。
-
-### 1.2 随机变量的严格数学定义与可测性
-课件第 6 页给出了随机变量的标准定义：
-
-> **定义（随机变量, Random Variable, 简记 r.v.）**：  
-> 设给定随机试验的样本空间为 $\Omega$。一个将样本空间中每个元素 $\omega \in \Omega$ **单值映射**到唯一实数 $X(\omega) = x \in \mathbb{R}$ 的实值函数：
-> $$X: \Omega \to \mathbb{R}$$
-> 称为**随机变量 (Random Variable)**。
-
-- **定义域 (Domain)**：试验的样本空间 $\Omega$；
-- **值域 / 支撑集 (Range / Support / Space)**：随机变量所有可能取值的实数集合，记作 $\mathbb{X} = \{x \in \mathbb{R} : X(\omega) = x, \omega \in \Omega\}$。
-
-> **【深度补充解释 1：测度论视角下的“可测函数 (Measurable Function)”】**  
-> 为什么一个普通的实值函数被称为“随机变量”而不是“函数”？  
-> 在严谨的现代测度论概率体系中，不能随便抓一个映射就叫随机变量。为了能够对形如 $P(X \le x)$ 或 $P(X \in B)$ 的事件计算概率，**原像必须是概率空间中的合法可测事件**！  
-> 即：对实数轴 Borel $\sigma$-代数中的任意集合 $B \in \mathcal{B}(\mathbb{R})$，其原像集合必须属于事件域 $\mathcal{F}$：
-> $$X^{-1}(B) = \{\omega \in \Omega : X(\omega) \in B\} \in \mathcal{F}$$
-> 因此，**随机变量的严格数学本质是可测空间 $(\Omega, \mathcal{F})$ 到 $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ 上的可测函数 (Measurable Function)**。
-
-### 1.3 随机变量的代数运算与代数封闭性
-课件第 7 页给出了随机变量的代数性质（命题 2.1 与 2.2）：
-- **命题 2.1**：若 $X, Y$ 是随机变量，则对任意实数常数 $a, b \in \mathbb{R}$，下列运算生成的对象依然是良定义的随机变量：
-  $$X + Y, \quad X - Y, \quad XY, \quad \frac{X}{Y} \; (Y \ne 0), \quad aX + bY$$
-- **命题 2.2**：若 $X, Y$ 是随机变量，$\phi: \mathbb{R}^2 \to \mathbb{R}$ 是二元可测函数，则复合映射 $\phi(X, Y)$ 亦为随机变量。
-
----
-
-## 2. 累积分布函数 (Cumulative Distribution Function, CDF)
-
-### 2.1 CDF 的定义与直观意义
-虽然随机变量本身是一个映射，但统计学关心的是其取值落在某个区间的可能性大小。
-
-> **定义（累积分布函数, CDF）**：  
-> 对于概率空间 $(\Omega, \mathcal{F}, P)$ 上的任意随机变量 $X$，定义在整个实数轴 $\mathbb{R} = (-\infty, +\infty)$ 上的函数：
-> $$F(x) = P(X \le x) = P(\{\omega \in \Omega : X(\omega) \le x\})$$
-> 称为随机变量 $X$ 的**累积分布函数 (Cumulative Distribution Function, CDF)**，或简称为**分布函数**。
-
-- **物理直观**：$F(x)$ 描述了随机变量落在区间 $(-\infty, x]$ 内的总累积概率质量。
-- **区间概率计算公式**：
-  $$P(a < X \le b) = F(b) - F(a)$$
-  $$P(X = x) = F(x) - F(x^-)$$
-  $$P(X > x) = 1 - F(x)$$
-
----
-
-### 2.2 CDF 的充要公理化性质 (定理 2.3)
-课件第 9 页指出了判定一个函数是否为合法 CDF 的三条充要条件：
-
-> **定理 2.3**：实函数 $F(x)$ 是某个随机变量的累积分布函数 (CDF) 的**充分必要条件**是满足以下三条性质：
-> 1. **极限边界性 (Boundary Limits)**：
->    $$\lim_{x \to -\infty} F(x) = 0, \quad \lim_{x \to +\infty} F(x) = 1$$
-> 2. **右连续性 (Right-continuity)**：$F(x)$ 处处右连续，即对任意 $x \in \mathbb{R}$：
->    $$F(x^+) = \lim_{y \downarrow x} F(y) = F(x)$$
-> 3. **单调不减性 (Non-decreasing)**：若 $x_1 < x_2$，则 $F(x_1) \le F(x_2)$。
-
----
-
-### 2.3 定理 2.3 的严格测度连续性证明
-课件第 10~11 页给出了极其优美的测度连续性证明，完美衔接了第一章的理论：
-
-#### (1) 右连续性证明：
-- 设 $x$ 为任意实数，取严格递减收敛到 $x$ 的实数数列 $\{y_n\}$，即 $y_1 > y_2 > \dots > x$ 且 $\lim_{n \to \infty} y_n = x$；
-- 构造单调递减的事件序列 $A_n = \{\omega : X(\omega) \le y_n\} = (-\infty, y_n]$；
-- 显然 $A_1 \supset A_2 \supset A_3 \dots$，且其交集为：
-  $$A = \bigcap_{n=1}^\infty A_n = \bigcap_{n=1}^\infty (-\infty, y_n] = (-\infty, x] = \{\omega : X(\omega) \le x\}$$
-- 由第一章**概率测度的下连续性（定理 1.1.7 / 推论 1.1.9）**：
-  $$\lim_{n \to \infty} P(A_n) = P(A)$$
-- 将 CDF 定义代入：
-  $$\lim_{n \to \infty} F(y_n) = F(x)$$
-  因数列 $\{y_n\}$ 的任意性，即证明了右极限 $F(x^+) = F(x)$。 $\blacksquare$
-
-#### (2) 极限边界性证明：
-- **上极限**：取单调增序列 $A_n = (-\infty, n]$，$A_1 \subset A_2 \subset \dots$。由可数并性质：
-  $$\bigcup_{n=1}^\infty A_n = (-\infty, +\infty) = \Omega$$
-  由概率测度的上连续性：$\lim_{n \to \infty} F(n) = \lim_{n \to \infty} P(A_n) = P(\Omega) = 1$。
-- **下极限**：取单调减序列 $B_n = (-\infty, -n]$，$B_1 \supset B_2 \supset \dots$。其交集为：
-  $$\bigcap_{n=1}^\infty B_n = \emptyset$$
-  由概率测度的下连续性：$\lim_{n \to \infty} F(-n) = \lim_{n \to \infty} P(B_n) = P(\emptyset) = 0$。 $\blacksquare$
-
-#### (3) 单调不减性证明：
-若 $x_1 < x_2$，则事件包含关系 $(-\infty, x_1] \subset (-\infty, x_2]$。由第一章概率单调性定理：
-$$P(X \le x_1) \le P(X \le x_2) \iff F(x_1) \le F(x_2) \quad \blacksquare$$
-
----
-
-### 2.4 随机变量的两大基本类型
-根据值域与 CDF 的形态，随机变量分为：
-1. **离散型 (Discrete Type)**：
-   - 支撑集 $\mathbb{X}$ 最多包含**可数个**数值；
-   - 其 CDF 表现为**阶梯函数 (Step Function)**，在每一个可能取值点处发生跳跃，跳跃高度等于该点的概率质量；
-2. **连续型 (Continuous Type)**：
-   - 支撑集 $\mathbb{X}$ 为一个区间或若干区间的并集；
-   - 其 CDF 是**连续函数**（处处连续，无跳跃）。
-
----
-
-## 3. 第一节：一维离散型随机变量与概率质量函数 (2.1 Discrete Random Variables & PMF)
-
-### 3.1 概率质量函数 (PMF) 的定义与公理化性质
-对于离散型随机变量 $X$，直接研究单点概率是最自然的途径。
-
-> **定义（概率质量函数, PMF）**：  
-> 离散型随机变量 $X$ 的概率质量函数 $f(x)$（课件常用记号，国内教材常记为 $p(x)$ 或 $P(X = x_i)$）定义为：
-> $$f(x) = P(X = x)$$
-
-#### PMF 的充要性质：
-1. **非负性**：$f(x) \ge 0, \quad \forall x \in \mathbb{X}$；
-2. **归一性 (Normed)**：$\sum_{x \in \mathbb{X}} f(x) = 1$；
-3. **可加性**：对任意子集 $A \subset \mathbb{X}$，有 $P(X \in A) = \sum_{x \in A} f(x)$。
-
-### 3.2 PMF 与 CDF 的对应关系
-已知 PMF 求 CDF：
-$$F(x) = \sum_{y \le x} f(y)$$
-已知 CDF 求单点 PMF：在跳跃点 $x$ 处，PMF 等于跳跃高度：
-$$f(x) = F(x) - F(x^-)$$
-
----
-
-### 3.3 经典案例剖析：双骰子极大值分布（例 2.2）
-掷两颗均匀六面骰子，样本空间 $\Omega^2 = \{(\omega_1, \omega_2) : \omega_i \in \{1, \dots, 6\}\}$，总可能数 $|\Omega| = 36$。  
-令随机变量 $X = \max(\omega_1, \omega_2)$ 为两颗骰子朝上面点数的较大者。求 $X$ 的分布。
-
-#### 严谨推导与思维模型：
-- **方法一：直接穷举枚举法**
-  - $X = 1$：仅 $(1, 1)$，共 1 种，故 $f(1) = 1/36$；
-  - $X = 2$：$(1, 2), (2, 1), (2, 2)$，共 3 种，故 $f(2) = 3/36$；
-  - $X = 3$：$(3, 1), (1, 3), (3, 2), (2, 3), (3, 3)$，共 5 种，故 $f(3) = 5/36$；
-  - $X = 4$：共 7 种，故 $f(4) = 7/36$；
-  - $X = 5$：共 9 种，故 $f(5) = 9/36$；
-  - $X = 6$：共 11 种，故 $f(6) = 11/36$。
-
-- **方法二：CDF 差分转化法（推荐高级解法）**  
-  事件 $\{\max(\omega_1, \omega_2) \le k\} \iff \{\omega_1 \le k \text{ 且 } \omega_2 \le k\}$。  
-  由于两颗骰子独立：
-  $$P(X \le k) = P(\omega_1 \le k) P(\omega_2 \le k) = \frac{k}{6} \times \frac{k}{6} = \frac{k^2}{36}$$
-  由此可直接写出阶梯状 CDF：
-  $$F(x) = \begin{cases} 0, & x < 1 \\ \frac{k^2}{36}, & k \le x < k + 1, \quad k = 1, 2, 3, 4, 5 \\ 1, & x \ge 6 \end{cases}$$
-  而单点 PMF 即为相邻平方差：
-  $$f(k) = F(k) - F(k-1) = \frac{k^2 - (k-1)^2}{36} = \frac{2k - 1}{36}, \quad k = 1, 2, \dots, 6$$
-
----
-
-### 3.4 离散分布的可视化表示
-课件第 22~23 页展示了离散分布的两种主流图形化工具：
-1. **折线针状图 (Line Graph / Spike Plot)**：在横轴每个取值点 $x$ 处作垂直线段，高度为 $f(x)$；
-2. **概率直方图 (Probability Histogram)**：在横轴以每个取值点 $x$ 为中心，以底边宽度为 1（若间距为 1）、高度为 $f(x)$ 绘制矩形柱。  
-   - 核心几何特性：每个矩形的底宽为 1，因而每个小矩形的面积严格等于该点的概率质量 $f(x)$；
-   - **所有矩形的总面积严格等于 1**。这一设计在直观上将离散的概率质量平滑过渡到了连续型的概率密度面积概念。
-
----
-
-## 4. 第二节：一维连续型随机变量与概率密度函数 (2.2 Continuous Random Variables & Pdf)
-
-### 4.1 概率密度函数 (PDF) 的严格定义与性质
-
-> **定义（概率密度函数, Probability Density Function, PDF）**：  
-> 设 $X$ 为连续型随机变量，其累积分布函数为 $F(x)$。在 $F(x)$ 可导（即 $f(x)$ 连续）的每一个实数点上，CDF 的一阶导数称为 $X$ 的**概率密度函数**：
-> $$f(x) = \frac{dF(x)}{dx}$$
-
-#### PDF 的充要公理化性质：
-1. **非负性**：$f(x) \ge 0, \quad \forall x \in \mathbb{X}$；
-2. **全积分归一性**：$\int_{-\infty}^{+\infty} f(x) dx = 1$；
-3. **区间测度性**：对任意实数子集 $A \in \mathcal{B}(\mathbb{R})$：
-   $$P(X \in A) = \int_A f(x) dx$$
-
----
-
-### 4.2 微积分基本定理下的 PDF 与 CDF 对偶关系
-- **由密度求分布（积分累积）**：
-  $$F(x) = \int_{-\infty}^x f(s) ds, \quad \forall x \in (-\infty, +\infty)$$
-- **由分布求密度（微分斜率）**：
-  $$f(x) = F'(x) = \frac{d}{dx} \int_{-\infty}^x f(s) ds$$
-
----
-
-### 4.3 核心本质辨析：为什么连续型 PDF 的值不是概率？
-这是概率论教学中最关键的认知飞跃：
-
-1. **单点概率恒为 0**：  
-   对于连续型随机变量，由积分性质：
-   $$P(X = c) = \int_c^c f(x) dx = 0$$
-   因此：$P(a < X < b) = P(a \le X < b) = P(a < X \le b) = P(a \le X \le b) = F(b) - F(a)$。是否包含端点不影响区间概率。
-2. **密度 (Density) vs 质量 (Mass)**：  
-   在物理学中，质量密度 $\rho(x) = \frac{dm}{dx}$ 的量纲是“质量 / 长度”。同理，概率密度 $f(x)$ 的量纲是“概率 / 长度”。
-3. **微元法诠释**：在微小区间 $[x, x + dx]$ 上：
-   $$P(x \le X \le x + dx) \approx f(x) dx$$
-4. **$f(x)$ 可以大于 1**：  
-   因为 $f(x)$ 不是概率，只要总积分等于 1，$f(x)$ 在局部完全可以大于 1，甚至在奇点处趋向无穷大！例如 $X \sim U(0, 0.1)$，其密度为 $f(x) = 10 > 1$。
-
----
-
-### 4.4 连续分布计算典型案例
-- **例 2.3（连续均匀分布）**：$X \sim U(1, 2)$，$f(x) = 1$ ($1 \le x \le 2$)。  
-  积分求得 CDF：
-  $$F(x) = \begin{cases} 0, & x < 1 \\ x - 1, & 1 \le x \le 2 \\ 1, & x > 2 \end{cases}$$
-- **例 2.4（线性三角密度）**：$f(x) = 2x$ ($0 \le x \le 1$)。  
-  积分求得 CDF：
-  $$F(x) = \int_0^x 2s ds = x^2, \quad 0 \le x \le 1$$
-  图像上：$f(x)$ 是一条斜率为 2 的上升线段，其 CDF 是一段顶点在原点的抛物线，在 $x=1$ 处平滑过渡到常数 1。
-
----
-
-## 5. 第三节：随机变量函数的分布 (2.3 Distributions of Functions of Random Variables)
-
-在工程信号处理、统计建模与机器学习中，常常需要对已知随机变量 $X$ 进行非线性变换得到新的随机变量 $Y = g(X)$。如何严谨求解 $Y$ 的分布？
-
-### 5.1 变量代换方法论：CDF 法 (Distribution Function Technique)
-CDF 法是最本质、最稳健的基础方法，其标准解题流水线分为三步：
-1. **确定 $Y$ 的支撑集 $\mathbb{Y}$**；
-2. **写出 $Y$ 的累积分布函数定义**：
-   $$F_Y(y) = P(Y \le y) = P(g(X) \le y)$$
-   通过不等式变换，将 $g(X) \le y$ 解出关于 $X$ 的等价取值区间；
-3. **代入 $X$ 的分布积分，并对 $y$ 求导得到密度 $f_Y(y) = F_Y'(y)$**。
-
----
-
-### 5.2 单调可逆变换定理与雅可比公式
-
-#### (1) 严格单调递增情形 (定理 2.4)
-若 $g(x)$ 严格单调递增且可导，其反函数为 $x = g^{-1}(y)$：
-$$F_Y(y) = P(g(X) \le y) = P(X \le g^{-1}(y)) = F_X(g^{-1}(y))$$
-两边对 $y$ 应用链式求导法则：
-$$f_Y(y) = \frac{d}{dy} F_X(g^{-1}(y)) = f_X(g^{-1}(y)) \cdot \frac{dg^{-1}(y)}{dy}$$
-
-#### (2) 严格单调递减情形 (定理 2.5)
-若 $g(x)$ 严格单调递减且可导：
-$$F_Y(y) = P(g(X) \le y) = P(X \ge g^{-1}(y)) = 1 - F_X(g^{-1}(y))$$
-两边对 $y$ 求导：
-$$f_Y(y) = - f_X(g^{-1}(y)) \cdot \frac{dg^{-1}(y)}{dy}$$
-注意：因为 $g(x)$ 递减，其反函数导数 $\frac{dg^{-1}(y)}{dy} < 0$，负负得正，保证了 $f_Y(y) \ge 0$。
-
-#### (3) 统一定理：雅可比单调变换公式 (定理 2.6)
-
-> **定理 2.6（单调代换通用定理）**：  
-> 设 $X$ 为连续型随机变量，其密度为 $f_X(x)$。设 $y = g(x)$ 是严格单调且处处可导的可逆变换，反函数为 $x = g^{-1}(y)$。则 $Y = g(X)$ 的概率密度函数为：
-> $$f_Y(y) = f_X(g^{-1}(y)) \cdot \left| \frac{dg^{-1}(y)}{dy} \right|, \quad y \in \mathbb{Y}$$
-
-其中因子 $\left| \frac{dg^{-1}(y)}{dy} \right| = \left| \frac{dx}{dy} \right|$ 称为**一维变换的雅可比行列式 (Jacobian)**。
-
----
-
-### 5.3 经典连续代换案例深度解析
-
-#### 案例 1：Gamma 分布到 Loggamma 分布（例 2.5）
-设 $X \sim \text{Gamma}(\alpha, \theta)$，其密度为 $f_X(x) = \frac{1}{\Gamma(\alpha)\theta^\alpha} x^{\alpha-1} e^{-x/\theta}, x > 0$。  
-作指数变换 $Y = g(X) = e^X$。
-- **确定支撑集**：$x \in (0, \infty) \implies y = e^x \in (1, \infty)$；
-- **反函数与导数**：$x = g^{-1}(y) = \ln y$，$\frac{dx}{dy} = \frac{1}{y} > 0$；
-- **代入雅可比公式**：
-  $$f_Y(y) = f_X(\ln y) \left| \frac{dx}{dy} \right| = \frac{1}{\Gamma(\alpha)\theta^\alpha} (\ln y)^{\alpha-1} e^{-\frac{\ln y}{\theta}} \cdot \frac{1}{y}$$
-  由于 $e^{-\frac{\ln y}{\theta}} = (e^{\ln y})^{-1/\theta} = y^{-1/\theta}$，合并同类项：
-  $$f_Y(y) = \frac{1}{\Gamma(\alpha)\theta^\alpha} (\ln y)^{\alpha-1} y^{-(1 + 1/\theta)}, \quad 1 < y < \infty$$
-  该分布被称为 **Loggamma 分布**。
-
-#### 案例 2：旋转指针与标准柯西分布的物理生成（例 2.6）
-在平面笛卡尔坐标系中，点 $(0, 1)$ 处安装一个可自由旋转的发光探针。探针与 $y$ 轴负方向的夹角 $W$ 服从对称均匀分布 $W \sim U(-\pi/2, \pi/2)$。  
-光线射向 $x$ 轴的交点坐标为 $X$。由三角几何关系，$X = \tan W$。求 $X$ 的概率分布。
-- $W$ 的 CDF 为：$F_W(w) = \frac{w - (-\pi/2)}{\pi} = \frac{w + \pi/2}{\pi}, \quad w \in (-\pi/2, \pi/2)$；
-- $X = \tan W$ 在 $(-\pi/2, \pi/2)$ 上严格单调递增，值域为 $(-\infty, +\infty)$；
-- $X$ 的 CDF：
-  $$F_X(x) = P(\tan W \le x) = P(W \le \arctan x) = F_W(\arctan x) = \frac{\arctan x + \pi/2}{\pi}$$
-- 求导得 PDF：
-  $$f_X(x) = \frac{d}{dx} \left( \frac{\arctan x}{\pi} + \frac{1}{2} \right) = \frac{1}{\pi (1 + x^2)}, \quad -\infty < x < \infty$$
-- **结论**：这就是著名的**标准柯西分布 (Standard Cauchy Distribution)**！这一几何光学模型揭示了柯西分布的物理来源。
-
-#### 案例 3：非单调变换：$Y = X^2$ 的两分支求和法（例 2.7）
-若 $X \sim \text{Cauchy}(1, 0)$，求 $Y = X^2$ 的分布。
-- **问题特征**：函数 $y = x^2$ 在整个定义域 $(-\infty, +\infty)$ 上**不是单调函数**（两边平方对称），无法直接应用定理 2.6。
-- **CDF 分支展开**：$y \ge 0$ 时：
-  $$F_Y(y) = P(X^2 \le y) = P(-\sqrt{y} \le X \le \sqrt{y}) = F_X(\sqrt{y}) - F_X(-\sqrt{y})$$
-- **求导并结合对称性**：
-  $$f_Y(y) = \frac{d}{dy} [F_X(\sqrt{y}) - F_X(-\sqrt{y})] = f_X(\sqrt{y}) \cdot \frac{1}{2\sqrt{y}} - f_X(-\sqrt{y}) \cdot \left(-\frac{1}{2\sqrt{y}}\right)$$
-  $$f_Y(y) = \frac{1}{2\sqrt{y}} [f_X(\sqrt{y}) + f_X(-\sqrt{y})]$$
-  因为柯西密度是偶函数 $f_X(x) = f_X(-x) = \frac{1}{\pi(1+x^2)}$：
-  $$f_Y(y) = \frac{1}{\sqrt{y}} f_X(\sqrt{y}) = \frac{1}{\pi (1 + y)\sqrt{y}}, \quad y \in [0, \infty)$$
-
----
-
-### 5.4 概率积分变换与逆变换抽样定理 (Theorems 2.7 & 2.8)
-课件第 42~43 页给出了计算统计学与蒙特卡洛随机模拟的理论奠基定理：
-
-#### 定理 2.7（逆变换采样定理 / Inverse Transform Sampling）
-设随机变量 $U \sim U(0, 1)$。若 $F_Y(y)$ 是任意连续且严格单调递增的累积分布函数，反函数为 $F_Y^{-1}$。  
-定义随机变量 $Y = F_Y^{-1}(U)$，则 **$Y$ 的分布函数恰好就是 $F_Y(y)$**！
-- *证明*：
-  $$P(Y \le y) = P(F_Y^{-1}(U) \le y) = P(U \le F_Y(y))$$
-  因为 $U \sim U(0, 1)$，对任意 $u \in (0, 1)$ 有 $P(U \le u) = u$。取 $u = F_Y(y) \in (0, 1)$，即得：
-  $$P(Y \le y) = F_Y(y) \quad \blacksquare$$
-- **计算机模拟的核心价值**：计算机伪随机数生成器只能产生标准的均匀分布伪随机数 $U(0, 1)$。利用该定理，只要算出目标分布的逆 CDF，就能将均匀随机数转化为任意指定连续分布的样本点！
-
-#### 定理 2.8（概率积分变换 / Probability Integral Transform）
-若连续型随机变量 $X$ 的 CDF $F_X(x)$ 严格单调递增，则构造的复合随机变量：
-$$Y = F_X(X) \sim U(0, 1)$$
-恒服从标准均匀分布。
-- *证明*：对 $y \in (0, 1)$，$P(Y \le y) = P(F_X(X) \le y) = P(X \le F_X^{-1}(y)) = F_X(F_X^{-1}(y)) = y$。
-
----
-
-### 5.5 离散型随机变量的代换技巧及与连续型的关键差异
-课件第 46~48 页特别指出了离散型变量代换与连续型的本质差异：
-
-- **核心差异**：离散型的 PMF $f_X(x) = P(X = x)$ **本身就是一个真实的概率值**，而不是单位区间的密度。因此在单调代换中，**完全不需要乘以导数/雅可比因子**！
-- **单调变换公式**：若 $Y = g(X)$ 是一对一单射，反函数为 $X = g^{-1}(Y)$，则：
-  $$f_Y(y) = P(Y = y) = P(X = g^{-1}(y)) = f_X(g^{-1}(y))$$
-- **案例 2.8**：$X \sim \text{Poisson}(4)$，PMF 为 $f_X(x) = \frac{4^x e^{-4}}{x!}, x = 0, 1, 2, \dots$  
-  令 $Y = \sqrt{X}$，则反函数为 $X = Y^2$。  
-  $Y$ 的支撑集为 $\mathbb{Y} = \{0, 1, \sqrt{2}, \sqrt{3}, \dots\}$，其 PMF 直接为：
-  $$f_Y(y) = f_X(y^2) = \frac{4^{y^2} e^{-4}}{(y^2)!}, \quad y \in \{0, 1, \sqrt{2}, \dots\}$$
-
----
-
-## 6. 第四节：常见离散型随机变量分布 (2.4.1 Common Discrete Distributions)
-
-### 6.1 离散均匀分布 (Discrete Uniform Distribution)
-- **支撑集**：有限个等可能点 $\mathbb{X} = \{c_1, c_2, \dots, c_m\}$；
-- **PMF**：$f(x) = \frac{1}{m}, \quad x \in \mathbb{X}$；
-- **CDF**：$F(x) = \begin{cases} 0, & x < c_1 \\ \frac{k}{m}, & c_k \le x < c_{k+1} \\ 1, & x \ge c_m \end{cases}$。
-
----
-
-### 6.2 伯努利分布 (Bernoulli Distribution)
-- **记号**：$X \sim \text{Bernoulli}(p)$，参数 $p \in [0, 1]$；
-- **试验模型**：单次二值试验（成功 1，失败 0）；
-- **PMF 紧凑表达**：
-  $$f(x) = p^x (1 - p)^{1 - x}, \quad x \in \{0, 1\}$$
-
----
-
-### 6.3 二项分布 (Binomial Distribution)
-- **记号**：$X \sim \text{Binomial}(n, p)$，参数 $n \in \mathbb{N}^+, p \in [0, 1]$；
-- **物理模型**：$n$ 重独立伯努利试验中成功的总次数；
-- **PMF 公式**：
-  $$f(x) = \binom{n}{x} p^x (1 - p)^{n - x}, \quad x = 0, 1, 2, \dots, n$$
-- **分布形态分析（课件图 12）**：
-  - 当 $p = 0.5$ 时，二项分布呈现**关于中心点高度对称**的钟形；
-  - 当 $p < 0.5$ 时，分布**右偏 (Right-skewed / 正偏)**，概率质量集中在左侧小数值区；
-  - 当 $p > 0.5$ 时，分布**左偏 (Left-skewed / 负偏)**，概率质量集中在右侧大数值区。
-
----
-
-### 6.4 负二项分布 (Negative Binomial) 与几何分布 (Geometric)
-课件第 53 页给出了统计试验中“等待试验结束”的模型：
-
-#### (1) 负二项分布（总试验次数定义）
-- **物理模型**：在独立重复伯努利试验中，持续进行试验，**直到获得第 $r$ 次成功为止所需的总试验次数 $X$**；
-- **支撑集**：$x = r, r+1, r+2, \dots$（至少需要做 $r$ 次试验）；
-- **PMF 推导**：
-  要在第 $x$ 次试验时恰好达成第 $r$ 次成功，必须满足：
-  1. 前 $x - 1$ 次试验中恰好发生了 $r - 1$ 次成功（以及 $x - r$ 次失败），组合数方式为 $\binom{x-1}{r-1}$；
-  2. 第 $x$ 次试验必定是成功（概率为 $p$）。
-  结合独立性相乘：
-  $$f(x) = \binom{x-1}{r-1} p^{r-1} (1-p)^{x-r} \times p = \binom{x-1}{r-1} p^r (1-p)^{x-r}, \quad x = r, r+1, \dots$$
-
-> **【深度概念辨析：负二项分布的两种常见定义】**  
-> - **定义 A（本课件采用）**：$X$ 为直到第 $r$ 次成功时的**总试验次数**，支撑集 $x \in \{r, r+1, \dots\}$；
-> - **定义 B（部分教材与软件如 R/Python 采用）**：$Y$ 为直到第 $r$ 次成功前的**失败次数**，支撑集 $y \in \{0, 1, 2, \dots\}$，其关系为 $Y = X - r$。读者在查表或调用函数时务必注意区分！
-
-#### (2) 几何分布 (Geometric Distribution)
-- 当取 $r = 1$ 时，负二项分布退化为几何分布（等待第一次成功所需的试验次数）：
-  $$f(x) = p (1 - p)^{x-1}, \quad x = 1, 2, 3, \dots$$
-
----
-
-### 6.5 泊松分布 (Poisson Distribution)
-- **记号**：$X \sim \text{Poisson}(\lambda)$，参数 $\lambda > 0$；
-- **物理模型**：用于对在固定时间间隔或空间区域内稀疏随机事件的**发生次数 (Counts)** 建模（例如每小时到达售票处的顾客数、每卷铝合金表面的缺陷点数）；
-- **PMF 公式**：
-  $$f(k) = \frac{\lambda^k}{k!} e^{-\lambda}, \quad k = 0, 1, 2, \dots$$
-- **归一化验证**：
-  $$\sum_{k=0}^\infty f(k) = \sum_{k=0}^\infty \frac{\lambda^k}{k!} e^{-\lambda} = e^{-\lambda} \sum_{k=0}^\infty \frac{\lambda^k}{k!} = e^{-\lambda} \cdot e^\lambda = 1 \quad \blacksquare$$
-
----
-
-### 6.6 泊松极限定理 (Poisson Theorem / 稀有事件定律)
-
-#### (1) 定理表述 (定理 2.9)
-设 $X_n \sim \text{Binomial}(n, p_n)$。若当试验次数 $n \to \infty$ 且单次成功率 $p_n \to 0$ 时，期望值保持收敛稳定：
-$$\lim_{n \to \infty} n p_n = \lambda > 0$$
-则对任意固定的非负整数 $k = 0, 1, 2, \dots$，二项分布概率逐点收敛于泊松分布概率：
-$$\lim_{n \to \infty} \binom{n}{k} p_n^k (1 - p_n)^{n - k} = \frac{\lambda^k}{k!} e^{-\lambda}$$
-
-#### (2) 严格数学证明
-*严谨推导*：  
-记 $p_n = \frac{\lambda_n}{n}$，其中 $\lim_{n \to \infty} \lambda_n = \lambda$。展开二项组合数：
-$$\binom{n}{k} p_n^k (1 - p_n)^{n - k} = \frac{n(n-1)(n-2)\dots(n-k+1)}{k!} \left(\frac{\lambda_n}{n}\right)^k \left(1 - \frac{\lambda_n}{n}\right)^{n - k}$$
-将其拆项重新组合：
-$$= \frac{\lambda_n^k}{k!} \cdot \left[ \frac{n}{n} \cdot \frac{n-1}{n} \cdot \dots \cdot \frac{n-k+1}{n} \right] \cdot \left(1 - \frac{\lambda_n}{n}\right)^n \cdot \left(1 - \frac{\lambda_n}{n}\right)^{-k}$$
-当 $n \to \infty$ 时分别考察各项极限（注意 $k$ 是固定的有限整数）：
-1. $\lim_{n \to \infty} \frac{\lambda_n^k}{k!} = \frac{\lambda^k}{k!}$；
-2. $\lim_{n \to \infty} \left[ 1 \cdot \left(1 - \frac{1}{n}\right) \dots \left(1 - \frac{k-1}{n}\right) \right] = 1 \times 1 \dots \times 1 = 1$；
-3. 由重要微积分极限 $\lim_{n \to \infty} (1 - x/n)^n = e^{-x}$，得 $\lim_{n \to \infty} \left(1 - \frac{\lambda_n}{n}\right)^n = e^{-\lambda}$；
-4. $\lim_{n \to \infty} \left(1 - \frac{\lambda_n}{n}\right)^{-k} = (1 - 0)^{-k} = 1$。
-四项极限相乘，立即得到：
-$$\lim_{n \to \infty} P(X_n = k) = \frac{\lambda^k}{k!} e^{-\lambda} \quad \blacksquare$$
-
-#### (3) 实际计算中的近似指导法则（课件图 15 & 16）
-- 课件第 59~60 页通过海量数值模拟线图与散点对比图阐明：  
-  当 $n$ 较大且 $p$ 极小时（工程惯用标准为 $n \ge 30, p \le 0.1$，或 $n \ge 100, np \le 10$），复杂的二项式高阶组合数可以用简洁的泊松概率极高精度地近似替代。散点图完全重合在对角线上！
-
----
-
-## 7. 第五节：常见连续型随机变量分布 (2.4.2 Common Continuous Distributions)
-
-### 7.1 连续均匀分布 (Continuous Uniform Distribution)
-- **记号**：$X \sim U(a, b), \quad a < b$；
-- **PDF 与 CDF**：
-  $$f(x) = \begin{cases} \frac{1}{b-a}, & a < x < b \\ 0, & \text{其他} \end{cases}, \qquad F(x) = \begin{cases} 0, & x < a \\ \frac{x-a}{b-a}, & a \le x < b \\ 1, & x \ge b \end{cases}$$
-
----
-
-### 7.2 柯西分布 (Cauchy Distribution)
-- **标准柯西分布**：$X \sim \text{Cauchy}(1, 0)$，PDF 为 $f(x) = \frac{1}{\pi(1+x^2)}, x \in \mathbb{R}$；
-- **一般柯西分布**：$Y = aX + b$（尺度参数 $a > 0$，位置参数 $b \in \mathbb{R}$），记作 $Y \sim \text{Cauchy}(a, b)$：
-  $$f_Y(y) = \frac{1}{a\pi \left[1 + \left(\frac{y-b}{a}\right)^2\right]}, \qquad F_Y(y) = \frac{1}{2} + \frac{1}{\pi} \arctan\left(\frac{y-b}{a}\right)$$
-
-> **【深度补充解释 2：柯西分布的“病态”厚尾与矩不存在悖论】**  
-> 课件第 65 页将标准柯西分布与标准正态分布 $N(0, 1)$ 的密度曲线进行了同图对比：
-> 1. **厚尾特性 (Heavy Tails)**：正态分布的尾部按指数二次方衰减 $e^{-x^2/2}$，极快趋向于 0；而柯西分布的尾部按代数多项式倒数衰减 $\sim 1/x^2$。这意味着在柯西分布下，**发生极端异常值的概率远比正态分布高得多**！
-> 2. **数学期望不存在**：由于 $\int_{-\infty}^{+\infty} \frac{|x|}{\pi(1+x^2)} dx = \infty$（被积函数按 $1/|x|$ 衰减，调和发散），柯西分布**连一阶数学期望（均值）都不存在**，更遑论方差！
-> 3. 它作为中心极限定理失效的著名反例，在物理学（共振谱线 Breit-Wigner 分布）与稳健统计学中扮演着核心角色。
-
----
-
-### 7.3 指数分布 (Exponential Distribution) 与无记忆性
-
-#### (1) 基本定义
-- **记号**：$X \sim \text{Exp}(\lambda)$，参数 $\lambda > 0$（事件到达率）；
-- **物理模型**：泊松流中连续两次事件发生的等待时间间隔；
-- **PDF 与 CDF**：
-  $$f(x) = \lambda e^{-\lambda x}, \quad x > 0; \qquad F(x) = 1 - e^{-\lambda x}, \quad x \ge 0$$
-- **生存函数 / 尾概率 (Survival Function)**：
-  $$P(X > x) = 1 - F(x) = e^{-\lambda x}, \quad x \ge 0$$
-
-#### (2) 无记忆性定理 (Memoryless Property, 定理 2.10)
-课件第 70~72 页重点讲解了电子元件寿命案例（例 2.8）与无记忆性证明：
-
-> **定理 2.10**：若 $X \sim \text{Exp}(\lambda)$，则对任意 $a, x \ge 0$，有：
-> $$P(X > a + x \mid X > a) = P(X > x)$$
-
-*严谨证明*：由条件概率公式与生存函数：
-$$P(X > a + x \mid X > a) = \frac{P(X > a + x \cap X > a)}{P(X > a)} = \frac{P(X > a + x)}{P(X > a)} = \frac{e^{-\lambda(a + x)}}{e^{-\lambda a}} = e^{-\lambda x} = P(X > x) \quad \blacksquare$$
-
-- **物理含义**：若一个元件的寿命服从指数分布，假设它已经无故障运行了 $a = 300$ 小时，它“还能再继续工作至少 $x = 600$ 小时”的条件概率，与一个“全新元件从 0 开始能工作 600 小时”的概率**完全一样**！元件没有任何“老化”或“磨损记忆”。
-- **唯一性**：**指数分布是整个连续型分布家族中唯一具备无记忆性的分布**！（几何分布是离散家族中的唯一代表）。
-
----
-
-### 7.4 伽马分布 (Gamma Distribution)
-- **物理模型**：泊松过程中直到**第 $\alpha$ 次事件发生所需的总等待时间**；
-- **记号**：$X \sim \text{Gamma}(\alpha, \lambda)$（形状参数 $\alpha > 0$，率参数 $\lambda > 0$）；
-- **Gamma 函数**：$\Gamma(\alpha) = \int_0^\infty y^{\alpha-1} e^{-y} dy$。重要性质：$\Gamma(\alpha) = (\alpha - 1)\Gamma(\alpha - 1)$，若 $n$ 为正整数则 $\Gamma(n) = (n - 1)!$；
-- **PDF 公式**：
-  $$f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\lambda x}, \quad x > 0$$
-- **CDF 与不完全 Gamma 函数**：
-  $$F(x) = \frac{\gamma(\alpha, \lambda x)}{\Gamma(\alpha)}, \quad \text{其中 } \gamma(s, x) = \int_0^x t^{s-1} e^{-t} dt$$
-- **退化关系**：当 $\alpha = 1$ 时，$\text{Gamma}(1, \lambda)$ 退化为**指数分布 $\text{Exp}(\lambda)$**。
-
----
-
-### 7.5 卡方分布 (Chi-square Distribution) 作为 Gamma 分布特例
-课件第 75 页指出：
-当 Gamma 分布的形状参数取自由度的一半 $\alpha = n/2$，率参数取 $\lambda = 1/2$（或尺度 $\beta = 1/\lambda = 2$）时：
-$$X \sim \text{Gamma}(n/2, 1/2) \implies X \sim \chi^2(n)$$
-称 $X$ 服从自由度为 $n$ 的**卡方分布**。卡方分布是后续数理统计中样本方差分布与拟合优度检验的基础。
-
----
-
-### 7.6 正态分布 (Normal Distribution) 与标准化变换
-
-#### (1) 基本定义
-- **记号**：$X \sim N(\mu, \sigma^2)$，位置参数（均值）$\mu \in \mathbb{R}$，尺度参数（标准差）$\sigma > 0$；
-- **PDF 公式**：
-  $$f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}, \quad -\infty < x < \infty$$
-- **标准正态分布**：当 $\mu = 0, \sigma = 1$ 时，记作 $Z \sim N(0, 1)$：
-  $$\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}, \qquad \Phi(z) = \int_{-\infty}^z \phi(s) ds$$
-
-#### (2) 标准化变换定理 (定理 2.11)
-
-> **定理 2.11**：若 $X \sim N(\mu, \sigma^2)$，则线性变换：
-> $$Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$$
-> 其 CDF 满足：$F_X(x) = \Phi\left(\frac{x - \mu}{\sigma}\right)$。
-
-*严谨证明（利用定理 2.4 单调变量代换法）*：  
-令 $Z = g(X) = \frac{X - \mu}{\sigma}$。  
-反函数为 $x = g^{-1}(z) = \sigma z + \mu$，导数 $\frac{dx}{dz} = \sigma > 0$。  
-由单调变换雅可比公式：
-$$f_Z(z) = f_X(g^{-1}(z)) \left| \frac{dx}{dz} \right| = \left[ \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{((\sigma z + \mu) - \mu)^2}{2\sigma^2}} \right] \cdot \sigma = \frac{1}{\sqrt{2\pi}} e^{-z^2/2} = \phi(z) \quad \blacksquare$$
-
----
-
-## 8. 核心公式速查与易错知识点深度辨析 (Summary & Pitfalls)
-
-### 8.1 经典分布全景速查对照表
-
-| 分布名称 | 类型 | 参数定义 | PMF / PDF 表达式 | 支撑集 $\mathbb{X}$ | 典型现实背景 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **离散均匀分布** | 离散 | $m$ 个点 | $f(x) = 1/m$ | $\{c_1, \dots, c_m\}$ | 掷骰子、抽签 |
-| **伯努利分布** | 离散 | $p \in [0, 1]$ | $f(x) = p^x (1-p)^{1-x}$ | $\{0, 1\}$ | 单次抛硬币、质检 |
-| **二项分布** | 离散 | $n \in \mathbb{N}^+, p$ | $f(x) = \binom{n}{x} p^x (1-p)^{n-x}$ | $\{0, 1, \dots, n\}$ | $n$ 重试验成功次数 |
-| **负二项分布** | 离散 | $r \in \mathbb{N}^+, p$ | $f(x) = \binom{x-1}{r-1} p^r (1-p)^{x-r}$ | $\{r, r+1, \dots\}$ | 等待第 $r$ 次成功的试验次数 |
-| **几何分布** | 离散 | $p \in [0, 1]$ | $f(x) = p(1-p)^{x-1}$ | $\{1, 2, \dots\}$ | 等待首次成功的试验次数 |
-| **泊松分布** | 离散 | $\lambda > 0$ | $f(x) = \frac{\lambda^x}{x!} e^{-\lambda}$ | $\{0, 1, 2, \dots\}$ | 稀疏事件计数、排队论 |
-| **连续均匀分布** | 连续 | $a < b$ | $f(x) = \frac{1}{b-a}$ | $(a, b)$ | 均匀误差、随机角 |
-| **标准柯西分布** | 连续 | - | $f(x) = \frac{1}{\pi(1+x^2)}$ | $(-\infty, +\infty)$ | 旋转光斑、厚尾物理共振 |
-| **指数分布** | 连续 | $\lambda > 0$ | $f(x) = \lambda e^{-\lambda x}$ | $(0, +\infty)$ | 电子元件寿命、无记忆等待 |
-| **伽马分布** | 连续 | $\alpha, \lambda > 0$ | $f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\lambda x}$ | $(0, +\infty)$ | 等待第 $\alpha$ 次事件发生的时间 |
-| **卡方分布** | 连续 | 自由度 $n$ | $\text{Gamma}(n/2, 1/2)$ | $(0, +\infty)$ | 样本方差分布、拟合优度 |
-| **正态分布** | 连续 | $\mu, \sigma^2$ | $f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | $(-\infty, +\infty)$ | 测量误差、海量微小扰动叠加 |
-
----
-
-### 8.2 核心易错点与解题陷阱深度辨析
-
-#### 辨析 1：连续变量代换是否能直接代入？雅可比项的本质为何？
-- **常见错误**：许多学生在求 $Y = g(X)$ 的密度时，直接把反函数代入原密度：$f_Y(y) = f_X(g^{-1}(y))$（遗漏了导数项！）；
-- **正确法则**：根据概率守恒原理，微元区间内的概率必须相等：
-  $$P(y \le Y \le y + dy) = P(x \le X \le x + dx) \implies f_Y(y) |dy| = f_X(x) |dx|$$
-  所以必有 $f_Y(y) = f_X(x) \left|\frac{dx}{dy}\right|$！只有当 $X$ 是离散型时，因 $f(x)$ 是纯概率点质量，才可以直接代入。
-
-#### 辨析 2：负二项分布定义混淆陷阱
-- 考试中必须审清题目问的是**“总试验次数 $X$”** 还是 **“失败次数 $Y$”**：
-  - 若为总次数，支撑集从 $r$ 开始，公式为 $\binom{x-1}{r-1} p^r (1-p)^{x-r}$；
-  - 若为失败次数，支撑集从 $0$ 开始，公式为 $\binom{y+r-1}{y} p^r (1-p)^y$。
-
-#### 辨析 3：连续型单点概率为 0 与可能发生的矛盾
-- 在连续型分布中，$P(X = x_0) = 0$ 对任何确定的实数点 $x_0$ 均成立。但这绝不代表事件 $\{X = x_0\}$ 是不可能事件 $\emptyset$。
-- 测度论解释：单点集的 Lebesgue 测度为 0，因而概率测度为 0。任何一次试验总会落出某个具体的实数点，这体现了“概率为 0 的事件依然可能发生”。
+# 第二章　一元随机变量与概率分布：教材式复习讲义
+
+> 依据 Chapter2.pdf（78 页，Shijia Wang）重构。正文按概念之间的逻辑展开，不沿用幻灯片顺序。课件例题以中文完整整理，另加的问题明确标注“补充”。页码均指 PDF 页码。
+> 记号：PMF 用 $p_X$，PDF 用 $f_X$，CDF 用 $F_X$。Gamma 分布明确区分速率和尺度。
+
+## 导论：从事件的概率走向数值的分布
+
+第一章研究随机事件是否发生，本章进一步研究随机试验产生的数值：成功多少次、等待多久、测量结果多大。数值并不是凭空出现的，而是用一个函数从样本结果中提取出来的。这个函数就是随机变量。
+
+整章围绕三个问题组织。第一，如何完整描述一个随机变量的概率规律？这引出分布及其统一表示 CDF。第二，怎样由实验机制建立分布？这引出成功计数、等待次数、稀有事件计数、连续等待等模型。第三，已知 $X$ 的分布，如何求 $g(X)$ 的分布？这引出事件还原、换元和分支求和。
+
+掌握本章，不能只记住分布公式。还应知道公式为什么成立、依赖哪些条件，以及变量定义改变后公式怎样改变。
+
+## 第一节　随机变量与分布：两个不同层次的对象
+
+### 1.1 随机变量是定义在样本空间上的函数
+
+在概率空间 $(\Omega,\mathcal F,P)$ 上，随机变量 $X$ 是一个实值可测函数：
+
+$$X:\Omega\to\mathbb R,\qquad \omega\mapsto X(\omega).$$
+
+每个样本结果只能对应一个数，但不同样本结果可以对应同一个数。“随机”来自样本结果尚未确定；结果一旦确定，函数值也就确定。
+
+严格定义中的可测性要求，对任意 $x\in\mathbb R$，
+
+$$\{\omega:X(\omega)\le x\}\in\mathcal F.$$
+
+它保证 $P(X\le x)$ 有定义。常见计数函数、连续函数及通常的分段函数符合相应要求，初等题目不必每次重新验证。
+
+需要区分：$\omega$ 是原始结果，$X$ 是数值化的函数，$x$ 是可能取值或确定阈值。$X$ 的取值范围在本文记作 $S_X$。课件常称其为 support；严格的拓扑支持集与函数值域有细微区别，本章重点是明确公式在哪个范围有效。
+
+### 1.2 分布描述的是数值的概率规律
+
+给定一个实数集合 $A$，定义
+
+$$P_X(A)=P(X\in A)=P(\{\omega:X(\omega)\in A\}).$$
+
+这就是 $X$ 的分布。它把原样本空间的概率转移到实数轴上。因此，我们始终在计算原事件的概率，只是用数值条件重新表达它。
+
+两个不同随机变量可以有相同分布。“同分布”表示各个数值集合的概率相同，不代表两个变量相等，也不代表它们独立。
+
+### 1.3 例题：用正面次数归类样本结果
+
+**例 1（课件建模例，第 4—5 页）。题目：** 独立抛掷正面概率为 $p$ 的硬币 $n$ 次，结果记为 $\omega=(\omega_1,\ldots,\omega_n)$。令 $X$ 为正面总次数。写出 $X$ 的表达式及事件“恰有 $j$ 次正面”，说明该映射是否需要为单射。
+
+**分析：** 我们只关心正面个数，不关心正面出现的具体位置。不同序列应归入同一个数值类别。
+
+**解答：** 令 $I_i$ 在第 $i$ 次为正面时取 1，否则取 0，则
+
+$$X=\sum_{i=1}^n I_i,\qquad S_X=\{0,1,\ldots,n\}.$$
+
+恰有 $j$ 次正面的事件为 $\{\omega:X(\omega)=j\}$，简写为 $\{X=j\}$。当 $n=3$ 时，HHT、HTH、THH 均映射到 2。因此不要求单射。后面将由计数得到
+
+$$P(X=j)=\binom njp^j(1-p)^{n-j}.$$
+
+**知识联系：** 随机变量把原样本结果按某种数量特征分类；概率则在同一类别内累加。课件第 5 页的 injective 用词并不准确。
+
+## 第二节　CDF：所有分布共用的语言
+
+### 2.1 定义与完整性
+
+定义累积分布函数
+
+$$\boxed{F_X(x)=P(X\le x)},\qquad x\in\mathbb R.$$
+
+CDF 表示阈值从左向右移动时已累计多少概率。其自变量可为任意实数，不限于实际取值。例如骰子不会掷出 2.7，但 $F_X(2.7)=P(X\le2)$ 仍有意义。
+
+CDF 完全决定分布。它同时适用于离散、连续以及混合分布，因而应先于 PMF 和 PDF 理解。
+
+### 2.2 三条特征及其原因
+
+一个实函数为 CDF，当且仅当：
+
+1. 单调不减；
+2. 右连续；
+3. 在负无穷处极限为 0，在正无穷处极限为 1。
+
+三条条件自动蕴含 $0\le F(x)\le1$。允许平台，也允许跳跃。
+
+**为什么非减？** 当 $a<b$，$\{X\le a\}\subseteq\{X\le b\}$，所以概率不会减小。
+
+**为什么右连续？** 取 $x_n\downarrow x$，有 $\{X\le x_n\}\downarrow\{X\le x\}$。由概率对递减事件列的连续性，$F(x_n)\to F(x)$。
+
+**为什么有两端极限？** 阈值分别向负无穷和正无穷移动时，事件趋近空集和全集。
+
+这些说明了必要性。充分性可通过后文的广义逆变换构造得到：从均匀变量出发，任何满足三条条件的函数都可成为某个变量的 CDF。
+
+### 2.3 跳跃高度等于单点概率
+
+左极限满足
+
+$$F(a-)=\lim_{x\uparrow a}F(x)=P(X<a).$$
+
+因此
+
+$$\boxed{P(X=a)=F(a)-F(a-)}.$$
+
+CDF 右连续，但不一定左连续。跳跃不是函数“不合法”，而是该点携带正概率质量的表现。
+
+### 2.4 区间概率与端点
+
+基本公式是 $P(a<X\le b)=F(b)-F(a)$。其他情形如下：
+
+| 事件 | 概率 |
+|---|---|
+| $a\le X\le b$ | $F(b)-F(a-)$ |
+| $a<X<b$ | $F(b-)-F(a)$ |
+| $a\le X<b$ | $F(b-)-F(a-)$ |
+| $X>a$ | $1-F(a)$ |
+| $X\ge a$ | $1-F(a-)$ |
+
+不能在不知道端点质量时随意交换 $<$ 与 $\le$。
+
+**例 2（补充）。题目：** 已知 $F(1-)=0.2,F(1)=0.5,F(3-)=0.8,F(3)=0.9$。求 $P(X=1)$、$P(1<X<3)$ 和 $P(1\le X\le3)$。
+
+**解答：** 三个概率依次为 $0.5-0.2=0.3$、$0.8-0.5=0.3$、$0.9-0.2=0.7$。后两者之差为 0.4，正是两个端点的质量之和。
+
+## 第三节　质量与密度：同一分布的不同表示
+
+### 3.1 离散型与 PMF
+
+若全部概率集中在有限或可数集合 $S$ 上，即 $P(X\in S)=1$，则称 $X$ 为离散型。其概率质量函数为
+
+$$p_X(x)=P(X=x),\qquad p_X(x)\ge0,\qquad\sum_{x\in S}p_X(x)=1.$$
+
+对任何适当集合 $A$，
+
+$$P(X\in A)=\sum_{x\in A\cap S}p_X(x),\qquad F_X(t)=\sum_{x\le t}p_X(x).$$
+
+反过来，PMF 由 CDF 的跳跃得到。PMF 关注每个点分到多少概率，CDF 关注累计了多少概率。
+
+### 3.2 有密度的连续型与 PDF
+
+本课程通常说的连续型，是存在非负函数 $f_X$，使
+
+$$P(X\in A)=\int_A f_X(x)dx,\qquad\int_{-\infty}^{\infty}f_X(x)dx=1.$$
+
+于是
+
+$$F_X(x)=\int_{-\infty}^x f_X(t)dt.$$
+
+在密度连续的点，$F_X'(x)=f_X(x)$；一般地，该等式几乎处处成立。
+
+密度的高度不是点概率。事实上，$P(X=x)=0$，而 $f_X(x)$ 可以大于 1。比如 $U(0,0.1)$ 的密度为 10，但总面积为 1。若密度在附近变化很小，小区间概率近似为 $f_X(x)h$，即
+
+$$P(x<X\le x+h)\approx f_X(x)h.$$
+
+因此概率对应面积，不对应高度。改变密度在有限个点上的值，不会改变分布。
+
+### 3.3 两类表示的比较与边界
+
+| 性质 | PMF | PDF |
+|---|---|---|
+| 值的含义 | 单点概率 | 单位长度上的概率密集程度 |
+| 归一化 | 求和为 1 | 积分为 1 |
+| 求集合概率 | 对质量求和 | 对密度积分 |
+| 能否超过 1 | 不能 | 可以 |
+| 与 CDF 联系 | 跳跃与累加 | 导数与积分 |
+
+**补充辨析：** CDF 连续只保证没有点质量，不一定保证存在 PDF。还存在奇异连续分布；同时包含点质量与密度部分的分布则称混合分布。因此课件第 12 页的二分表述是一种简化，不能把“值域是区间”或“CDF 连续”单独当成存在密度的充分条件。
+
+### 3.4 从候选函数到完整分布
+
+给定 PMF 或 PDF，应先明确范围，再检查非负和归一化。若含未知常数，通常由总概率为 1 求出；但总和或积分为 1 本身不能保证非负。
+
+由 CDF 求 PDF 时还要先查跳跃。只对每段求导会遗漏点质量。
+
+**例 3（课件，第 29—30 页）。题目：** 随机变量 $X$ 的 PDF 为 $f_X(x)=2x$，$0<x<1$，范围外为 0。求完整 CDF。另求 $P(1/4<X<3/4)$（此问为补充）。
+
+**分析：** 积分上限在支持范围左侧、内部、右侧时，表达式不同。
+
+**解答：** $\int_0^1 2x dx=1$，密度合法。CDF 为
+
+$$F_X(x)=\begin{cases}0,&x<0,\\x^2,&0\le x\le1,\\1,&x>1.\end{cases}$$
+
+区间概率为 $(3/4)^2-(1/4)^2=1/2$。中间一段不能延伸到整个实数轴，否则不再是合法 CDF。
+
+## 第四节　均匀模型与数值归类
+
+### 4.1 离散均匀和连续均匀的共同思想
+
+均匀性是概率与某种基本大小成比例。有限集合用点的个数衡量大小；有限区间用长度衡量大小。
+
+若 $X$ 在 $\{c_1,\ldots,c_m\}$ 上离散均匀，$c_1<\cdots<c_m$，则 $p_X(c_i)=1/m$。在 $c_k\le x<c_{k+1}$ 时 CDF 为 $k/m$，范围左侧为 0，$x\ge c_m$ 时为 1。各取值不必等间距。
+
+若 $X\sim U(a,b)$，则
+
+$$f_X(x)=\frac1{b-a}\quad(a<x<b),$$
+
+其余位置为 0，且
+
+$$F_X(x)=\begin{cases}0,&x<a,\\(x-a)/(b-a),&a\le x<b,\\1,&x\ge b.\end{cases}$$
+
+区间概率等于与 $(a,b)$ 相交的长度除以 $b-a$。连续均匀不是“每个点都有相同的正概率”，因为每个点的概率均为零。
+
+**例 4（课件，第 27—28 页）。题目：** 设 $X\sim U(1,2)$。描述其 PDF 图像并求完整 CDF。
+
+**解答：** PDF 在 $(1,2)$ 上为 1，其他位置为 0；图像是底长 1、高为 1 的矩形。CDF 在 $x<1$ 为 0，在 $1\le x\le2$ 为 $x-1$，在 $x>2$ 为 1。CDF 图像从 $(1,0)$ 线性上升至 $(2,1)$，两端水平。
+
+### 4.2 等可能样本不一定产生均匀数值
+
+多个样本结果可映射为同一数值，因此不同数值对应的样本结果个数会决定其概率。
+
+**例 5（课件，第 19—23 页）。题目：** 独立投掷公平六面骰子两次，点数为 $D_1,D_2$。令 $M=\max(D_1,D_2)$。求 $M$ 的 PMF 和完整 CDF。
+
+**分析：** 36 个有序结果等可能，但六种最大值并不等可能。先求“两个点数都不超过 $k$”比枚举恰好等于 $k$ 更简洁。
+
+**解答：** 对整数 $k=1,\ldots,6$，
+
+$$P(M\le k)=P(D_1\le k,D_2\le k)=(k/6)^2.$$
+
+所以
+
+$$p_M(k)=\frac{k^2-(k-1)^2}{36}=\frac{2k-1}{36}.$$
+
+六个质量依次为 $1,3,5,7,9,11$ 除以 36，和为 1。CDF 为
+
+$$F_M(x)=\begin{cases}0,&x<1,\\k^2/36,&k\le x<k+1,\ k=1,\ldots,5,\\1,&x\ge6.\end{cases}$$
+
+**补充推广：** 若 $X_i$ 独立同分布，CDF 为 $F$，则 $P(\max_iX_i\le x)=F(x)^n$，$P(\min_iX_i>x)=[1-F(x)]^n$。最大值联系“全部不超过”，最小值联系“全部超过”；乘积来自独立性。
+
+## 第五节　伯努利试验：固定次数与固定成功目标
+
+把 Bernoulli、二项、几何和负二项放在同一机制下理解，比逐个背公式更有效。设一系列试验独立，每次只区分成功、失败，成功概率恒为 $p$，记 $q=1-p$。
+
+### 5.1 一次试验：Bernoulli 分布
+
+成功取 1，失败取 0，则 $P(I=1)=p,P(I=0)=q$，记为 $I\sim\operatorname{Bernoulli}(p)$。任何事件 $A$ 的指示变量都服从参数为 $P(A)$ 的伯努利分布。
+
+### 5.2 固定总次数：二项分布
+
+令 $X$ 为前 $n$ 次成功总数。恰好 $k$ 次成功的一种特定位置安排有概率 $p^kq^{n-k}$；这种安排有 $\binom nk$ 种，因此
+
+$$\boxed{P(X=k)=\binom nkp^kq^{n-k}},\quad k=0,\ldots,n.$$
+
+记为 $\operatorname{Bin}(n,p)$。二项式定理保证质量和为 $(p+q)^n=1$。
+
+使用条件是固定次数、二元结果、独立、相同成功概率。只知道“数成功个数”不够；例如不放回抽样一般不独立。
+
+**例 6（补充）。题目：** 独立检测 10 件产品，每件不合格概率均为 0.02。求恰有两件不合格和至少一件不合格的概率。
+
+**解答：** 不合格数 $X\sim\operatorname{Bin}(10,0.02)$，故
+
+$$P(X=2)=\binom{10}{2}(0.02)^2(0.98)^8,$$
+$$P(X\ge1)=1-P(X=0)=1-(0.98)^{10}.$$
+
+成功是数学标签，可以表示不合格。至少一次常用补事件，比逐项相加简洁。
+
+### 5.3 等第一次成功：几何分布
+
+令 $T$ 为第一次成功发生时的总试验次数。$T=k$ 表示前 $k-1$ 次失败、末次成功，故
+
+$$\boxed{P(T=k)=q^{k-1}p},\quad k=1,2,\ldots.$$
+
+记为 $\operatorname{Geom}(p)$，要求 $0<p\le1$。尾概率为 $P(T>m)=q^m$。若数的是首次成功前的失败次数 $K=T-1$，取值改为从 0 开始，PMF 为 $q^kp$。
+
+**补充：无记忆性。** 当条件概率有定义时，对非负整数 $m,n$，
+
+$$P(T>m+n\mid T>m)=q^{m+n}/q^m=q^n=P(T>n).$$
+
+已失败多少次不会改变未来独立试验的规律。$p=0$ 时成功不会在有限次数内发生，不能使用这个普通几何分布。
+
+### 5.4 等第 $r$ 次成功：负二项分布
+
+令 $T_r$ 为第 $r$ 次成功时的总次数。前 $k-1$ 次必须恰有 $r-1$ 次成功，第 $k$ 次必须成功，因此
+
+$$\boxed{P(T_r=k)=\binom{k-1}{r-1}p^rq^{k-r}},\quad k=r,r+1,\ldots.$$
+
+组合数只选择前面的成功位置，因为末次成功已固定。令 $r=1$ 就是几何分布。
+
+**例 7（补充）。题目：** 独立投篮，每次命中概率为 0.4。求第 3 次命中恰好发生在第 7 次投篮的概率，并解释为何不能使用 $\binom73$。
+
+**解答：** 第 7 次必须命中，前 6 次恰有两次命中，所以概率为
+
+$$\binom62(0.4)^3(0.6)^4.$$
+
+$\binom73$ 会计入第 7 次失败、第三次命中早已发生的序列，因此不能使用。
+
+若变量定义为第 $r$ 次成功前的失败数 $K_r=T_r-r$，则
+
+$$P(K_r=k)=\binom{k+r-1}{r-1}p^rq^k,\quad k=0,1,\ldots.$$
+
+读题或读软件文档时，应先辨明数的是失败数还是总次数。
+
+## 第六节　稀有计数与连续等待：Poisson、指数、Gamma
+
+固定观察时段问“发生几次”是计数问题，固定事件目标问“等待多久”是时间问题。泊松、指数和 Gamma 的联系建立在这种对偶关系上。
+
+### 6.1 泊松分布与稀有事件
+
+若
+
+$$\boxed{P(N=k)=e^{-\lambda}\frac{\lambda^k}{k!}},\quad k=0,1,\ldots,\quad\lambda>0,$$
+
+则 $N\sim\operatorname{Poisson}(\lambda)$。由指数级数，总质量为 $e^{-\lambda}e^\lambda=1$。
+
+常见应用是给定时间内的到达人数或给定材料上的缺陷数。但计数变量不自动服从泊松。若采用速率为 $\rho$ 的齐次泊松过程模型，时长 $t$ 内计数的参数为 $\rho t$。必须区分每单位时间的速率和整个观察区间的计数参数。
+
+### 6.2 二项到泊松的极限
+
+若 $X_n\sim\operatorname{Bin}(n,p_n)$，$np_n\to\lambda>0$，则对固定 $k$，
+
+$$\binom nkp_n^k=\frac{(np_n)^k}{k!}\prod_{j=0}^{k-1}(1-j/n)\to\lambda^k/k!.$$
+
+又因 $p_n\to0$，$(n-k)\log(1-p_n)\to-\lambda$，故 $(1-p_n)^{n-k}\to e^{-\lambda}$。相乘得到
+
+$$P(X_n=k)\to e^{-\lambda}\lambda^k/k!.$$
+
+因此大量独立机会、每次概率很小的计数适合泊松近似，实际取 $\lambda=np$。只有 $n$ 大但 $p$ 不小，并不足以说明该近似合适。
+
+**例 8（补充）。题目：** 某设备有 2000 个部件，每个部件独立地以 0.001 的概率在一个月内损坏。给出损坏数的精确分布，并用泊松近似求至多损坏一个的概率。
+
+**解答：** $X\sim\operatorname{Bin}(2000,0.001)$，精确概率为
+
+$$P(X\le1)=(0.999)^{2000}+2000(0.001)(0.999)^{1999}.$$
+
+取 $\lambda=2$，得 $P(X\le1)\approx e^{-2}(1+2)=3e^{-2}\approx0.4060$。近似应使用近似符号。
+
+### 6.3 指数分布：第一次到达的时间
+
+指数密度为
+
+$$\boxed{f_T(t)=\lambda e^{-\lambda t}},\quad t>0,\quad\lambda>0.$$
+
+CDF 和尾概率为
+
+$$F_T(t)=1-e^{-\lambda t},\quad P(T>t)=e^{-\lambda t},\quad t\ge0.$$
+
+$\lambda$ 为速率，越大等待越短。若时间以小时计，速率单位是每小时，$\lambda t$ 无量纲。
+
+**与计数的联系（补充）：** 在齐次泊松过程中，首次到达晚于 $t$ 等价于前 $t$ 内没有事件，因此 $P(T>t)=P(N(t)=0)=e^{-\lambda t}$。仅知道某个时段的边缘计数服从泊松，不足以推出整个过程的等待时间结构，须有相应过程假设。
+
+### 6.4 无记忆性
+
+对 $a,t\ge0$，
+
+$$\boxed{P(T>a+t\mid T>a)=\frac{e^{-\lambda(a+t)}}{e^{-\lambda a}}=e^{-\lambda t}=P(T>t)}.$$
+
+这描述的是剩余等待时间：已等待 $a$ 且尚未发生时，再等超过 $t$ 的概率和最初相同。它不是所有寿命模型共同具有的性质。
+
+**例 9（课件，第 70—71 页）。题目：** 某电子元件寿命 $T$ 以小时计，服从 $\operatorname{Exp}(1/500)$。① 求寿命超过 600 小时的概率；② 已知已经运行 300 小时，求还能继续运行超过 600 小时的条件概率。
+
+**分析：** 第二问的总寿命阈值为 900，而不是 600。
+
+**解答：**
+
+$$P(T>600)=e^{-600/500}=e^{-1.2},$$
+$$P(T>900\mid T>300)=e^{-900/500}/e^{-300/500}=e^{-1.2}.$$
+
+如果问 $P(T>600\mid T>300)$，则答案是 $e^{-0.6}$，属于不同事件。
+
+课件的“唯一无记忆分布”须限定在非负连续型等常规条件下；离散情形的几何分布也无记忆。存在老化的真实元件未必适合指数模型。
+
+### 6.5 Gamma：连续等待的累积
+
+形状—速率形式为
+
+$$\boxed{f_T(t)=\frac{\lambda^\alpha}{\Gamma(\alpha)}t^{\alpha-1}e^{-\lambda t}},\quad t>0,\quad\alpha,\lambda>0.$$
+
+其中
+
+$$\Gamma(\alpha)=\int_0^\infty u^{\alpha-1}e^{-u}du.$$
+
+分部积分给出 $\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$，结合 $\Gamma(1)=1$，得 $\Gamma(n)=(n-1)!$。令 $u=\lambda t$ 可验证密度积分为 1。CDF 为
+
+$$F_T(t)=\frac{\gamma(\alpha,\lambda t)}{\Gamma(\alpha)},\quad
+\gamma(\alpha,z)=\int_0^z u^{\alpha-1}e^{-u}du,\quad t\ge0.$$
+
+当 $\alpha=1$，Gamma 就是指数分布。当 $\alpha=r$ 为正整数，$r$ 个独立同分布的 $\operatorname{Exp}(\lambda)$ 等待时间之和服从此分布，也称 Erlang 分布。在泊松过程中，它表示等第 $r$ 次事件的时间。非整数形状同样有定义，但不能字面解释为“第 $\alpha$ 次事件”。没有独立性，仅凭各段边缘分布为指数，不足以推出总和为 Gamma。
+
+**尺度参数：** 令 $\theta=1/\lambda$，则密度也写为
+
+$$f_T(t)=\frac{t^{\alpha-1}e^{-t/\theta}}{\Gamma(\alpha)\theta^\alpha}.$$
+
+课件第 33 页用尺度，第 73 页用速率。看指数是 $-\lambda t$ 还是 $-t/\theta$，比只记参数位置更可靠。
+
+**例 10（补充）。题目：** 顾客按每分钟 2 人的齐次泊松过程到达。令 $T_3$ 为从开始观察到第 3 人到达的时间，单位为分钟。求其分布、密度和 $P(T_3>1)$。
+
+**解答：** $T_3\sim\operatorname{Gamma}(3,\text{rate}=2)$，密度为 $4t^2e^{-2t}$，$t>0$。第 3 人晚于 1 分钟到达，等价于 1 分钟内至多到达两人，故
+
+$$P(T_3>1)=P(N(1)\le2)=e^{-2}(1+2+2^2/2!)=5e^{-2}.$$
+
+一般地，整数形状的尾概率为 $e^{-\lambda t}\sum_{k=0}^{r-1}(\lambda t)^k/k!$。这是把连续等待问题转为离散计数问题的桥梁。
+
+### 6.6 卡方是 Gamma 的特例
+
+$$\boxed{\chi^2(n)=\operatorname{Gamma}(n/2,\text{rate}=1/2)}.$$
+
+对应尺度为 2，密度为
+
+$$f(x)=\frac{x^{n/2-1}e^{-x/2}}{2^{n/2}\Gamma(n/2)},\quad x>0.$$
+
+补充衔接：若 $Z_1,\ldots,Z_n$ 独立且均为标准正态，则 $\sum Z_i^2\sim\chi^2(n)$。这解释它在平方和与后续统计推断中的作用；课件本章主要给出 Gamma 特例的定义。
+
+## 第七节　位置尺度与尾部：正态和 Cauchy
+
+### 7.1 位置和尺度是怎样的作用
+
+若 $Y=aZ+b$，$a>0$，$b$ 使分布平移，$a$ 使横轴伸缩。变宽后密度高度会降低，才能保持面积为 1。位置与尺度是分布形状的概念，不能自动等同于均值与标准差，后两者是否存在需要另行判断。
+
+### 7.2 正态分布和标准化
+
+$$\boxed{f_X(x)=\frac1{\sqrt{2\pi}\sigma}e^{-(x-\mu)^2/(2\sigma^2)}},\quad x\in\mathbb R.$$
+
+记为 $N(\mu,\sigma^2)$，$\mu\in\mathbb R,\sigma>0$。图像关于 $\mu$ 对称，$\sigma$ 越大越宽。第二个参数是方差，标准化时除以标准差。
+
+令 $Z=(X-\mu)/\sigma$，则 $Z\sim N(0,1)$。记其 CDF 为 $\Phi$，有
+
+$$F_X(x)=\Phi\left(\frac{x-\mu}{\sigma}\right),$$
+$$P(a<X\le b)=\Phi\left(\frac{b-\mu}{\sigma}\right)-\Phi\left(\frac{a-\mu}{\sigma}\right).$$
+
+由对称性，$\Phi(-z)=1-\Phi(z)$；对 $c\ge0$，$P(|Z|\le c)=2\Phi(c)-1$，$P(|Z|>c)=2[1-\Phi(c)]$。CDF 没有初等函数表达式，但可查表或数值计算。
+
+**例 11（补充）。题目：** 设 $X\sim N(10,4)$。求 $P(8<X<12)$，并用 $\Phi$ 表示 $P(X>13)$。
+
+**解答：** 标准差是 2，不是 4。因此两问分别为
+
+$$P(-1<Z<1)=2\Phi(1)-1\approx0.6827,$$
+$$P(Z>1.5)=1-\Phi(1.5).$$
+
+### 7.3 Cauchy：对称并不保证矩存在
+
+标准 Cauchy 为
+
+$$f_Z(z)=\frac1{\pi(1+z^2)},\qquad F_Z(z)=\frac12+\frac1\pi\arctan z.$$
+
+课件记 $Y=aZ+b$ 为 $\operatorname{Cauchy}(a,b)$，尺度在前、位置在后：
+
+$$f_Y(y)=\frac1{\pi a[1+((y-b)/a)^2]},\qquad
+F_Y(y)=\frac12+\frac1\pi\arctan\left(\frac{y-b}{a}\right).$$
+
+Cauchy 与正态都对称单峰，但尾部密度按 $1/x^2$ 衰减，远慢于正态。因此极端值更常见。
+
+补充：标准 Cauchy 的期望和方差不存在。正半轴的 $\int_1^\infty x/(1+x^2)dx$ 发散，不能用正负无穷相消来得到期望 0。对称中心为 0 与期望为 0 是两个不同命题。
+
+## 第八节　随机变量函数的分布：从事件还原推导公式
+
+### 8.1 最基本的方法是 CDF 法
+
+设 $Y=g(X)$。所有方法都从
+
+$$\boxed{F_Y(y)=P(g(X)\le y)}$$
+
+开始：先求 $g(S_X)$，按 $y$ 的位置分段，在原变量范围内解不等式，再用 $X$ 的分布计算概率。如果结果有密度，再对 CDF 求导。
+
+这套方法不要求一对一，也不要求新变量仍是连续型。直接密度换元则需要额外条件。
+
+### 8.2 单调换元：为什么有反函数导数和绝对值
+
+设 $g$ 在相关区间严格单调，反函数 $h=g^{-1}$ 可微，且 $X$ 有密度。递增时，$F_Y(y)=F_X(h(y))$；递减时，$F_Y(y)=P(X\ge h(y))=1-F_X(h(y))$。求导统一得到
+
+$$\boxed{f_Y(y)=f_X(h(y))|h'(y)|},\qquad y\in g(S_X).$$
+
+密度不能只做函数代换，因为一个小 $dy$ 对应的原长度是 $|dx|$。概率守恒 $f_Y(y)dy\approx f_X(x)|dx|$ 正好给出伸缩因子。
+
+线性变换 $Y=aX+b$，$a\ne0$ 时，
+
+$$f_Y(y)=\frac1{|a|}f_X((y-b)/a).$$
+
+当 $a=0$，新变量是常数，有点质量，不能套这个公式。正态标准化也是线性换元：$x=\mu+\sigma z$，于是 $f_Z(z)=\sigma f_X(\mu+\sigma z)=e^{-z^2/2}/\sqrt{2\pi}$。
+
+**例 12（补充）。题目：** $X\sim U(0,2)$，$Y=3-2X$。求 $Y$ 的范围、CDF 和 PDF。
+
+**解答：** $-1<Y<3$。范围内
+
+$$F_Y(y)=P(X\ge(3-y)/2)=1-(3-y)/4=(y+1)/4.$$
+
+范围左侧 CDF 为 0，右侧为 1。PDF 在 $(-1,3)$ 为 $1/4$，其余为 0。换元核对为 $(1/2)|-1/2|=1/4$；绝对值不可省略。
+
+### 8.3 一对一非线性变换的完整例题
+
+**例 13（课件，第 33—34 页）。题目：** $X$ 的密度为
+
+$$f_X(x)=\frac{x^{\alpha-1}e^{-x/\theta}}{\Gamma(\alpha)\theta^\alpha},\quad x>0,$$
+
+范围外为 0，$\alpha,\theta>0$。令 $Y=e^X$，求 PDF。
+
+**分析：** 此处 $\theta$ 为尺度，$Y>1$，反函数为 $\ln y$。
+
+**解答：** 对 $y>1$，$F_Y(y)=P(X\le\ln y)=\int_0^{\ln y}f_X(x)dx$，求导得
+
+$$\boxed{f_Y(y)=\frac{(\ln y)^{\alpha-1}}{\Gamma(\alpha)\theta^\alpha y^{1+1/\theta}}},\quad y>1.$$
+
+范围外为 0。分母中额外的 $y$ 来自 $d\ln y/dy=1/y$。不能漏导数，也不能把范围写成全部正数。
+
+**例 14（课件，第 35—36 页）。题目：** 在 $(0,1)$ 处设置转针，以带符号角度 $W$ 表示方向，$W\sim U(-\pi/2,\pi/2)$。转针延长线与横轴交点横坐标为 $X=\tan W$。求 CDF 和 PDF。
+
+**解答：** 正切在给定区间严格递增，值域为 $\mathbb R$。所以
+
+$$F_X(x)=P(W\le\arctan x)=\frac12+\frac1\pi\arctan x,$$
+$$f_X(x)=\frac1{\pi(1+x^2)}.$$
+
+这是标准 Cauchy。均匀角度并不产生均匀横坐标；当角度靠近两端时，横坐标会很大。
+
+### 8.4 多对一变换：所有有效原像都要计入
+
+当一个 $y$ 有多个原像 $x_i$，应在每条单调分支上计算，再加总。若分支可逆且相关导数非零，则
+
+$$\boxed{f_Y(y)=\sum_{x_i:g(x_i)=y}\frac{f_X(x_i)}{|g'(x_i)|}}.$$
+
+只计入位于 $S_X$ 的根。对 $Y=X^2$，$y>0$ 时，
+
+$$F_Y(y)=F_X(\sqrt y)-F_X(-\sqrt y),$$
+$$f_Y(y)=\frac{f_X(\sqrt y)+f_X(-\sqrt y)}{2\sqrt y}.$$
+
+若原变量只取正值，负根不贡献质量；不可不看范围便乘以 2。临界点和端点可另用 CDF 分析。
+
+**例 15（课件，第 44—45 页）。题目：** $X$ 服从标准 Cauchy，密度为 $1/[\pi(1+x^2)]$，$x\in\mathbb R$。令 $Y=X^2$，求完整 CDF 和 PDF。
+
+**分析：** $Y\le y$ 等价于 $-\sqrt y\le X\le\sqrt y$，不等价于仅有 $X\le\sqrt y$。
+
+**解答：** 当 $y<0$，$F_Y(y)=0$；当 $y\ge0$，
+
+$$F_Y(y)=\frac2\pi\arctan\sqrt y.$$
+
+因此
+
+$$\boxed{f_Y(y)=\frac1{\pi(1+y)\sqrt y}},\quad y>0,$$
+
+其余位置可取零。密度在 0 附近无界，但 $P(Y=0)=P(X=0)=0$，不能把无界高度解释为点质量。
+
+### 8.5 离散变换：概率合并，不乘导数
+
+离散情况下，
+
+$$\boxed{p_Y(y)=\sum_{x:g(x)=y}p_X(x)}.$$
+
+一对一时只有一项，多对一时求和。因为 PMF 已经是点概率，不是每单位长度的密度，所以不出现伸缩因子。
+
+**例 16（课件，第 47—48 页）。题目：** $P(X=k)=4^ke^{-4}/k!$，$k=0,1,\ldots$。令 $Y=\sqrt X$，求范围和分布。
+
+**解答：**
+
+$$S_Y=\{\sqrt k:k=0,1,\ldots\}=\{0,1,\sqrt2,\sqrt3,2,\ldots\}.$$
+
+对 $y\in S_Y$，
+
+$$P(Y=y)=P(X=y^2)=\frac{4^{y^2}e^{-4}}{(y^2)!}.$$
+
+其余点概率为 0。$y^2$ 必须为非负整数；无理数取值不会使可数集合变成连续型。也不能乘 $2y$。
+
+### 8.6 连续变量的函数不一定连续
+
+**例 17（补充）。题目：** $X\sim U(-1,1)$，$Y=\max(X,0)$。求 CDF，并判断是否存在描述全部分布的普通 PDF。
+
+**解答：** 整个 $X\le0$ 的区间被压到 0，所以 $P(Y=0)=1/2$。CDF 为
+
+$$F_Y(y)=\begin{cases}0,&y<0,\\(y+1)/2,&0\le y<1,\\1,&y\ge1.\end{cases}$$
+
+它在 0 跳跃 $1/2$，在 $(0,1)$ 上连续增加。分布由一个点质量和密度为 $1/2$ 的连续部分组成，没有普通 PDF 可以单独表示全部概率。分段求导只得到面积为 $1/2$ 的部分。
+
+这说明换元前必须检查变换是否将整个区间压缩为一点。
+
+## 第九节　用 CDF 进行统一变换
+
+### 9.1 概率积分变换
+
+若 $X$ 的 CDF $F$ 连续且在有关范围严格递增，令 $U=F(X)$，则对 $0<u<1$，
+
+$$P(U\le u)=P(X\le F^{-1}(u))=u.$$
+
+故 $F(X)\sim U(0,1)$。它把一个数值变成它在自身分布中的累计概率位置。离散变量的 $F(X)$ 通常不连续均匀。
+
+### 9.2 逆 CDF 生成目标分布
+
+若 $U\sim U(0,1)$，令 $Y=F^{-1}(U)$，则
+
+$$P(Y\le y)=P(U\le F(y))=F(y).$$
+
+一般 CDF 使用广义逆 $F^{-1}(u)=\inf\{x:F(x)\ge u\}$。这既是随机模拟方法，也给出 CDF 特征定理充分性的构造。
+
+**例 18（补充）。题目：** 已有 $U\sim U(0,1)$，如何构造参数为 $\lambda>0$ 的指数变量，并验证结果？
+
+**解答：** 从 $u=1-e^{-\lambda t}$ 解出
+
+$$T=-\ln(1-U)/\lambda.$$
+
+对 $t\ge0$，$P(T\le t)=P(U\le1-e^{-\lambda t})=1-e^{-\lambda t}$；对 $t<0$，CDF 为 0。因 $1-U$ 也均匀，也可用 $-\ln U/\lambda$。
+
+## 第十节　复习整合与独立练习
+
+### 10.1 用结构记忆分布
+
+| 实验问题 | 分布 | 关键条件 |
+|---|---|---|
+| 一次试验是否成功 | Bernoulli | 成功编码为 1 |
+| 固定 $n$ 次成功几次 | Binomial | 独立、同成功率 |
+| 等第一次成功要几次 | Geometric | 总次数从 1 开始 |
+| 等第 $r$ 次成功要几次 | Negative Binomial | 总次数从 $r$ 开始 |
+| 固定范围内发生几次 | Poisson | 需适当计数模型 |
+| 首次事件等待多久 | Exponential | 泊松过程中的首次等待 |
+| 第 $r$ 次事件等待多久 | Gamma/Erlang | 独立同速率指数等待之和 |
+| 平方标准正态的和 | Chi-square | 各变量独立 |
+
+### 10.2 公式使用的检查顺序
+
+先问变量是什么、取值范围在哪里，再问概率事件如何翻译。然后判断用求和、积分还是变换。最后检查总概率、CDF 两端、非负性和参数单位。
+
+尤其要能解释四个问题：二项的组合数为何为 $\binom nk$；负二项为何为 $\binom{k-1}{r-1}$；连续换元为什么乘绝对导数；离散换元为何不乘导数。能推导这些，比孤立记忆更能应对变形题。
+
+### 10.3 课件勘误及提取符号问题
+
+以下不影响正文的知识组织。第 41、45、48、73、74、76 页已核对原页图像。
+
+| 页码 | 阅读注意 |
+|---|---|
+| 5 | 次数映射不要求单射，injective 用词不准确 |
+| 6—7 | 严格定义及一般函数变换需要可测性 |
+| 12 | CDF 连续不必有密度，区间值域也不是充分条件 |
+| 15、25 | 集合概率规范写为 $P(X\in A)$；积分应含积分变量 |
+| 34 | 确定阈值应写 $\ln y$ 而非 $\ln Y$ |
+| 41 | 原页有绝对值，公式正确；文本提取可能漏竖线 |
+| 45 | 首行 $P(g(X)\le x)$ 的阈值应为 $y$；根号、绝对值原页均有，最终密度应在 $y>0$ 使用 |
+| 48 | 原页范围包含 $\sqrt2,\sqrt3,\ldots$，正确；文本提取会漏根号 |
+| 72 | 证明中的 $x+1$ 应为 $x+a$；唯一无记忆分布需限定连续情形 |
+| 73 | Gamma 定义段误写 exponential；Gamma 函数积分幂应为 $\alpha-1$ |
+| 74—75 | 速率符号由 $\lambda$ 换为 $\beta$，应按参数含义理解 |
+| 76 | 原页正态系数为 $1/(\sqrt{2\pi}\sigma)$，正确 |
+
+### 10.4 独立自测
+
+**习题 1。** $X$ 只取 $1,2,3$，$P(X=k)=ck$。求 $c$、完整 CDF 和 $P(1<X\le3)$。
+
+**习题 2。** $X\sim U(-1,1)$，$Y=X^2$。求完整 CDF、PDF，并验证积分为 1。
+
+**习题 3。** $P(X=-1)=0.2,P(X=0)=0.5,P(X=1)=0.3$，求 $Y=X^2$ 的 PMF。
+
+**习题 4。** 独立试验成功概率为 $p\in(0,1)$，$K$ 为第 2 次成功之前出现的失败总数。求 $P(K=3)$，说明对应总次数。
+
+**习题 5。** Gamma 变量形状为 3、尺度为 2。求速率参数及 PDF，说明其独立指数等待时间之和的解释。
+
+**习题 6。** $X\sim N(5,9)$。用 $\Phi$ 表示 $P(2<X<11)$ 与 $P(|X-5|>6)$。
+
+**习题 7。** $T\sim\operatorname{Exp}(0.2)$，以小时计。求 $P(T>8\mid T>3)$，并比较已运行 3 小时后再运行超过 8 小时的概率。
+
+**习题 8。** 一个 CDF 在 0 跳跃 0.2，其他位置连续，分段导数的全轴积分为 0.8。是否矛盾？导数漏掉了什么？
+
+### 10.5 参考解析
+
+**1.** $c=1/6$。CDF 在 $x<1$、$[1,2)$、$[2,3)$、$[3,\infty)$ 依次为 $0,1/6,1/2,1$。所求概率为 $5/6$。
+
+**2.** CDF 在 $y<0$ 为 0，在 $0\le y\le1$ 为 $\sqrt y$，在 $y>1$ 为 1。密度在 $(0,1)$ 为 $1/(2\sqrt y)$，其他位置为 0。积分为 $[\sqrt y]_0^1=1$。
+
+**3.** $P(Y=0)=0.5,P(Y=1)=0.5$，将正负原像合并。
+
+**4.** 总次数为 5。末次成功，前四次一成功三失败，故概率为 $\binom{4}{1}p^2(1-p)^3$。
+
+**5.** 速率为 $1/2$，PDF 为 $x^2e^{-x/2}/16$，$x>0$。它是三个独立同分布 $\operatorname{Exp}(1/2)$ 变量的和。
+
+**6.** 标准差为 3，两问依次为 $\Phi(2)-\Phi(-1)$ 和 $2[1-\Phi(2)]$。
+
+**7.** 第一问为 $e^{-0.2(8-3)}=e^{-1}$；第二问是 $P(T>11\mid T>3)=e^{-1.6}$，一个给总寿命阈值，另一个给额外运行时长。
+
+**8.** 不矛盾。跳跃对应 0.2 的点质量，导数只保留总概率为 0.8 的连续部分，两者合计为 1。
+
+## 附录　与后续期望、方差章节的联系
+
+以下仅供交叉复习，不当作本章已逐项证明的结论。几何与负二项按总次数定义，Gamma 按速率定义。
+
+| 分布 | 期望 | 方差 |
+|---|---|---|
+| 均匀于 $\{1,\ldots,m\}$ | $(m+1)/2$ | $(m^2-1)/12$ |
+| Bernoulli$(p)$ | $p$ | $p(1-p)$ |
+| Binomial$(n,p)$ | $np$ | $np(1-p)$ |
+| Geometric$(p)$ | $1/p$ | $(1-p)/p^2$ |
+| Negative Binomial$(r,p)$ | $r/p$ | $r(1-p)/p^2$ |
+| Poisson$(\lambda)$ | $\lambda$ | $\lambda$ |
+| $U(a,b)$ | $(a+b)/2$ | $(b-a)^2/12$ |
+| Exp$(\lambda)$ | $1/\lambda$ | $1/\lambda^2$ |
+| Gamma$(\alpha,\text{rate}=\lambda)$ | $\alpha/\lambda$ | $\alpha/\lambda^2$ |
+| $\chi^2(n)$ | $n$ | $2n$ |
+| $N(\mu,\sigma^2)$ | $\mu$ | $\sigma^2$ |
+| Cauchy | 不存在 | 不存在 |

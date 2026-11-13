@@ -1,1544 +1,1866 @@
-# Math1212 概率论与数理统计 I (Probability and Statistics I)
+# 第四章　随机变量的数字特征：教材式复习讲义
 
-## 第四章：随机变量的数字特征 课程讲义全景精要与深度解析笔记
+> 依据 chapter 4.pdf 的全部 120 个 PDF 页面整理。正文按知识依赖关系展开：期望 → 方差 → 矩与矩母函数 → 协方差与相关 → 线性预测 → 二元正态 → 条件期望与全方差。课件中的习题、例题和应用均给出推导；额外解释与练习标为“补充”。本文页码均为 PDF 的物理页码，原课件页脚的总页数“123”与文件实际页数不一致。
+>
+> 原课件：[chapter 4.pdf](<C:/Users/yang/Desktop/大四/概率论/chapter 4.pdf>)。离散 PMF 记为 $p$，连续 PDF 记为 $f$；$N(\mu,\sigma^2)$ 的第二个参数是方差。几何分布取值为 $1,2,\ldots$；Gamma 与指数分布一律使用**速率参数** $\lambda$。
 
-> **课件来源**：`week7_1.pdf`，*Numerical Characteristics of Random Variables — Chapter 4*，共 94 页。  
-> **编排方式**：按知识点及其逻辑联系重组，不按课件页码逐页复述。  
-> **笔记格式**：沿用第二章笔记的中英双语标题、分级编号、定义与定理引用块、详细证明、案例解析、深度辨析和公式速查结构。  
-> **内容边界**：标注“深度补充”的内容用于解释或连接知识点，不表示课件已完整讲授。课件目录列出 4.4 二维正态分布，但第 73—74 页主要是引入性应用，随后进入条件期望。  
-> **参考教材（按本章课件第 2 页）**：
-> 1. Robert V. Hogg, Elliot A. Tanis, Dale Zimmerman, *Probability and Statistical Inference* (9th/10th ed.), Sections 2.2, 3.1, 4.2, 5.3, 5.4, 5.5。
-> 2. 魏宗舒 等，《概率论与数理统计教程》（第三版），Sections 2.4, 2.5, 2.6, 3.5。
+## 导论　本章怎样承接前面三章
 
----
+前三章研究“概率规律的完整描述”：事件概率、一元分布、联合分布。本章进一步问：如果不想每次携带整个分布，能否用几个数概括它的重要性质？
 
-## 目录与知识架构
+期望描述平均位置，方差描述离散程度，协方差与相关系数描述两个变量的线性共同变化。矩母函数把一系列矩编码到一个函数里，既能求矩，也能识别分布。条件期望则把“一个总体平均值”扩展为“根据已知信息变化的平均值”。
 
-1. **引言：为什么要研究数字特征？(Motivation & Conceptual Framework)**
-   - 1.1 从完整分布到关键数值
-   - 1.2 本章的知识联系与统一记号
-   - 1.3 参数约定、存在条件与“几乎必然”
-2. **数学期望及其运算法则 (Expectation & Its Properties)**
-   - 2.1 期望的定义、直观意义与存在条件
-   - 2.2 随机变量函数的期望：定理 4.1
-   - 2.3 示性变量：概率就是一种期望
-   - 2.4 线性性与独立乘积公式：定理 4.3—4.4
-   - 2.5 二元函数的期望与交叉矩
-3. **方差、标准差与矩 (Variance, Standard Deviation & Moments)**
-   - 3.1 方差与标准差的定义
-   - 3.2 方差计算公式与线性变换：定理 4.5
-   - 3.3 原点矩、中心矩与存在性关系
-   - 3.4 常见分布的均值与方差推导
-   - 3.5 分布参数与数字特征速查表
-4. **矩母函数：生成矩与识别分布 (Moment-generating Functions, MGF)**
-   - 4.1 定义与零点邻域的存在条件
-   - 4.2 求导生成矩：定理 4.6
-   - 4.3 泊松、指数、正态与二项分布的 MGF
-   - 4.4 唯一性定理：定理 4.7
-   - 4.5 仿射变换与独立和：定理 4.8 及推论 4.8A
-5. **分布运算：独立和、最小值与平方变换 (Distributional Operations)**
-   - 5.1 分布可加性的统一证明方法
-   - 5.2 伯努利、二项、泊松、Gamma 与卡方的可加性
-   - 5.3 指数变量之和与最小值的本质区别
-   - 5.4 独立正态变量的线性组合
-   - 5.5 正态标准化与标准正态平方
-6. **协方差与相关系数 (Covariance & Correlation)**
-   - 6.1 协方差的定义、意义与双线性性
-   - 6.2 一般线性组合的方差：推论 4.11
-   - 6.3 相关系数的界与等号条件
-   - 6.4 例 4.8：联合分布表求相关系数
-   - 6.5 独立与不相关：离散、连续两个反例
-7. **正态模型与联合正态的作用 (Normal Models & Joint Normality)**
-   - 7.1 正态概率计算与分位数
-   - 7.2 灌装量质量控制例题
-   - 7.3 边缘正态不足以确定联合关系
-   - 7.4 相关正态变量的线性组合例题
-   - 7.5 深度补充：二维正态的结构与条件分布
-8. **条件期望与全期望公式 (Conditional & Total Expectation)**
-   - 8.1 普通期望、给定取值的条件期望、随机条件期望
-   - 8.2 离散型与连续型计算流程
-   - 8.3 条件期望的代数性质
-   - 8.4 全期望公式及证明
-   - 8.5 两台机器与离散联合分布的完整案例
-9. **条件方差、全方差与分层模型 (Conditional Variance & Hierarchical Models)**
-   - 9.1 条件方差与全方差公式
-   - 9.2 两阶段均匀模型的完整计算
-   - 9.3 随机成功概率二项模型的均值、方差和边缘分布
-   - 9.4 条件独立与无条件依赖的区别
-10. **最优预测：线性预测与条件期望 (Optimal Prediction)**
-    - 10.1 最佳线性预测的公式与配方证明
-    - 10.2 相关系数与最小均方误差
-    - 10.3 二元离散预测案例
-    - 10.4 深度补充：条件期望是最佳一般均方预测
-11. **核心公式速查与易错知识点深度辨析 (Summary & Pitfalls)**
-    - 11.1 公式、条件和用途对照表
-    - 11.2 高频错误与概念边界
-    - 11.3 按题型选择方法
-    - 11.4 自测题与答案核对
+需要始终记住：**少量数字特征通常不能决定整个分布。** 两个变量均值、方差相同，不代表同分布；两个边缘都正态且相关系数给定，也不代表已经确定联合分布，除非额外假设联合正态。
+
+本章可以沿着五个问题复习：
+
+1. **平均在什么位置？** ——期望及其线性性质。
+2. **围绕平均值波动多大？** ——方差、标准差、矩。
+3. **组合后是什么分布？** ——矩母函数与独立和。
+4. **两个变量怎样共同变化？** ——协方差、相关、二元正态。
+5. **掌握信息后怎样预测？** ——条件期望、全期望、全方差。
+
+### 课件与本文对应关系
+
+| PDF 页码 | 课件内容 | 本文位置 |
+|---|---|---|
+| 4、6—10 | 可积性、期望、函数期望、指示变量、期望性质 | 第一、二节 |
+| 11—19 | 方差及常见分布的均值方差，习题 4.1 | 第三、四节 |
+| 21—24、30—34 | 矩母函数、矩、唯一性、独立和及仿射变换 | 第五节 |
+| 25—29、35—44 | Poisson、指数、正态的 MGF；习题 4.4—4.6；正态组合、标准化、平方 | 第六、七节 |
+| 45—49 | 可加性、指数和与最小值 | 第七节 |
+| 51—57、62—70 | 协方差、相关、例 4.8、例 4.10、不相关反例、双线性、和的方差 | 第八至十节 |
+| 58—61 | 最佳线性预测与离散表格例题 | 第十一节 |
+| 71—74 | 灌装质量控制、两项健康测量的建模 | 第十二节 |
+| 76—85 | 二元正态的构造、密度、边缘与联合 MGF | 第十三节 |
+| 86—97 | 正态线性组合、独立性、反例、条件分布及计算 | 第十四、十五节 |
+| 99—108 | 机器次品率、条件期望、全期望及离散例题 | 第十六、十七节 |
+| 109—114 | 条件方差、全方差、两阶段均匀模型 | 第十八节 |
+| 115—117 | 分层患病率模型 | 第十九节 |
+| 118—119 | 总结公式及 Gaussian 结论 | 第二十节及附录 |
 
 ---
 
-## 1. 引言：为什么要研究数字特征？(Motivation & Conceptual Framework)
+## 第一节　数学期望：按概率加权的平均
 
-### 1.1 从完整分布到关键数值
+### 1.1 定义与直觉
 
-第二章主要解决“随机变量服从什么分布”，通过 PMF、PDF 和 CDF 描述全部概率信息。本章进一步研究：能否用几个重要数值，概括分布最值得关注的特征？
+若 $X$ 为离散变量，取值为 $x$ 的概率是 $p_X(x)$，定义
 
-- **数学期望 (Expectation)**：取值的平均水平在哪里？
-- **方差与标准差 (Variance & Standard Deviation)**：取值围绕平均水平波动多大？
-- **矩 (Moments)**：如何用更一般的幂次平均描述分布？
-- **协方差与相关系数 (Covariance & Correlation)**：两个变量是否有同向或反向的线性变化倾向？
-- **条件期望与条件方差 (Conditional Expectation & Variance)**：已知额外信息后，平均值和剩余波动如何改变？
+$$\boxed{E(X)=\sum_x x\,p_X(x).}$$
 
-> **【核心概念辨析：数字特征不等于完整分布】**  
-> 均值、方差相同的变量，可以具有完全不同的分布。仅凭 $E(X)$ 和 $\operatorname{Var}(X)$，一般无法计算任意区间概率。只有在分布族等额外信息已知时，参数才能进一步确定分布。例如，已知属于正态分布族后，均值与方差才确定该正态分布。
+若 $X$ 有密度 $f_X$，则
 
-### 1.2 本章的知识联系与统一记号
+$$\boxed{E(X)=\int_{-\infty}^{\infty}x f_X(x)\,dx.}$$
 
-本章的主要联系为：
+离散情形的“取值乘权重再相加”，在连续情形变成积分。权重由分布决定，不是把所有可能取值等权平均。例如 $P(X=0)=0.9,P(X=10)=0.1$，则 $E(X)=1$，不是 5。
 
-$$\text{分布}\longrightarrow\text{期望}\longrightarrow\text{矩、方差、协方差}$$
+期望也不必是可能取到的值。公平骰子的期望为 $3.5$，而骰子不会掷出 $3.5$。在适当的重复试验条件下，样本平均值会趋近总体期望；这一长期解释依赖后续的大数定律，不能当作期望的定义。
 
-$$\text{MGF}\longrightarrow\text{生成矩、识别分布、研究独立和}$$
+### 1.2 先判断有限期望是否存在
 
-$$\text{条件分布}\longrightarrow\text{条件期望与条件方差}\longrightarrow\text{总体特征与预测}$$
+本章的普通有限期望以**绝对可积**为前提：
 
-统一使用：
+$$\boxed{E|X|<\infty.}$$
 
-$$\mu_X=E(X),\qquad \sigma_X^2=\operatorname{Var}(X)=D(X),\qquad \sigma_X=\operatorname{sd}(X).$$
+对应地，离散情形要求 $\sum_x|x|p_X(x)<\infty$，连续情形要求 $\int|x|f_X(x)dx<\infty$。
 
-离散概率质量函数记为 $p_X(x)$，连续概率密度记为 $f_X(x)$，避免混淆单点概率与密度。
+令 $X^+=\max(X,0),X^-=\max(-X,0)$，则
 
-### 1.3 参数约定、存在条件与“几乎必然”
+$$X=X^+-X^-,\qquad |X|=X^++X^-.$$
 
-课件第 4 页明确规定：
+若两部分的期望都有限，$E(X)=E(X^+)-E(X^-)$ 是有限数；若一边无限、另一边有限，可以谈 $+\infty$ 或 $-\infty$ 的扩展期望；若两边都无限，就出现没有定义的“$\infty-\infty$”。本章的线性、协方差等常规运算应在相应有限性条件下使用。
 
-1. 有限期望要求绝对可积：$E|X|<\infty$。
-2. 方差、协方差公式在有关二阶矩有限时使用。
-3. 几何分布取值为 $1,2,\ldots$，表示首次成功所需的**总试验次数**。
-4. 指数分布、Gamma 分布均采用**速率参数** $\lambda$。
-5. 讨论高斯向量时，方差为零的正态分布解释为点质量，即常数随机变量。
+**补充反例：对称不保证期望为 0。** 标准柯西密度为
 
-> **【参数衔接：第二章笔记与本章 Gamma 记号】**  
-> 第二章笔记的不同案例出现了尺度参数 $\theta$ 与速率参数 $\lambda$。二者满足 $\theta=1/\lambda$。本章统一写作 $\operatorname{Gamma}(\alpha,\lambda)$，密度为
-> $$f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\qquad x>0.$$
-> 因此 $E(X)=\alpha/\lambda$、$\operatorname{Var}(X)=\alpha/\lambda^2$；若使用尺度参数，则对应 $\alpha\theta$、$\alpha\theta^2$。
+$$f(x)=\frac1{\pi(1+x^2)},\qquad x\in\mathbb R.$$
 
-“几乎必然 (Almost Surely, a.s.)”表示以概率 $1$ 成立。例如 $X=c$ a.s. 表示 $P(X=c)=1$，允许在零概率事件上有不同取值。
+虽然关于 0 对称，但
+
+$$\int_0^A\frac{x}{\pi(1+x^2)}dx=\frac1{2\pi}\log(1+A^2)\longrightarrow\infty.$$
+
+负半轴也有无限的绝对贡献，因此 $E(X)$ 不存在。对称截断 $\lim_{A\to\infty}\int_{-A}^Axf(x)dx=0$ 是主值，不是期望。**先验证可积，再使用对称性。**
+
+### 1.3 函数的期望：不必先求新变量的分布
+
+课件定理 4.1：若 $g$ 可测且 $E|g(X)|<\infty$，则
+
+$$\boxed{E[g(X)]=\sum_xg(x)p_X(x)}$$
+
+或
+
+$$\boxed{E[g(X)]=\int_{-\infty}^{\infty}g(x)f_X(x)dx.}$$
+
+例如求 $E(X^2)$，直接把公式中的 $x$ 换成 $x^2$；求 $E(e^{tX})$，直接积分 $e^{tx}f_X(x)$。这条公式常称 LOTUS：知道输入变量分布，就能求输出函数的平均。
+
+为什么成立？离散时，同一输出值 $z$ 的概率应把所有满足 $g(x)=z$ 的输入概率加起来，再把求和重新归类：
+
+$$\sum_z zP(g(X)=z)
+=\sum_z\sum_{x:g(x)=z}g(x)p_X(x)
+=\sum_xg(x)p_X(x).$$
+
+连续情形可由指示函数、简单函数逐步推广得到；它不要求 $g$ 单调或一一对应。
+
+**补充例：** $X\sim U(-1,1)$ 时，
+
+$$E(X^2)=\int_{-1}^1x^2\frac12dx=\frac13.$$
+
+无需先用第三章的方法求 $X^2$ 的密度。但如果题目要求 $X^2$ 的完整分布，仍需做分布变换。注意 $E[g(X)]$ 一般不等于 $g(E(X))$，这里 $E(X^2)=1/3$，而 $[E(X)]^2=0$。
+
+### 1.4 二元函数的期望
+
+课件第 51 页将同一原理推广为
+
+$$E[g(X,Y)]=\sum_x\sum_y g(x,y)p_{X,Y}(x,y),$$
+
+或
+
+$$E[g(X,Y)]=\iint_Dg(x,y)f_{X,Y}(x,y)\,dx\,dy.$$
+
+仍要先写支持集 $D$，并要求相应绝对期望有限。特别地，$E(XY)$ 用联合分布计算，通常不能只靠两个边缘计算。
 
 ---
 
-## 2. 数学期望及其运算法则 (Expectation & Its Properties)
+## 第二节　期望的性质与指示变量
 
-### 2.1 期望的定义、直观意义与存在条件
+### 2.1 概率也是一种期望
 
-对应课件第 6 页。
-
-> **定义（数学期望, Expectation）**：设 $E|X|<\infty$。离散型与连续型随机变量的数学期望分别为：
-> $$E(X)=\sum_x x p_X(x),\qquad E(X)=\int_{\mathbb R}x f_X(x)\,dx.$$
-
-**直观意义**：按取值出现的概率对取值加权平均。
-
-例如公平骰子：
-
-$$E(X)=\sum_{k=1}^{6}k\frac16=\frac72.$$
-
-虽然骰子不会出现 $3.5$ 点，但期望可以是 $3.5$。因此，期望不必属于随机变量的取值集合，也不等于最可能出现的取值。
-
-#### 为什么要求绝对可积？
-
-连续型要求：
-
-$$\int_{\mathbb R}|x|f_X(x)\,dx<\infty.$$
-
-离散型要求：
-
-$$\sum_x|x|p_X(x)<\infty.$$
-
-绝对可积保证正负部分都有限，防止出现 $\infty-\infty$；离散型的绝对收敛还使求和结果不依赖排列顺序。
-
-> **【深度辨析：对称不自动意味着均值为零】**  
-> 关于零对称且可积的分布，均值才为零。标准柯西密度 $1/[\pi(1+x^2)]$ 虽然对称，但 $\int |x|/[\pi(1+x^2)]\,dx$ 发散，所以普通意义下的期望不存在。对称截断积分为零只说明柯西主值为零，不能替代期望的存在性。
-
-### 2.2 随机变量函数的期望：定理 4.1
-
-对应课件第 7 页。
-
-> **定理 4.1（随机变量函数的期望）**：若 $g$ 可测且 $E|g(X)|<\infty$，则：
-> $$E[g(X)]=\begin{cases}\displaystyle\sum_x g(x)p_X(x),&X\text{ 离散},\\[5pt]\displaystyle\int_{\mathbb R}g(x)f_X(x)\,dx,&X\text{ 连续}.\end{cases}$$
-
-**实际价值**：求 $E[g(X)]$ 时，不必先求新变量 $g(X)$ 的分布。
-
-例如 $X\sim U(0,1)$：
-
-$$E(X^2)=\int_0^1x^2\,dx=\frac13.$$
-
-而：
-
-$$[E(X)]^2=\left(\int_0^1x\,dx\right)^2=\frac14.$$
-
-因此一般有 $E[g(X)]\ne g(E(X))$。只有线性函数等特定情形才可直接交换。
-
-### 2.3 示性变量：概率就是一种期望
-
-对应课件第 8—9 页，推论 4.2。
-
-定义事件 $A$ 的示性变量：
+对事件 $A$ 定义指示变量
 
 $$I_A=\begin{cases}1,&A\text{ 发生},\\0,&A\text{ 不发生}.\end{cases}$$
 
-由期望定义：
+于是课件推论 4.2 给出
 
-$$\boxed{E(I_A)=P(A).}$$
+$$\boxed{E(I_A)=1\cdot P(A)+0\cdot P(A^c)=P(A).}$$
 
-课件的写法 $\mathbf1_A(X)$ 表示判断 $X$ 是否落在集合 $A$ 中，于是：
+写成 $1_B(X)$ 时，它指事件 $\{X\in B\}$ 的指示变量，因此 $E[1_B(X)]=P(X\in B)$。
 
-$$E[\mathbf1_A(X)]=P(X\in A).$$
+这条公式把计数题变成期望题：若总数 $N=\sum_{i=1}^nI_{A_i}$，则
 
-连续型证明：
+$$E(N)=\sum_{i=1}^nP(A_i).$$
 
-$$E[\mathbf1_A(X)]=\int_{\mathbb R}\mathbf1_A(x)f_X(x)\,dx=\int_Af_X(x)\,dx=P(X\in A).\quad\blacksquare$$
+事件之间可以相关。**计算期望人数、次数时，往往先拆成若干个 0—1 变量。**
 
-**计数问题的应用**：若 $N=\sum_{i=1}^nI_{A_i}$ 统计事件发生总次数，则：
+**补充例：随机排列的固定点。** 把 $n$ 封信随机放进 $n$ 个信封。令 $I_i$ 表示第 $i$ 封信进入正确的信封。每个 $P(I_i=1)=1/n$，故正确配对数 $N$ 满足 $E(N)=n\cdot1/n=1$。这些指示变量并不独立，但不影响此期望计算。
 
-$$\boxed{E(N)=\sum_{i=1}^nP(A_i).}$$
+### 2.2 线性性质：不要求独立
 
-不要求这些事件独立。复杂计数问题若难以求出 $N$ 的分布，先拆成示性变量往往更容易。
+对可积随机变量和常数 $a_i,b$，课件定理 4.3 给出
 
-### 2.4 线性性与独立乘积公式：定理 4.3—4.4
+$$\boxed{E\left(b+\sum_{i=1}^na_iX_i\right)=b+\sum_{i=1}^na_iE(X_i).}$$
 
-对应课件第 10 页。
+理由是求和或积分的线性。例如在联合密度情形，
 
-> **定理 4.3（期望的线性性）**：对可积随机变量和常数 $a_i,b$，
-> $$E\left(b+\sum_{i=1}^na_iX_i\right)=b+\sum_{i=1}^na_iE(X_i).$$
-> **不要求独立。**
+$$\iint(ax+by)f(x,y)dxdy
+=a\iint xf(x,y)dxdy+b\iint yf(x,y)dxdy.$$
 
-> **定理 4.4（独立变量的乘积期望）**：若 $X_1,\ldots,X_n$ 相互独立，且各 $g_i(X_i)$ 可积，则：
-> $$E\left[\prod_{i=1}^ng_i(X_i)\right]=\prod_{i=1}^nE[g_i(X_i)].$$
+这里没有把联合密度分解，所以不需要独立性。若 $Y=X$，仍有 $E(X+Y)=2E(X)$。
 
-对两个离散型独立变量，证明为：
+课件用 $g_i(X_i)$ 表述同一性质：只要每一项可积，有限和的期望就是期望之和。
 
-$$\begin{aligned}E[g(X)h(Y)]&=\sum_x\sum_y g(x)h(y)p_{X,Y}(x,y)\\&=\sum_x\sum_y g(x)h(y)p_X(x)p_Y(y)\\&=\left[\sum_xg(x)p_X(x)\right]\left[\sum_yh(y)p_Y(y)\right].\end{aligned}$$
+### 2.3 独立时乘积期望可以分解
 
-关键一步是独立性给出的联合分布分解。连续型将求和换成积分即可。
+课件定理 4.4：若 $X_1,\ldots,X_n$ **相互独立**，且各 $g_i(X_i)$ 可积，则
 
-> **【核心辨析：加法与乘法的条件不同】**  
-> $E(X+Y)=E(X)+E(Y)$ 在可积时总成立；$E(XY)=E(X)E(Y)$ 一般不能直接使用，独立是保证它成立的充分条件。反过来，仅一个乘积期望等式成立，并不能推出独立。
+$$\boxed{E\left[\prod_{i=1}^ng_i(X_i)\right]=\prod_{i=1}^nE[g_i(X_i)].}$$
 
-### 2.5 二元函数的期望与交叉矩
+例如 $X,Y$ 独立时，$E(XY)=E(X)E(Y)$。连续情形的证明是
 
-对应课件第 51 页。
+$$\begin{aligned}
+E[g(X)h(Y)]
+&=\iint g(x)h(y)f_X(x)f_Y(y)dxdy\\
+&=\left[\int g(x)f_X(x)dx\right]
+  \left[\int h(y)f_Y(y)dy\right].
+\end{aligned}$$
 
-当 $g(X,Y)$ 可积时：
+独立性保证联合密度或联合分布能够分解，也保证乘积的绝对可积性。
 
-$$E[g(X,Y)]=\sum_x\sum_y g(x,y)p_{X,Y}(x,y)$$
+反方向要小心：**仅有 $E(XY)=E(X)E(Y)$ 不能推出独立。** 它只约束一个乘积平均值；独立性要求所有有关事件的概率分解，强得多。第十节会给出反例。
 
-或：
+### 2.4 三条辅助性质（补充）
 
-$$E[g(X,Y)]=\iint_{\mathbb R^2}g(x,y)f_{X,Y}(x,y)\,dx\,dy.$$
+在相应期望存在时：若 $X\le Y$ 几乎处处，则 $E(X)\le E(Y)$；若 $X\ge0$，则 $E(X)\ge0$；总有 $|E(X)|\le E|X|$。
 
-特别地，取 $g(x,y)=xy$ 得交叉矩：
-
-$$E(XY)=\sum_x\sum_yxy\,p_{X,Y}(x,y).$$
-
-这是协方差计算的关键中间量。仅有边缘分布通常无法确定 $E(XY)$，因为它还反映变量之间的依赖。
+“几乎处处”或“几乎必然”表示允许在概率为 0 的事件上不成立。对于非负变量，$E(X)=0$ 等价于 $X=0$ 几乎必然。这一点将用于理解零方差。
 
 ---
 
-## 3. 方差、标准差与矩 (Variance, Standard Deviation & Moments)
+## 第三节　方差与标准差：位置以外的第二个特征
 
-### 3.1 方差与标准差的定义
+### 3.1 为什么用平方偏差
 
-对应课件第 11 页。
+设 $\mu=E(X)$，且 $E(X^2)<\infty$。定义
 
-> **定义（方差与标准差）**：设 $E(X^2)<\infty$，$\mu=E(X)$，则：
-> $$\operatorname{Var}(X)=E[(X-\mu)^2],\qquad \operatorname{sd}(X)=\sqrt{\operatorname{Var}(X)}.$$
+$$\boxed{\operatorname{Var}(X)=E[(X-\mu)^2],\qquad
+\operatorname{sd}(X)=\sqrt{\operatorname{Var}(X)}.}$$
 
-偏差直接求平均得到零：$E(X-\mu)=0$，因此采用平方偏差衡量波动。平方避免正负抵消，并使较大偏差获得更大权重。
+普通偏差的平均恒为 $E(X-\mu)=0$，正负偏差会抵消；平方使不同方向的偏离都产生非负贡献。方差的单位是原单位的平方，标准差与 $X$ 同单位。例如身高用 cm 表示，方差用 $\mathrm{cm}^2$，标准差用 cm。
 
-例如 $X$ 等概率取 $49,51$，$Y$ 等概率取 $0,100$。二者均值都为 $50$，但：
+二阶矩有限自动推出一阶绝对矩有限，因为 $|x|\le1+x^2$。因此这一前提足以保证均值与方差公式中的每一项有限。
 
-$$\operatorname{Var}(X)=1,\qquad \operatorname{Var}(Y)=2500.$$
+### 3.2 计算公式与证明
 
-若原变量以 mL 计量，方差单位是 $\text{mL}^2$，标准差单位仍是 mL。
+展开平方并使用线性性质：
 
-### 3.2 方差计算公式与线性变换：定理 4.5
+$$\begin{aligned}
+\operatorname{Var}(X)
+&=E(X^2-2\mu X+\mu^2)\\
+&=E(X^2)-2\mu E(X)+\mu^2\\
+&=\boxed{E(X^2)-[E(X)]^2}.
+\end{aligned}$$
 
-对应课件第 11—12 页。
+实战中常先求 $E(X),E(X^2)$，再相减。**$E(X^2)$ 是二阶原点矩，不能直接当作方差。** 若算得方差为负数，说明计算或舍入有问题。
 
-> **定理 4.5**：
-> $$\boxed{\operatorname{Var}(X)=E(X^2)-[E(X)]^2}$$
-> $$\boxed{\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X).}$$
+### 3.3 平移与缩放
 
-#### (1) 方差计算公式的证明
+课件定理 4.5：
 
-$$\begin{aligned}E[(X-\mu)^2]&=E(X^2)-2\mu E(X)+\mu^2\\&=E(X^2)-\mu^2.\end{aligned}\quad\blacksquare$$
+$$\boxed{\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X),\qquad
+\operatorname{sd}(aX+b)=|a|\operatorname{sd}(X).}$$
 
-#### (2) 线性变换的证明
+证明只需注意
 
 $$aX+b-E(aX+b)=a(X-\mu).$$
 
-两边平方再取期望即得方差公式。相应地：
+平移改变中心，不改变围绕自身中心的波动；缩放后的偏差变为 $a$ 倍，平方偏差变为 $a^2$ 倍。负号也必须平方，标准差则乘 $|a|$。
 
-$$\operatorname{sd}(aX+b)=|a|\operatorname{sd}(X).$$
+### 3.4 方差为零是什么意思
 
-**直观解释**：平移不改变离散程度；放大 $a$ 倍使平方偏差放大 $a^2$ 倍。
+$$\operatorname{Var}(X)=0\quad\Longleftrightarrow\quad X=E(X)\ \text{几乎必然}.$$
 
-#### (3) 零方差与常数变量
+因为平方偏差非负，期望为零意味着平方偏差几乎必然为零。零方差变量是常数变量；它与任何变量独立，但其 Pearson 相关系数通常没有定义，因为分母为零。
 
-非负随机变量 $(X-\mu)^2$ 的期望为零，当且仅当它几乎必然为零。因此：
+### 3.5 独立和的方差与样本平均（后者为补充）
 
-$$\boxed{\operatorname{Var}(X)=0\iff X=E(X)\text{ a.s.}}$$
+若 $X_i$ 相互独立且二阶矩有限，则
 
-### 3.3 原点矩、中心矩与存在性关系
+$$\boxed{\operatorname{Var}\left(\sum_i a_iX_i\right)
+=\sum_i a_i^2\operatorname{Var}(X_i).}$$
 
-对应课件第 22—23 页。
+展开中心化和的平方后，交叉项为
 
-> **定义（矩, Moments）**：当相应绝对矩有限时，$r$ 阶原点矩为 $E(X^r)$，$r$ 阶中心矩为 $E[(X-\mu)^r]$。
+$$E[(X_i-\mu_i)(X_j-\mu_j)]
+=E(X_i-\mu_i)E(X_j-\mu_j)=0.$$
 
-| 名称 | 公式 | 含义 |
-| :--- | :--- | :--- |
-| 一阶原点矩 | $E(X)$ | 均值 |
-| 二阶原点矩 | $E(X^2)$ | 计算方差的基础 |
-| 一阶中心矩 | $E(X-\mu)=0$ | 平均偏差为零 |
-| 二阶中心矩 | $E[(X-\mu)^2]$ | 方差 |
+事实上，两两不相关已经足够让交叉项为零；独立是充分条件。没有这些条件时应使用第八节的完整公式。
 
-若 $0<k<r$，因为 $|x|^k\le1+|x|^r$，所以：
+例如独立同分布的 $X_1,\ldots,X_n$ 满足 $E(X_i)=\mu,\operatorname{Var}(X_i)=\sigma^2$，则
 
-$$\boxed{E|X|^r<\infty\implies E|X|^k<\infty.}$$
+$$E(\bar X)=\mu,\qquad \operatorname{Var}(\bar X)=\frac{\sigma^2}{n},\qquad
+\operatorname{sd}(\bar X)=\frac\sigma{\sqrt n}.$$
 
-特别地，有限二阶矩保证有限一阶绝对矩。反向推理一般不成立。
+期望中系数 $1/n$ 乘一次，方差中系数必须平方，再累加 $n$ 项。这是常见的系数错误来源。
 
-### 3.4 常见分布的均值与方差推导
+### 3.6 均值是最佳常数预测（补充）
 
-对应课件练习 4.1，第 13—17 页。
+对任意常数 $c$，
 
-#### (1) 伯努利分布：利用 $X^2=X$
+$$E[(X-c)^2]=\operatorname{Var}(X)+(\mu-c)^2.$$
 
-若 $X\sim\operatorname{Bernoulli}(p)$，则：
-
-$$E(X)=0(1-p)+1p=p.$$
-
-由于 $X\in\{0,1\}$，有 $X^2=X$，故：
-
-$$\boxed{\operatorname{Var}(X)=p-p^2=p(1-p).}$$
-
-#### (2) 二项分布：利用示性变量分解
-
-若 $X=\sum_{i=1}^nX_i$，其中 $X_i$ 相互独立且均服从 $\operatorname{Bernoulli}(p)$，则：
-
-$$E(X)=\sum_{i=1}^nE(X_i)=np.$$
-
-独立使协方差为零，因此：
-
-$$\boxed{\operatorname{Var}(X)=\sum_{i=1}^n\operatorname{Var}(X_i)=np(1-p).}$$
-
-注意期望相加本身不需要独立，而上述方差简化使用了独立性。
-
-#### (3) 几何分布：对几何级数求导
-
-设 $0<p<1$，$q=1-p$，$P(X=k)=pq^{k-1}$，$k\ge1$。由：
-
-$$\sum_{k=0}^\infty q^k=\frac1{1-q},$$
-
-对 $q$ 求导：
-
-$$E(X)=p\sum_{k=1}^\infty kq^{k-1}=p\frac{d}{dq}\frac1{1-q}=\frac1p.$$
-
-求二阶矩时，先计算阶乘形式：
-
-$$E[X(X-1)]=pq\frac{d^2}{dq^2}\frac1{1-q}=\frac{2q}{p^2}.$$
-
-利用 $X^2=X(X-1)+X$：
-
-$$E(X^2)=\frac{2q}{p^2}+\frac1p=\frac{2-p}{p^2}.$$
-
-最终：
-
-$$\boxed{\operatorname{Var}(X)=\frac{2-p}{p^2}-\frac1{p^2}=\frac{1-p}{p^2}.}$$
-
-$p=1$ 时 $X=1$ a.s.，上述均值和方差公式仍成立；$p=0$ 时不能作为有限首次成功时间的这一几何模型。
-
-#### (4) 指数分布：分部积分
-
-若 $X\sim\operatorname{Exp}(\lambda)$，$\lambda>0$，则：
-
-$$\begin{aligned}E(X)&=\int_0^\infty x\lambda e^{-\lambda x}\,dx\\&=[-xe^{-\lambda x}]_0^\infty+\int_0^\infty e^{-\lambda x}\,dx=\frac1\lambda.\end{aligned}$$
-
-同理：
-
-$$E(X^2)=[-x^2e^{-\lambda x}]_0^\infty+2\int_0^\infty xe^{-\lambda x}\,dx=\frac2{\lambda^2}.$$
-
-所以：
-
-$$\boxed{\operatorname{Var}(X)=\frac1{\lambda^2}.}$$
-
-#### (5) 正态分布：标准化与分部积分
-
-写作 $X=\mu+\sigma Z$，其中 $Z\sim N(0,1)$。设标准正态密度为 $\phi(z)$，则：
-
-$$\phi'(z)=-z\phi(z).$$
-
-对称性与可积性给出 $E(Z)=0$。再由分部积分：
-
-$$\begin{aligned}E(Z^2)&=\int_{\mathbb R}z^2\phi(z)\,dz=-\int_{\mathbb R}z\phi'(z)\,dz\\&=[-z\phi(z)]_{-\infty}^{+\infty}+\int_{\mathbb R}\phi(z)\,dz=1.\end{aligned}$$
-
-因此：
-
-$$\boxed{E(X)=\mu,\qquad \operatorname{Var}(X)=\sigma^2.}$$
-
-### 3.5 分布参数与数字特征速查表
-
-对应课件第 14、18—19 页。
-
-| 分布 | 参数与约定 | 期望 | 方差 |
-| :--- | :--- | :--- | :--- |
-| 点质量 $X=a$ | 常数 $a$ | $a$ | $0$ |
-| $\operatorname{Bernoulli}(p)$ | $0\le p\le1$ | $p$ | $p(1-p)$ |
-| $\operatorname{Binomial}(n,p)$ | $n$ 次独立同成功率试验 | $np$ | $np(1-p)$ |
-| $\operatorname{Geometric}(p)$ | $0<p\le1$，支撑从 $1$ 开始 | $1/p$ | $(1-p)/p^2$ |
-| $\operatorname{Poisson}(\lambda)$ | $\lambda>0$ | $\lambda$ | $\lambda$ |
-| $U(a,b)$ | $a<b$ | $(a+b)/2$ | $(b-a)^2/12$ |
-| $\operatorname{Exp}(\lambda)$ | 速率 $\lambda>0$ | $1/\lambda$ | $1/\lambda^2$ |
-| $\operatorname{Gamma}(\alpha,\lambda)$ | 形状、速率均为正 | $\alpha/\lambda$ | $\alpha/\lambda^2$ |
-| $N(\mu,\sigma^2)$ | 第二参数为方差 | $\mu$ | $\sigma^2$ |
-| $\chi^2(n)$ | 自由度 $n$ | $n$ | $2n$ |
-| $t(\nu)$ | 自由度 $\nu>0$ | $0$，要求 $\nu>1$ | $\nu/(\nu-2)$，要求 $\nu>2$ |
-
-> **【存在条件不能漏记】**  
-> $t$ 分布在 $\nu\le1$ 时均值不存在，在 $\nu\le2$ 时没有有限方差。不能忽略条件后机械代入 $\nu/(\nu-2)$，得到负数“方差”。
+因此在所有常数中，用 $\mu$ 预测 $X$ 的均方误差最小，最小值就是方差。这是第十一节线性预测和第十七节条件期望预测的起点。
 
 ---
 
-## 4. 矩母函数：生成矩与识别分布 (Moment-generating Functions, MGF)
+## 第四节　课件习题 4.1：常见分布均值、方差的推导
 
-### 4.1 定义与零点邻域的存在条件
+### 4.1 Bernoulli 分布
 
-对应课件第 21—22 页。
+若 $X\sim\operatorname{Bernoulli}(p)$，则 $X\in\{0,1\}$，且 $X^2=X$，所以
 
-> **定义（矩母函数, MGF）**：
-> $$M_X(t)=E(e^{tX}).$$
-> 本章所用的 MGF 理论要求存在 $h>0$，使得 $M_X(t)$ 在整个 $(-h,h)$ 内有限。
+$$E(X)=p,\qquad E(X^2)=p,\qquad
+\boxed{\operatorname{Var}(X)=p(1-p).}$$
 
-离散与连续表达式：
+任何事件的指示变量都是 Bernoulli 变量，因而 $\operatorname{Var}(I_A)=P(A)[1-P(A)]$。
 
-$$M_X(t)=\sum_xe^{tx}p_X(x),\qquad M_X(t)=\int_{\mathbb R}e^{tx}f_X(x)\,dx.$$
+### 4.2 Binomial 分布
 
-任何随机变量均满足 $E(e^{0X})=1$，但这不足以保证 MGF 在零点邻域有限。另一方面，MGF 不必在整个实数轴上有限。
+若 $X\sim\operatorname{Binomial}(n,p)$，可以表示为 $n$ 个相互独立的 Bernoulli 变量之和：$X=\sum_{i=1}^nI_i$。于是
 
-> **【深度补充：MGF 为什么能同时管理很多矩？】**  
-> $e^{tx}$ 的幂级数为 $1+tx+t^2x^2/2!+\cdots$。在零点附近具有足够可积性时，$M_X(t)$ 的导数提取相应的幂次平均。严格论证不能只形式化地交换无穷求和、积分与求导；零点邻域内的有限性提供了相应控制。
+$$\boxed{E(X)=np,\qquad \operatorname{Var}(X)=np(1-p).}$$
 
-### 4.2 求导生成矩：定理 4.6
+期望相加使用线性；方差相加使用独立性。两步依据不同，不能混为一谈。
 
-对应课件第 23—24 页。
+### 4.3 Geometric 分布：第一次成功所在的试验次数
 
-> **定理 4.6（Generating Moments）**：若 MGF 在零点邻域内有限，则各阶原点矩存在，并且：
-> $$\boxed{M_X^{(r)}(0)=E(X^r).}$$
+令 $q=1-p$，其中 $0<p\le1$，课件约定
 
-**证明思路**：
+$$P(X=k)=pq^{k-1},\qquad k=1,2,\ldots.$$
 
-$$\frac{d^r}{dt^r}e^{tx}=x^re^{tx}.$$
+从几何级数 $\sum_{k=0}^\infty q^k=1/(1-q)$ 出发，在 $0\le q<1$ 的范围内逐项求导，得到
 
-在可交换求导与期望的条件下：
+$$\sum_{k=1}^\infty kq^{k-1}=\frac1{(1-q)^2}.$$
 
-$$M_X^{(r)}(t)=E(X^re^{tX}).$$
+因此
 
-令 $t=0$，即得结论。$\blacksquare$
+$$E(X)=p\sum_{k=1}^\infty kq^{k-1}=\frac1p.$$
 
-因此：
+再求一次导数，并乘 $pq$：
 
-$$\boxed{E(X)=M_X'(0),\qquad E(X^2)=M_X''(0)}$$
+$$E[X(X-1)]
+=p\sum_{k=2}^\infty k(k-1)q^{k-1}
+=\frac{2pq}{(1-q)^3}=\frac{2q}{p^2}.$$
 
-$$\boxed{\operatorname{Var}(X)=M_X''(0)-[M_X'(0)]^2.}$$
+由 $X^2=X(X-1)+X$，
 
-计算前可用 $M_X(0)=1$ 检查表达式；若不等于 $1$，则一定有误，但等于 $1$ 并不能证明全部计算正确。
+$$E(X^2)=\frac{2q}{p^2}+\frac1p=\frac{2-p}{p^2},$$
 
-### 4.3 泊松、指数、正态与二项分布的 MGF
+$$\boxed{\operatorname{Var}(X)=\frac{1-p}{p^2}.}$$
 
-#### (1) 泊松分布：识别指数函数级数
+如果改为“成功前失败的次数” $W=X-1$，其均值为 $(1-p)/p$，方差不变。看到 Geometric，第一步先确认支持集从 0 还是 1 开始。
 
-对应课件第 25—26 页。若 $X\sim\operatorname{Poisson}(\lambda)$：
+### 4.4 指数分布：用分部积分
 
-$$\begin{aligned}M_X(t)&=\sum_{k=0}^\infty e^{tk}e^{-\lambda}\frac{\lambda^k}{k!}\\&=e^{-\lambda}\sum_{k=0}^\infty\frac{(\lambda e^t)^k}{k!}\\&=\boxed{\exp[\lambda(e^t-1)]},\qquad t\in\mathbb R.\end{aligned}$$
+若 $X\sim\operatorname{Exp}(\lambda)$，$\lambda>0$，密度为 $\lambda e^{-\lambda x}$，$x>0$。有
 
-求导：
+$$\begin{aligned}
+E(X)&=\int_0^\infty x\lambda e^{-\lambda x}dx\\
+&=[-xe^{-\lambda x}]_0^\infty+\int_0^\infty e^{-\lambda x}dx=\frac1\lambda,
+\end{aligned}$$
 
-$$M_X'(t)=\lambda e^tM_X(t),\qquad M_X''(t)=(\lambda e^t+\lambda^2e^{2t})M_X(t).$$
+$$E(X^2)=[-x^2e^{-\lambda x}]_0^\infty
++2\int_0^\infty xe^{-\lambda x}dx=\frac2{\lambda^2}.$$
 
-所以：
+于是
 
-$$E(X)=\lambda,\quad E(X^2)=\lambda+\lambda^2,\quad \operatorname{Var}(X)=\lambda.$$
+$$\boxed{E(X)=\frac1\lambda,\qquad\operatorname{Var}(X)=\frac1{\lambda^2}.}$$
 
-#### (2) 指数分布：必须注明收敛范围
+边界项为零，是因为指数衰减快于这些多项式的增长。速率越大，平均等待越短。
 
-对应课件第 27 页。
+### 4.5 正态分布：标准化后用对称性与分部积分
 
-$$M_X(t)=\lambda\int_0^\infty e^{-(\lambda-t)x}\,dx=\boxed{\frac{\lambda}{\lambda-t}},\qquad t<\lambda.$$
+设 $Z\sim N(0,1)$，密度 $\phi(z)=e^{-z^2/2}/\sqrt{2\pi}$。由于 $z\phi(z)$ 为奇函数且绝对可积，$E(Z)=0$。
 
-当 $t\ge\lambda$ 时积分发散。求导得到：
+利用 $\phi'(z)=-z\phi(z)$，
 
-$$M_X'(t)=\frac{\lambda}{(\lambda-t)^2},\qquad M_X''(t)=\frac{2\lambda}{(\lambda-t)^3}.$$
+$$\begin{aligned}
+E(Z^2)&=-\int_{-\infty}^{\infty}z\phi'(z)dz\\
+&=[-z\phi(z)]_{-\infty}^{\infty}+\int_{-\infty}^{\infty}\phi(z)dz=1.
+\end{aligned}$$
 
-于是 $E(X)=1/\lambda$，$E(X^2)=2/\lambda^2$，$\operatorname{Var}(X)=1/\lambda^2$。
+对 $X=\mu+\sigma Z$，$\sigma>0$，得到
 
-#### (3) 正态分布：配方后识别一个密度积分
+$$\boxed{E(X)=\mu,\qquad\operatorname{Var}(X)=\sigma^2.}$$
 
-对应课件第 28—29 页。若 $X\sim N(\mu,\sigma^2)$，$\sigma>0$，配方：
+### 4.6 常见分布速查及条件
 
-$$tx-\frac{(x-\mu)^2}{2\sigma^2}=-\frac{[x-(\mu+\sigma^2t)]^2}{2\sigma^2}+\mu t+\frac{\sigma^2t^2}{2}.$$
+| 分布与参数约定 | 期望 | 方差 |
+|---|---|---|
+| 点质量 $P(X=a)=1$ | $a$ | $0$ |
+| Bernoulli$(p)$ | $p$ | $p(1-p)$ |
+| Binomial$(n,p)$ | $np$ | $np(1-p)$ |
+| Geometric$(p)$，取值 $1,2,\ldots$ | $1/p$ | $(1-p)/p^2$ |
+| Poisson$(\lambda)$ | $\lambda$ | $\lambda$ |
+| $U(a,b)$，$a<b$ | $(a+b)/2$ | $(b-a)^2/12$ |
+| Exp$(\lambda)$，速率 | $1/\lambda$ | $1/\lambda^2$ |
+| Gamma$(\alpha,\lambda)$，形状—速率 | $\alpha/\lambda$ | $\alpha/\lambda^2$ |
+| $\chi^2(\nu)$ | $\nu$ | $2\nu$ |
+| $N(\mu,\sigma^2)$ | $\mu$ | $\sigma^2$ |
+| $t(\nu)$ | $0$，要求 $\nu>1$ | $\nu/(\nu-2)$，要求 $\nu>2$ |
 
-因此：
+Poisson 的推导见第六节；Gamma 与卡方由 MGF 得到。均匀分布可用 $X=a+(b-a)U$、$U\sim U(0,1)$，结合 $E(U)=1/2,E(U^2)=1/3$ 推出。
 
-$$M_X(t)=e^{\mu t+\sigma^2t^2/2}\int_{\mathbb R}\frac1{\sqrt{2\pi}\sigma}e^{-[x-(\mu+\sigma^2t)]^2/(2\sigma^2)}\,dx.$$
-
-积分内是均值为 $\mu+\sigma^2t$、方差为 $\sigma^2$ 的正态密度，其全积分等于 $1$：
-
-$$\boxed{M_X(t)=e^{\mu t+\sigma^2t^2/2},\qquad t\in\mathbb R.}$$
-
-求导：
-
-$$M_X'(t)=(\mu+\sigma^2t)M_X(t),$$
-
-$$M_X''(t)=[(\mu+\sigma^2t)^2+\sigma^2]M_X(t).$$
-
-于是：
-
-$$E(X)=\mu,\qquad E(X^2)=\mu^2+\sigma^2,\qquad \operatorname{Var}(X)=\sigma^2.$$
-
-#### (4) 二项分布：使用二项式定理
-
-对应练习 4.4，第 35—36 页。若 $Y\sim\operatorname{Binomial}(n,p)$：
-
-$$\begin{aligned}M_Y(t)&=\sum_{y=0}^ne^{ty}\binom ny p^y(1-p)^{n-y}\\&=\sum_{y=0}^n\binom ny(pe^t)^y(1-p)^{n-y}\\&=\boxed{(1-p+pe^t)^n},\qquad t\in\mathbb R.\end{aligned}$$
-
-当 $n=1$ 时，得到伯努利 MGF：$1-p+pe^t$。
-
-### 4.4 唯一性定理：定理 4.7
-
-对应课件第 30 页。
-
-> **定理 4.7（Uniqueness）**：设 $M_X,M_Y$ 在某个共同区间 $(-h,h)$ 内有限，且该区间中处处有 $M_X(t)=M_Y(t)$，则 $X,Y$ 同分布。
-
-**方法论**：先求未知变量的 MGF，再与熟悉分布的 MGF 匹配，最后引用唯一性。
-
-**注意**：同分布不等于 $X=Y$，也不意味着独立；只表示两者具有相同的概率分布。
-
-### 4.5 仿射变换与独立和：定理 4.8 及推论 4.8A
-
-对应课件第 31—34 页。
-
-> **推论 4.8A（仿射变换）**：若 $Y=aX+b$，则：
-> $$\boxed{M_Y(t)=e^{bt}M_X(at).}$$
-
-证明：$E[e^{t(aX+b)}]=e^{bt}E(e^{atX})$。$\blacksquare$
-
-> **定理 4.8（独立线性组合）**：若 $X_1,\ldots,X_n$ 相互独立且 MGF 在零点附近有限，则在各因子有限的范围内：
-> $$\boxed{M_{b+\sum_ia_iX_i}(t)=e^{bt}\prod_iM_{X_i}(a_it).}$$
-
-证明的核心：
-
-$$E\left[e^{t\sum_i a_iX_i}\right]=E\left[\prod_i e^{ta_iX_i}\right]=\prod_iE(e^{ta_iX_i}).$$
-
-最后一步使用相互独立，不能只凭两两不相关使用此公式。
+对 $t$ 分布，$\nu\le1$ 时均值不存在；$1<\nu\le2$ 时均值为 0，但二阶矩无限，方差无有限值；均值不存在时，不应直接套用以均值为中心的方差定义。F 分布的矩及条件在第三章讲义中已列出，本章不要求据此扩展课件范围。
 
 ---
 
-## 5. 分布运算：独立和、最小值与平方变换 (Distributional Operations)
+## 第五节　矩与矩母函数：从数字特征走回分布
 
-### 5.1 分布可加性的统一证明方法
+### 5.1 原点矩与中心矩
 
-对应课件第 37—46 页。
+对正整数 $r$，在相应绝对矩有限时，定义
 
-设 $S=\sum_iX_i$，变量相互独立。步骤为：
+$$\mu'_r=E(X^r)\quad\text{为 $r$ 阶原点矩},$$
 
-1. 写出每个 $M_{X_i}(t)$ 与其有限范围。
-2. 用独立性得到 $M_S(t)=\prod_iM_{X_i}(t)$。
-3. 整理成某个已知分布的 MGF。
-4. 说明零点附近有限，并引用唯一性。
+$$\mu_r=E[(X-E(X))^r]\quad\text{为 $r$ 阶中心矩}.$$
 
-这比仅计算均值、方差更强：它确定了 $S$ 的完整分布。
+第一阶原点矩是均值，第一阶中心矩是 0，第二阶中心矩是方差。不要把 $E(X^2)$ 与 $E[(X-\mu)^2]$ 混淆。
 
-### 5.2 伯努利、二项、泊松、Gamma 与卡方的可加性
+若 $E|X|^r<\infty$，则对 $0<k<r$ 有
 
-#### (1) 练习 4.5：独立同参数伯努利变量之和
+$$|X|^k\le1+|X|^r\quad\Longrightarrow\quad E|X|^k<\infty.$$
 
-若 $X_i\sim\operatorname{Bernoulli}(p)$ 相互独立：
+高阶绝对矩有限推出低阶有限；反方向一般不成立。
 
-$$M_S(t)=\prod_{i=1}^n(1-p+pe^t)=(1-p+pe^t)^n.$$
+### 5.2 MGF 的定义与存在范围
 
-所以：
+课件定义矩母函数为
 
-$$\boxed{S\sim\operatorname{Binomial}(n,p).}$$
+$$\boxed{M_X(t)=E(e^{tX}),}$$
 
-#### (2) 练习 4.6：同成功率二项变量之和
+并要求它在 0 的某个开邻域 $(-h,h)$ 内均有限。具体计算为
 
-若 $X_i\sim\operatorname{Binomial}(n_i,p)$ 相互独立：
+$$M_X(t)=\sum_xe^{tx}p_X(x)
+\quad\text{或}\quad
+M_X(t)=\int_{-\infty}^{\infty}e^{tx}f_X(x)dx.$$
 
-$$M_S(t)=\prod_i(1-p+pe^t)^{n_i}=(1-p+pe^t)^{\sum_i n_i}.$$
+“在 0 附近存在”不等于“对所有实数 $t$ 都有限”。指数分布的 MGF 只在 $t<\lambda$ 时有限，但由于 $\lambda>0$，仍包含 0 的一个双侧邻域。
 
-所以：
+任何随机变量都有 $E(e^{0X})=1$，因此仅有 $M_X(0)=1$ 不能证明 MGF 在本章意义下存在。计算时应同时写出**表达式与有限域**。
 
-$$\boxed{S\sim\operatorname{Binomial}\left(\sum_i n_i,p\right).}$$
+### 5.3 为什么 MGF 能产生矩
 
-不同成功概率时，该乘积通常无法合并为单一二项分布形式。
+对固定的 $x$，$d^re^{tx}/dt^r=x^re^{tx}$。MGF 在 0 附近有限时，可以在该邻域内把求导移入期望，于是课件定理 4.6 给出
 
-#### (3) 定理 4.9：独立和的分布汇总
+$$M_X^{(r)}(t)=E(X^re^{tX}),\qquad
+\boxed{M_X^{(r)}(0)=E(X^r).}$$
 
-| 各变量分布 | 和的分布 | 必要使用条件 |
-| :--- | :--- | :--- |
-| $\operatorname{Poisson}(\lambda_i)$ | $\operatorname{Poisson}(\sum_i\lambda_i)$ | 相互独立 |
-| $\operatorname{Binomial}(n_i,p)$ | $\operatorname{Binomial}(\sum_i n_i,p)$ | 相互独立、相同 $p$ |
-| $\operatorname{Gamma}(\alpha_i,\lambda)$ | $\operatorname{Gamma}(\sum_i\alpha_i,\lambda)$ | 相互独立、相同速率 |
-| $\chi^2(n_i)$ | $\chi^2(\sum_i n_i)$ | 相互独立 |
-| $N(\mu_i,\sigma_i^2)$ | $N(\sum_i\mu_i,\sum_i\sigma_i^2)$ | 相互独立 |
+特别地，
 
-例如 Gamma 一行的计算是：
+$$\boxed{E(X)=M'_X(0),\qquad
+\operatorname{Var}(X)=M''_X(0)-[M'_X(0)]^2.}$$
 
-$$\prod_i\left(\frac\lambda{\lambda-t}\right)^{\alpha_i}=\left(\frac\lambda{\lambda-t}\right)^{\sum_i\alpha_i},\qquad t<\lambda.$$
+注意二阶导数产生的是 $E(X^2)$，还需要减去均值平方。
 
-卡方分布是 $\operatorname{Gamma}(n/2,1/2)$，所以自由度相加来自形状参数相加。
+**补充：存在性条件在证明中的作用。** 取足够小的 $\delta>0$，有
 
-### 5.3 指数变量之和与最小值的本质区别
+$$E(e^{\delta|X|})\le M_X(\delta)+M_X(-\delta)<\infty.$$
 
-对应课件第 47—49 页。
+多项式 $|X|^r$ 及较小邻域中的求导项可以用一个可积的指数函数控制，这就为交换微分与期望提供依据。不能仅凭形式求导就跳过有限性检查。
 
-#### (1) 相同速率的和：Gamma 分布
+由此也得到：MGF 在 0 附近存在，则所有阶绝对矩均有限。**补充辨析：反方向不成立。** 例如非退化对数正态变量 $X=e^Z$、$Z\sim N(0,1)$，所有正整数阶矩都有限，但任意 $t>0$ 的 $E(e^{tX})$ 都无限，故没有这样的双侧 MGF。它说明“有很多矩”和“具有 MGF”是不同条件。
 
-若 $X_1,\ldots,X_n\overset{\mathrm{iid}}\sim\operatorname{Exp}(\lambda)$，则：
+### 5.4 唯一性：相同 MGF 意味着同分布
 
-$$M_{\sum_iX_i}(t)=\left(\frac\lambda{\lambda-t}\right)^n.$$
+课件定理 4.7：若 $M_X,M_Y$ 在共同邻域 $(-h,h)$ 都有限，且该区间内
 
-由唯一性：
+$$M_X(t)=M_Y(t),$$
 
-$$\boxed{\sum_{i=1}^nX_i\sim\operatorname{Gamma}(n,\lambda).}$$
+则 $X,Y$ 同分布，记为 $X\overset d=Y$。课件将变换唯一性定理作为已知结果，本文亦不把它误当成一个简单的代数恒等式来证明。
 
-因此均值为 $n/\lambda$，方差为 $n/\lambda^2$。除单个变量等特殊情形外，和不再是指数分布。
+常用步骤是：
 
-#### (2) 不同速率的最小值：速率相加
+1. 计算待研究变量的 MGF，并写出有效区间。
+2. 整理成已知分布的 MGF。
+3. 确认共同区间包含 0 的邻域。
+4. 由唯一性宣布同分布。
 
-若 $X_i\sim\operatorname{Exp}(\lambda_i)$ 相互独立，令 $W=\min_iX_i$。当 $w\ge0$：
+只比较前两个矩不够；只看到形式像某个 MGF，也应检查参数和有效区间。
 
-$$\begin{aligned}P(W>w)&=P(X_1>w,\ldots,X_n>w)\\&=\prod_iP(X_i>w)\\&=\prod_i e^{-\lambda_iw}=e^{-w\sum_i\lambda_i}.\end{aligned}$$
+### 5.5 仿射变换
 
-故：
+课件推论 4.8A：若 $Y=aX+b$，则
 
-$$\boxed{W\sim\operatorname{Exp}\left(\sum_i\lambda_i\right).}$$
+$$\boxed{M_Y(t)=e^{bt}M_X(at).}$$
 
-当 $w<0$ 时，$P(W>w)=1$，与非负支撑一致。
+证明为 $E(e^{t(aX+b)})=e^{bt}E(e^{atX})$。常数平移在外面乘 $e^{bt}$，缩放改变自变量为 $at$，不能写成 $aM_X(t)+b$。
 
-> **【模型辨析：依次完成与最先发生】**  
-> 求和对应依次经历多个等待阶段；最小值对应同时等待多个事件中最先发生的那个。相同速率的独立和改变 Gamma 的形状参数；独立最小值将指数速率相加。两种规则不能交换使用。
+当 $a\ne0$ 时有限域满足 $at$ 落入 $M_X$ 的有限域；若 $a=0$，则 $Y=b$，直接有 $M_Y(t)=e^{bt}$，对所有实数有限。
 
-### 5.4 独立正态变量的线性组合
+### 5.6 独立和的 MGF
 
-对应课件第 41—42 页。
+课件定理 4.8：若 $X_1,\ldots,X_n$ 相互独立，各 MGF 在 0 附近有限，$Y=b+\sum_ka_kX_k$，则
 
-若 $X_i\sim N(\mu_i,\sigma_i^2)$ 相互独立，令 $Y=b+\sum_i a_iX_i$，则：
+$$\boxed{M_Y(t)=e^{bt}\prod_{k=1}^nM_{X_k}(a_kt).}$$
 
-$$\begin{aligned}M_Y(t)&=e^{bt}\prod_i\exp\left(a_i\mu_it+\frac12a_i^2\sigma_i^2t^2\right)\\&=\exp\left[\left(b+\sum_i a_i\mu_i\right)t+\frac12\left(\sum_i a_i^2\sigma_i^2\right)t^2\right].\end{aligned}$$
+因为
 
-识别为正态 MGF：
+$$E\left[e^{t\sum_ka_kX_k}\right]
+=E\left[\prod_ke^{ta_kX_k}\right]
+=\prod_kE(e^{ta_kX_k}).$$
 
-$$\boxed{Y\sim N\left(b+\sum_i a_i\mu_i,\sum_i a_i^2\sigma_i^2\right).}$$
-
-特别地，独立正态变量相减时：
-
-$$X-Y\sim N(\mu_X-\mu_Y,\sigma_X^2+\sigma_Y^2).$$
-
-均值相减，方差仍相加。若结果方差为零，$Y$ 为常数变量。
-
-### 5.5 正态标准化与标准正态平方
-
-对应课件第 43—44 页。
-
-#### (1) 标准化的 MGF 证明
-
-若 $X\sim N(\mu,\sigma^2)$，$\sigma>0$，令 $Z=(X-\mu)/\sigma$：
-
-$$M_Z(t)=e^{-\mu t/\sigma}M_X(t/\sigma)=e^{t^2/2}.$$
-
-所以：
-
-$$\boxed{Z\sim N(0,1).}$$
-
-仅使均值为零、方差为一，不能保证一般变量变成正态；这里还使用了原变量正态。
-
-#### (2) 标准正态平方的分布
-
-若 $Z\sim N(0,1)$，则当 $t<1/2$：
-
-$$E(e^{tZ^2})=\frac1{\sqrt{2\pi}}\int_{\mathbb R}e^{-(1-2t)z^2/2}\,dz=(1-2t)^{-1/2}.$$
-
-这正是 $\chi^2(1)$ 的 MGF：
-
-$$\boxed{Z^2\sim\chi^2(1).}$$
-
-因此独立标准正态平方和满足：
-
-$$\boxed{Z_1,\ldots,Z_n\overset{\mathrm{iid}}\sim N(0,1)\implies\sum_{i=1}^nZ_i^2\sim\chi^2(n).}$$
+第二个等号使用相互独立性；有限域由所有非零系数对应的 $a_kt$ 条件共同决定。若变量相关，就不能一般地把和的 MGF 写成边缘 MGF 的乘积。
 
 ---
 
-## 6. 协方差与相关系数 (Covariance & Correlation)
+## 第六节　课件 MGF 例题：Poisson、指数、正态与二项
 
-### 6.1 协方差的定义、意义与双线性性
+### 6.1 Poisson 分布：识别指数级数
 
-对应课件第 52、67—68 页。
+若 $X\sim\operatorname{Poisson}(\lambda)$，则
 
-> **定义（协方差, Covariance）**：在二阶矩有限时：
-> $$\boxed{\operatorname{Cov}(X,Y)=E[(X-\mu_X)(Y-\mu_Y)]=E(XY)-E(X)E(Y).}$$
+$$\begin{aligned}
+M_X(t)&=\sum_{k=0}^\infty e^{tk}e^{-\lambda}\frac{\lambda^k}{k!}\\
+&=e^{-\lambda}\sum_{k=0}^\infty\frac{(\lambda e^t)^k}{k!}\\
+&=\boxed{\exp[\lambda(e^t-1)]},\qquad t\in\mathbb R.
+\end{aligned}$$
 
-同向偏离各自均值时，偏差乘积为正；反向偏离时为负。协方差是这些乘积的平均，反映整体的线性共同变化倾向，而不是每次观测都满足的单调规律。
+求导得
 
-基本性质：
+$$M'_X(t)=\lambda e^tM_X(t),$$
 
-$$\operatorname{Cov}(X,X)=\operatorname{Var}(X),\qquad \operatorname{Cov}(X,Y)=\operatorname{Cov}(Y,X).$$
+$$M''_X(t)=(\lambda e^t+\lambda^2e^{2t})M_X(t).$$
 
-> **定理 4.10（双线性性, Bilinearity）**：
-> $$\boxed{\operatorname{Cov}\left(\sum_i a_iX_i,\sum_j b_jY_j\right)=\sum_i\sum_j a_ib_j\operatorname{Cov}(X_i,Y_j).}$$
+所以 $E(X)=\lambda$，$E(X^2)=\lambda+\lambda^2$，$\operatorname{Var}(X)=\lambda$。
 
-证明：将两边变量分别减去其均值，展开乘积，再利用期望线性性。整个过程不需要独立。
+### 6.2 指数分布：积分的收敛条件必须写出来
 
-特别地：
+$$M_X(t)=\int_0^\infty\lambda e^{-(\lambda-t)x}dx
+=\boxed{\frac\lambda{\lambda-t}},\qquad t<\lambda.$$
 
-$$\operatorname{Cov}(aX+b,cY+d)=ac\operatorname{Cov}(X,Y),$$
+若 $t=\lambda$，被积函数为正的常数；若 $t>\lambda$，被积函数指数增长，因此都发散。
 
-$$\operatorname{Cov}(X+Y,Z)=\operatorname{Cov}(X,Z)+\operatorname{Cov}(Y,Z).$$
+$$M'_X(t)=\frac\lambda{(\lambda-t)^2},\qquad
+M''_X(t)=\frac{2\lambda}{(\lambda-t)^3}.$$
 
-常数平移不改变协方差，倍乘系数保留符号。
+代 $t=0$ 得到 $E(X)=1/\lambda$、$E(X^2)=2/\lambda^2$、$\operatorname{Var}(X)=1/\lambda^2$，与第四节分部积分相互核对。
 
-### 6.2 一般线性组合的方差：推论 4.11
+### 6.3 正态分布：核心技巧是配方
 
-对应课件第 69—70 页。
+对 $X\sim N(\mu,\sigma^2)$、$\sigma>0$，
 
-> **推论 4.11**：
-> $$\boxed{\operatorname{Var}\left(\sum_i a_iX_i\right)=\sum_i a_i^2\operatorname{Var}(X_i)+2\sum_{i<j}a_ia_j\operatorname{Cov}(X_i,X_j).}$$
+$$M_X(t)=\int_{\mathbb R}\frac1{\sqrt{2\pi}\sigma}
+\exp\left[tx-\frac{(x-\mu)^2}{2\sigma^2}\right]dx.$$
 
-证明：令 $U=\sum_i a_iX_i$，由 $\operatorname{Var}(U)=\operatorname{Cov}(U,U)$ 与双线性性：
+配方得到
 
-$$\operatorname{Var}(U)=\sum_i\sum_j a_ia_j\operatorname{Cov}(X_i,X_j).$$
+$$tx-\frac{(x-\mu)^2}{2\sigma^2}
+=-\frac{[x-(\mu+\sigma^2t)]^2}{2\sigma^2}
++\mu t+\frac{\sigma^2t^2}2.$$
 
-其中 $i=j$ 为方差项；$i\ne j$ 的对称项两两合并，得到系数 $2$。$\blacksquare$
+提取与 $x$ 无关的部分后，剩余积分是均值为 $\mu+\sigma^2t$、方差为 $\sigma^2$ 的正态密度的积分，等于 1。因此
 
-两个变量时：
+$$\boxed{M_X(t)=\exp\left(\mu t+\frac{\sigma^2t^2}2\right),\qquad t\in\mathbb R.}$$
 
-$$\boxed{\operatorname{Var}(aX+bY)=a^2\sigma_X^2+b^2\sigma_Y^2+2ab\operatorname{Cov}(X,Y).}$$
+$$M'_X(t)=(\mu+\sigma^2t)M_X(t),$$
 
-因此：
+$$M''_X(t)=[(\mu+\sigma^2t)^2+\sigma^2]M_X(t).$$
 
-$$\operatorname{Var}(X\pm Y)=\operatorname{Var}(X)+\operatorname{Var}(Y)\pm2\operatorname{Cov}(X,Y).$$
+所以 $E(X)=\mu$，$E(X^2)=\mu^2+\sigma^2$，方差为 $\sigma^2$。记忆时注意：指数中 $t$ 的系数是均值，$t^2$ 的系数是**方差的一半**。
 
-若变量两两不相关，交叉项消失；独立是保证这种简化成立的充分条件，但不是必要条件。
+### 6.4 习题 4.4：二项分布的 MGF
 
-### 6.3 相关系数的界与等号条件
+若 $Y\sim\operatorname{Binomial}(n,p)$，由二项式定理，
 
-对应课件第 52、56—57 页。
+$$\begin{aligned}
+M_Y(t)&=\sum_{y=0}^ne^{ty}\binom ny p^y(1-p)^{n-y}\\
+&=\sum_{y=0}^n\binom ny(pe^t)^y(1-p)^{n-y}\\
+&=\boxed{(1-p+pe^t)^n},\qquad t\in\mathbb R.
+\end{aligned}$$
 
-> **定义（相关系数, Correlation）**：当 $0<\sigma_X,\sigma_Y<\infty$ 时：
-> $$\boxed{\rho_{X,Y}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\sigma_Y}.}$$
+这是有限和，对每个实数 $t$ 都有限。取 $n=1$ 就得到 Bernoulli 的 MGF：$1-p+pe^t$。
 
-协方差随单位变化，相关系数除去两个标准差后没有量纲。若一个变量方差为零，该公式下的相关系数没有定义。
+### 6.5 Gamma 分布的 MGF（课件可加性证明的补充步骤）
 
-#### (1) 相关系数的范围
+课件第 46 页直接使用 Gamma 的 MGF，这里补出积分。若
 
-设 $U=X-\mu_X$，$V=Y-\mu_Y$。Cauchy–Schwarz 不等式给出：
+$$f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\qquad x>0,$$
 
-$$[E(UV)]^2\le E(U^2)E(V^2)=\sigma_X^2\sigma_Y^2.$$
+则对 $t<\lambda$，
 
-故：
+$$\begin{aligned}
+M_X(t)&=\frac{\lambda^\alpha}{\Gamma(\alpha)}
+\int_0^\infty x^{\alpha-1}e^{-(\lambda-t)x}dx\\
+&=\boxed{\left(\frac\lambda{\lambda-t}\right)^\alpha}.
+\end{aligned}$$
 
-$$\boxed{-1\le\rho_{X,Y}\le1.}$$
+第二步令 $u=(\lambda-t)x$，使用 Gamma 积分；$t\ge\lambda$ 时发散。求导得
 
-#### (2) 什么时候达到等号？
+$$E(X)=\frac\alpha\lambda,\qquad
+E(X^2)=\frac{\alpha(\alpha+1)}{\lambda^2},\qquad
+\operatorname{Var}(X)=\frac\alpha{\lambda^2}.$$
 
-等号成立当且仅当 $V=aU$ a.s.。由于两个方差为正，$a\ne0$。因此：
+卡方为 $\operatorname{Gamma}(\nu/2,1/2)$，所以
 
-$$\boxed{|\rho|=1\iff Y=aX+b\text{ a.s.},\quad a\ne0.}$$
+$$M_{\chi^2(\nu)}(t)=(1-2t)^{-\nu/2},\qquad t<1/2.$$
 
-$a>0$ 对应 $\rho=1$；$a<0$ 对应 $\rho=-1$。一般非线性函数关系并不能保证 $|\rho|=1$。
+---
 
-### 6.4 例 4.8：联合分布表求相关系数
+## 第七节　用 MGF 识别和的分布
 
-对应课件第 53—55 页。
+### 7.1 习题 4.5：独立 Bernoulli 之和
 
-已知：
+若 $X_k\sim\operatorname{Bernoulli}(p)$ 相互独立，$Y=\sum_{k=1}^nX_k$，则
 
-$$p_{X,Y}(x,y)=\frac{x+2y}{18},\qquad x,y\in\{1,2\}.$$
+$$M_Y(t)=\prod_{k=1}^n(1-p+pe^t)=(1-p+pe^t)^n.$$
 
-#### 第一步：求联合与边缘分布
+它与第 6.4 小节的二项 MGF 相同，在整个实轴有限，由唯一性，
 
-| $X\backslash Y$ | $Y=1$ | $Y=2$ | $p_X(x)$ |
-| :--- | :--- | :--- | :--- |
-| $X=1$ | $3/18$ | $5/18$ | $4/9$ |
-| $X=2$ | $4/18$ | $6/18$ | $5/9$ |
+$$\boxed{Y\sim\operatorname{Binomial}(n,p).}$$
+
+若各成功概率不同，则 MGF 为 $\prod_k(1-p_k+p_ke^t)$，一般不能合并成同一个二项分布。
+
+### 7.2 习题 4.6：独立同成功概率的二项之和
+
+为避免课件中“求和项数 $n$”与“各二项试验次数 $n_k$”混淆，令共有 $m$ 项。若 $X_k\sim\operatorname{Binomial}(n_k,p)$ 相互独立，则
+
+$$M_{\sum_kX_k}(t)=\prod_{k=1}^m(1-p+pe^t)^{n_k}
+=(1-p+pe^t)^{\sum_kn_k}.$$
+
+故
+
+$$\boxed{\sum_{k=1}^mX_k\sim\operatorname{Binomial}\left(\sum_{k=1}^mn_k,p\right).}$$
+
+必须共享同一个 $p$；独立本身不足以推出此结论。
+
+### 7.3 课件练习：独立正态的线性组合
+
+若 $X_k\sim N(\mu_k,\sigma_k^2)$ 相互独立，令 $Y=\sum_ka_kX_k$，则
+
+$$\begin{aligned}
+M_Y(t)&=\prod_k\exp\left(a_k\mu_kt+\frac{a_k^2\sigma_k^2t^2}2\right)\\
+&=\exp\left[t\sum_ka_k\mu_k+\frac{t^2}2\sum_ka_k^2\sigma_k^2\right].
+\end{aligned}$$
+
+所以
+
+$$\boxed{Y\sim N\left(\sum_ka_k\mu_k,\ \sum_ka_k^2\sigma_k^2\right).}$$
+
+系数在均值中保持原符号，在方差中平方。若所得方差为 0，$Y$ 是常数，按课件约定理解为退化正态。对有关联的联合正态，仍有线性组合正态，但方差需要协方差项，见第十四节。
+
+### 7.4 标准化与标准正态平方
+
+对 $X\sim N(\mu,\sigma^2)$、$\sigma>0$，$Z=(X-\mu)/\sigma$ 满足
+
+$$M_Z(t)=e^{-\mu t/\sigma}M_X(t/\sigma)=e^{t^2/2},$$
+
+故 $Z\sim N(0,1)$。
+
+若 $Z\sim N(0,1)$，令 $Q=Z^2$，不能使用仿射公式，而应从函数期望积分：
+
+$$\begin{aligned}
+M_Q(t)&=E(e^{tZ^2})
+=\frac1{\sqrt{2\pi}}\int_{\mathbb R}e^{-(1-2t)z^2/2}dz\\
+&=\frac1{\sqrt{1-2t}},\qquad t<1/2.
+\end{aligned}$$
+
+这是 $\chi^2(1)$ 的 MGF，因此 $Z^2\sim\chi^2(1)$。若 $Z_1,\ldots,Z_n$ 相互独立，则平方后仍相互独立，于是 $\sum_iZ_i^2\sim\chi^2(n)$，与第三章的构造一致。
+
+### 7.5 定理 4.9：五类分布的可加性
+
+以下每一行都假设各变量相互独立：
+
+| 各变量分布 | 和的分布 | 参数限制 |
+|---|---|---|
+| Poisson$(\lambda_k)$ | Poisson$(\sum_k\lambda_k)$ | 无须各速率相同 |
+| Binomial$(n_k,p)$ | Binomial$(\sum_kn_k,p)$ | 同一个 $p$ |
+| Gamma$(\alpha_k,\lambda)$ | Gamma$(\sum_k\alpha_k,\lambda)$ | 同一个速率 $\lambda$ |
+| $\chi^2(\nu_k)$ | $\chi^2(\sum_k\nu_k)$ | 自由度相加 |
+| $N(\mu_k,\sigma_k^2)$ | $N(\sum_k\mu_k,\sum_k\sigma_k^2)$ | 方差相加 |
+
+证明都采用“MGF 相乘，再由唯一性识别”。尚未展开的三行分别为
+
+$$\prod_ke^{\lambda_k(e^t-1)}=e^{(\sum_k\lambda_k)(e^t-1)},$$
+
+$$\prod_k\left(\frac\lambda{\lambda-t}\right)^{\alpha_k}
+=\left(\frac\lambda{\lambda-t}\right)^{\sum_k\alpha_k},$$
+
+$$\prod_k(1-2t)^{-\nu_k/2}=(1-2t)^{-(\sum_k\nu_k)/2}.$$
+
+“和属于同一分布族”不是所有分布都有的性质。例如两个独立均匀变量的和一般不是均匀分布。
+
+### 7.6 指数变量：和与最小值必须区分
+
+**同速率独立和。** 若 $X_1,\ldots,X_n$ 独立且均为 Exp$(\lambda)$，则
+
+$$M_{\sum_kX_k}(t)=\left(\frac\lambda{\lambda-t}\right)^n,$$
+
+所以
+
+$$\boxed{\sum_kX_k\sim\operatorname{Gamma}(n,\lambda).}$$
+
+当 $n>1$ 时通常不是指数分布；这里和表示依次完成若干阶段所需总时间。
+
+**可以不同速率的独立最小值。** 若 $X_k\sim\operatorname{Exp}(\lambda_k)$ 相互独立，$W=\min_kX_k$，则对 $x\ge0$，
+
+$$\begin{aligned}
+P(W>x)&=P(X_1>x,\ldots,X_n>x)\\
+&=\prod_ke^{-\lambda_kx}=e^{-x\sum_k\lambda_k}.
+\end{aligned}$$
+
+故
+
+$$\boxed{W\sim\operatorname{Exp}\left(\sum_k\lambda_k\right).}$$
+
+这里用生存函数最方便，独立性用于联合事件概率分解。它表示多个机制并行工作时，首次发生事件的等待时间。最小值结论允许速率不同；Gamma 和的结论则需要同速率。
+
+---
+
+## 第八节　协方差：两个变量的中心化乘积平均
+
+### 8.1 定义及正负含义
+
+设 $E(X^2),E(Y^2)<\infty$，记 $\mu_X=E(X),\mu_Y=E(Y)$。定义
+
+$$\boxed{\operatorname{Cov}(X,Y)=E[(X-\mu_X)(Y-\mu_Y)].}$$
+
+二阶矩有限通过 Cauchy–Schwarz 保证这里的乘积绝对可积。若两个变量常在各自均值的同侧，中心化乘积常为正；若常在均值的相反侧，乘积常为负。协方差总结这种**线性共同变化**，正负项也可能相互抵消。
+
+展开得最常用的计算式：
+
+$$\boxed{\operatorname{Cov}(X,Y)=E(XY)-E(X)E(Y).}$$
+
+同时
+
+$$\operatorname{Cov}(X,Y)=\operatorname{Cov}(Y,X),\qquad
+\operatorname{Cov}(X,X)=\operatorname{Var}(X).$$
+
+协方差有单位，改变测量单位会改变数值，因此不适宜直接比较不同量纲的数据关系强弱。
+
+### 8.2 双线性：常数项不产生协方差
+
+课件定理 4.10 给出
+
+$$\boxed{\operatorname{Cov}(aX+b,cY+d)=ac\operatorname{Cov}(X,Y),}$$
+
+以及
+
+$$\boxed{\operatorname{Cov}\left(\sum_ia_iX_i,\sum_jb_jY_j\right)
+=\sum_i\sum_ja_ib_j\operatorname{Cov}(X_i,Y_j).}$$
+
+证明是先把和减去其均值，再展开中心化乘积，最后应用期望线性。这里**不要求独立性**。
+
+例如
+
+$$\begin{aligned}
+\operatorname{Cov}(X+Y,X-Y)
+&=\operatorname{Var}(X)-\operatorname{Cov}(X,Y)\\
+&\quad+\operatorname{Cov}(Y,X)-\operatorname{Var}(Y)\\
+&=\operatorname{Var}(X)-\operatorname{Var}(Y).
+\end{aligned}$$
+
+两个交叉协方差自动抵消，不需要先假设 $X,Y$ 独立。
+
+### 8.3 和的方差：完整公式
+
+使用 $\operatorname{Var}(U)=\operatorname{Cov}(U,U)$，课件推论 4.11 得到
+
+$$\boxed{\operatorname{Var}\left(\sum_ia_iX_i\right)
+=\sum_ia_i^2\operatorname{Var}(X_i)
++2\sum_{i<j}a_ia_j\operatorname{Cov}(X_i,X_j).}$$
+
+其中对角项是方差；非对角项按对称性两两合并，产生系数 2。特别地，
+
+$$\operatorname{Var}(X+Y)=\operatorname{Var}(X)+\operatorname{Var}(Y)+2\operatorname{Cov}(X,Y),$$
+
+$$\operatorname{Var}(X-Y)=\operatorname{Var}(X)+\operatorname{Var}(Y)-2\operatorname{Cov}(X,Y).$$
+
+即使独立，差的方差仍然是两个方差相加，不是相减。
+
+**补充自检：** 若 $Y=X$，则 $\operatorname{Var}(X+Y)=4\operatorname{Var}(X)$、$\operatorname{Var}(X-Y)=0$。如果忽略协方差项，两式都会算错。
+
+### 8.4 用矩阵压缩公式（补充）
+
+随机向量 $\boldsymbol X$ 的协方差矩阵为 $\Sigma=(\operatorname{Cov}(X_i,X_j))$。则
+
+$$\operatorname{Var}(\boldsymbol a^T\boldsymbol X)=\boldsymbol a^T\Sigma\boldsymbol a\ge0.$$
+
+因此协方差矩阵一定对称且半正定。二维时
+
+$$\Sigma=\begin{pmatrix}
+\sigma_X^2&\operatorname{Cov}(X,Y)\\
+\operatorname{Cov}(X,Y)&\sigma_Y^2
+\end{pmatrix}.$$
+
+矩阵只是完整展开公式的简写，不能取代对各项含义的理解。
+
+---
+
+## 第九节　相关系数与课件例 4.8
+
+### 9.1 用标准差消去量纲
+
+当 $0<\sigma_X,\sigma_Y<\infty$ 时，定义 Pearson 相关系数
+
+$$\boxed{\rho_{X,Y}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\sigma_Y}.}$$
+
+它等于标准化变量 $U=(X-\mu_X)/\sigma_X$ 与 $V=(Y-\mu_Y)/\sigma_Y$ 的乘积期望：$\rho=E(UV)$。相关系数无量纲，但只描述线性关系，不能概括全部依赖。
+
+### 9.2 为什么相关系数在 $[-1,1]$ 内
+
+对中心化变量使用 Cauchy–Schwarz 不等式：
+
+$$\{E[(X-\mu_X)(Y-\mu_Y)]\}^2
+\le E[(X-\mu_X)^2]E[(Y-\mu_Y)^2].$$
+
+除以正的 $\sigma_X^2\sigma_Y^2$，得到
+
+$$\boxed{-1\le\rho\le1.}$$
+
+等号成立恰好在两个中心化变量成确定比例时：
+
+$$Y-\mu_Y=a(X-\mu_X)\quad\text{几乎必然},\qquad a\ne0.$$
+
+因此
+
+$$\boxed{|\rho|=1\ \Longleftrightarrow\ Y=aX+b\ \text{几乎必然},\ a\ne0.}$$
+
+斜率为正时 $\rho=1$，斜率为负时 $\rho=-1$。“完全相关”在这里指精确的仿射关系；$Y=X^2$ 这样的精确非线性关系不必有 $|\rho|=1$。
+
+### 9.3 单位变化与符号（补充）
+
+对非零 $a,c$，
+
+$$\rho_{aX+b,cY+d}=\frac{ac}{|a||c|}\rho_{X,Y}.$$
+
+平移与正比例单位换算不改变相关系数；仅把一个轴反向会翻转符号。若缩放系数为 0，所得变量为常数，相关系数无定义。
+
+### 9.4 例 4.8：从联合 PMF 算相关
+
+**题目（第 53—55 页）。** 已知
+
+$$p(x,y)=\frac{x+2y}{18},\qquad x,y\in\{1,2\}.$$
+
+将表列全，避免漏项：
+
+| $X\backslash Y$ | $1$ | $2$ | $p_X(x)$ |
+|---|---|---|---|
+| $1$ | $3/18$ | $5/18$ | $4/9$ |
+| $2$ | $4/18$ | $6/18$ | $5/9$ |
 | $p_Y(y)$ | $7/18$ | $11/18$ | $1$ |
 
-#### 第二步：求一、二阶矩
+先求边缘矩：
 
-$$E(X)=\frac{14}{9},\quad E(X^2)=\frac83,\quad E(Y)=\frac{29}{18},\quad E(Y^2)=\frac{17}{6}.$$
+$$E(X)=\frac49+2\frac59=\frac{14}9,\qquad
+E(X^2)=\frac49+4\frac59=\frac83,$$
 
-因此：
+$$E(Y)=\frac7{18}+2\frac{11}{18}=\frac{29}{18},\qquad
+E(Y^2)=\frac7{18}+4\frac{11}{18}=\frac{17}6.$$
 
-$$\operatorname{Var}(X)=\frac83-\left(\frac{14}{9}\right)^2=\frac{20}{81},$$
+因此
 
-$$\operatorname{Var}(Y)=\frac{17}{6}-\left(\frac{29}{18}\right)^2=\frac{77}{324}.$$
+$$\operatorname{Var}(X)=\frac83-\left(\frac{14}9\right)^2=\frac{20}{81},$$
 
-#### 第三步：求交叉矩与协方差
+$$\operatorname{Var}(Y)=\frac{17}6-\left(\frac{29}{18}\right)^2=\frac{77}{324}.$$
 
-$$E(XY)=\sum_x\sum_yxy\frac{x+2y}{18}=\frac{3+10+8+24}{18}=\frac52.$$
+再用联合 PMF 求交叉矩：
 
-$$\operatorname{Cov}(X,Y)=\frac52-\frac{14}{9}\frac{29}{18}=-\frac1{162}.$$
+$$E(XY)=\frac{1\cdot1\cdot3+1\cdot2\cdot5+2\cdot1\cdot4+2\cdot2\cdot6}{18}
+=\frac52.$$
 
-#### 第四步：标准化为相关系数
+于是
 
-$$\boxed{\rho=\frac{-1/162}{\sqrt{(20/81)(77/324)}}=-\frac1{\sqrt{1540}}\approx-0.0255.}$$
+$$\operatorname{Cov}(X,Y)=\frac52-\frac{14}9\frac{29}{18}=-\frac1{162},$$
 
-说明二者只有很弱的负线性相关，不能据此断定独立。
+$$\boxed{\rho=\frac{-1/162}{\sqrt{(20/81)(77/324)}}
+=-\frac1{\sqrt{1540}}\approx-0.0255.}$$
 
-### 6.5 独立与不相关：离散、连续两个反例
-
-对应课件第 62—66 页。
-
-若独立，则 $E(XY)=E(X)E(Y)$，故：
-
-$$\boxed{X\perp Y\implies\operatorname{Cov}(X,Y)=0.}$$
-
-反向推理一般不成立。
-
-#### (1) 例 4.10：离散反例
-
-$(X,Y)$ 在 $(0,1),(1,0),(2,1)$ 上各有概率 $1/3$。于是：
-
-$$E(X)=1,\quad E(Y)=\frac23,\quad E(XY)=\frac23.$$
-
-所以 $\operatorname{Cov}(X,Y)=0$。但是：
-
-$$P(X=0,Y=0)=0\ne P(X=0)P(Y=0)=\frac19.$$
-
-故二者不相关但不独立。
-
-#### (2) 连续反例：$Y=X^2$
-
-设 $X\sim U(-1,1)$，$Y=X^2$。由对称性：
-
-$$E(X)=0,\qquad E(XY)=E(X^3)=0,$$
-
-从而协方差为零。为严格证明不独立，考虑：
-
-$$A=\{|X|\le1/2\},\qquad B=\{Y\le1/4\}.$$
-
-因 $Y=X^2$，有 $A=B$，所以：
-
-$$P(A\cap B)=\frac12,\qquad P(A)P(B)=\frac14.$$
-
-事件不独立，故随机变量也不独立。
-
-> **【核心逻辑】**  
-> 独立排除所有可测事件层面的依赖；不相关只约束一个二阶交叉矩。独立比不相关强得多。只有加入联合正态等额外结构，才可以从不相关推出独立。
+虽然 PMF 的表达式随 $x,y$ 增大而增大，但相关系数仍略为负。不能根据密度或 PMF 的局部增减来直接猜相关符号；需要比较“相对于各自均值的共同偏离”。非零协方差也直接说明二者不独立。
 
 ---
 
-## 7. 正态模型与联合正态的作用 (Normal Models & Joint Normality)
+## 第十节　独立、不相关与非线性依赖
 
-### 7.1 正态概率计算与分位数
+### 10.1 正确的逻辑方向
 
-设 $X\sim N(\mu,\sigma^2)$，$\sigma>0$，标准正态 CDF 为 $\Phi$。标准化后：
+在二阶矩有限的前提下，
 
-$$P(X\le x)=\Phi\left(\frac{x-\mu}{\sigma}\right),$$
+$$X\perp Y\ \Longrightarrow\ E(XY)=E(X)E(Y)
+\ \Longrightarrow\ \operatorname{Cov}(X,Y)=0.$$
 
-$$\boxed{P(a\le X\le b)=\Phi\left(\frac{b-\mu}{\sigma}\right)-\Phi\left(\frac{a-\mu}{\sigma}\right).}$$
+“不相关”就是协方差为 0；当两个方差都为正时，也等价于相关系数为 0。一般不能反推独立。
 
-若 $z_p$ 满足 $\Phi(z_p)=p$，则 $X$ 的 $p$ 分位数为：
+独立要求联合概率结构完整分解；不相关仅是一条关于二阶混合矩的等式。若其中某个变量是常数，协方差为 0，且它与另一个变量独立，但相关系数没有定义。
 
-$$\boxed{x_p=\mu+\sigma z_p.}$$
+### 10.2 例 4.10：离散的不相关但依赖
 
-使用对称性可减少查表：$\Phi(-z)=1-\Phi(z)$。
+**题目（第 64 页）。** 三个点 $(0,1),(1,0),(2,1)$ 各以概率 $1/3$ 出现。
 
-### 7.2 灌装量质量控制例题
+直接算得
 
-对应课件第 71—72 页。设瓶中液体体积：
+$$E(X)=1,\qquad E(Y)=\frac23,\qquad
+E(XY)=\frac{0+0+2}3=\frac23.$$
 
-$$X\sim N(500,10^2).$$
+故 $\operatorname{Cov}(X,Y)=0$。但
 
-#### (1) 少于 $485$ mL 的概率
+$$P(X=0,Y=0)=0,\qquad
+P(X=0)P(Y=0)=\frac13\frac13=\frac19.$$
 
-$$P(X<485)=\Phi\left(\frac{485-500}{10}\right)=\Phi(-1.5)\approx\boxed{0.0668}.$$
+所以不独立。实际上 $Y=(X-1)^2$，知道 $X$ 就完全知道 $Y$，只是这种依赖不表现为非零线性相关。
 
-#### (2) 满足 $485\le X\le515$ 的比例
+### 10.3 连续反例：$Y=X^2$
 
-$$P(485\le X\le515)=\Phi(1.5)-\Phi(-1.5)\approx\boxed{0.8664}.$$
+**题目（第 65—66 页）。** $X\sim U(-1,1)$，$Y=X^2$。对称性给出
 
-#### (3) 仅有 $5\%$ 的瓶子超过的体积
+$$E(X)=0,\quad E(XY)=E(X^3)=0,\quad E(Y)=E(X^2)=\frac13,$$
 
-令 $P(X>c)=0.05$，等价于 $P(X\le c)=0.95$：
+因此 $\operatorname{Cov}(X,Y)=0$。
 
-$$\frac{c-500}{10}=z_{0.95}\approx1.645.$$
+取 $A=\{|X|\le1/2\}$、$B=\{Y\le1/4\}$。由于 $Y=X^2$，$A=B$，所以
 
-所以：
+$$P(A\cap B)=\frac12\ne\frac14=P(A)P(B).$$
 
-$$\boxed{c\approx516.45\text{ mL}.}$$
+这用事件概率严格证明不独立。两个边缘都连续，并不保证存在普通二维联合密度；本例全部概率集中在抛物线 $y=x^2$ 上。
 
-**方向辨析**：“只有 $5\%$ 超过”对应第 $95\%$ 分位数，不是第 $5\%$ 分位数。
+![线性相关与依赖的区别](<C:/Users/yang/Documents/ChatGPT/概率论/output/chapter4_dependence.png>)
 
-### 7.3 边缘正态不足以确定联合关系
+*补充示意图：每幅为固定随机种子生成的样本，只辅助理解；图中 $\rho$ 指理论相关系数。独立与不相关的结论由公式及事件概率证明，不能仅靠散点图判定。第四幅将在第十四节解释。*
 
-对应课件第 73—74 页。
+### 10.4 三个不能混用的判断
 
-已知 $X,Y$ 各自的正态分布，不能单独确定 $P(X>a,Y>b)$ 或 $X+Y$ 的完整分布。还需要描述依赖结构。
+| 已知信息 | 可以推出 | 不能一般推出 |
+|---|---|---|
+| 独立且二阶矩有限 | 协方差为 0 | 变量之间存在确定关系 |
+| 协方差为 0 | 不相关、和的方差可直接相加 | 独立 |
+| 相关系数绝对值为 1 | 几乎必然存在非零斜率的直线关系 | 一般非线性关系都能被这种相关系数识别 |
+| 联合正态且协方差为 0 | 独立 | 把“联合正态”弱化成“两个边缘正态” |
 
-> **【深度补充：联合正态的定义性特征】**  
-> 若对任意常数 $a,b$，$aX+bY$ 都是正态变量（允许退化情形），则称 $(X,Y)$ 联合正态。联合正态保证边缘正态；边缘正态本身一般不能推出联合正态。
+---
 
-仅给出两个边缘分布和一个相关系数，对一般分布仍不足以唯一确定联合分布；在**联合正态假设下**，均值、方差、相关系数才确定二维正态模型。
+## 第十一节　最佳线性预测：用 $X$ 预测 $Y$
 
-### 7.4 相关正态变量的线性组合例题
+### 11.1 最小化的是什么
 
-课件设：
+课件第 58—59 页考虑：在所有 $\widehat Y=a+bX$ 中，找到使
 
-$$X\sim N(120,15^2),\quad Y\sim N(200,30^2),\quad \rho=0.6,$$
+$$\operatorname{MSE}(a,b)=E[(Y-a-bX)^2]$$
 
-且 $(X,Y)$ 联合正态。令 $R=X+0.5Y$。
+最小的系数。假设 $X,Y$ 二阶矩有限且 $\operatorname{Var}(X)>0$。这里最小化的是 **$Y$ 方向的预测残差平方**，不是点到直线的垂直几何距离，也不是用样本估计回归系数的过程。
 
-首先：
+### 11.2 配方推导
 
-$$\operatorname{Cov}(X,Y)=0.6\times15\times30=270.$$
+将均值部分和中心化部分拆开：
 
-均值：
+$$\begin{aligned}
+E[(Y-a-bX)^2]
+={}&(\mu_Y-a-b\mu_X)^2\\
+&+\sigma_Y^2+b^2\sigma_X^2-2b\operatorname{Cov}(X,Y).
+\end{aligned}$$
 
-$$E(R)=120+0.5\times200=220.$$
+对给定 $b$，第一项在 $a=\mu_Y-b\mu_X$ 时为零。剩下部分对 $b$ 配方：
 
-方差：
+$$\begin{aligned}
+&\sigma_Y^2+b^2\sigma_X^2-2b\operatorname{Cov}(X,Y)\\
+&=\sigma_X^2\left[b-\frac{\operatorname{Cov}(X,Y)}{\sigma_X^2}\right]^2
++\sigma_Y^2-\frac{\operatorname{Cov}(X,Y)^2}{\sigma_X^2}.
+\end{aligned}$$
 
-$$\begin{aligned}\operatorname{Var}(R)&=15^2+0.5^2\times30^2+2(1)(0.5)(270)\\&=225+225+270=720.\end{aligned}$$
+因此
 
-由联合正态性：
+$$\boxed{\widehat Y=\mu_Y+\frac{\operatorname{Cov}(X,Y)}{\operatorname{Var}(X)}(X-\mu_X).}$$
+
+若 $\sigma_Y>0$，可写为
+
+$$\widehat Y=\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(X-\mu_X),$$
+
+$$\boxed{\operatorname{MSE}_{\min}=\sigma_Y^2(1-\rho^2).}$$
+
+若 $Y$ 为常数，直接预测该常数，最小误差为 0；此时不使用含 $\rho$ 的表达式。
+
+### 11.3 解释与限制
+
+斜率为 $\rho\sigma_Y/\sigma_X$，一般不等于 $\rho$，因为预测斜率有单位。若先把两个变量都标准化，预测斜率才是 $\rho$。
+
+当 $\rho=0$，最佳线性预测为常数 $\mu_Y$。这并不说明 $X$ 完全没有预测价值。例如 $Y=X^2$ 且 $X\sim U(-1,1)$ 时，最佳线性预测是 $1/3$，但知道 $X$ 后，用非线性函数 $X^2$ 可以实现零误差。
+
+对于二元正态，条件均值恰好是上述直线；一般模型中的 $E(Y\mid X)$ 则可能弯曲。第十七节会解释为什么条件期望是允许任意函数时的最佳预测。
+
+### 11.4 课件离散表格例题
+
+**题目（第 60—61 页）。** 联合分布为
+
+| $X\backslash Y$ | $0$ | $1$ |
+|---|---|---|
+| $0$ | $0.4$ | $0.1$ |
+| $1$ | $0.1$ | $0.4$ |
+
+两个边缘均为 Bernoulli$(1/2)$，所以
+
+$$E(X)=E(Y)=\frac12,\qquad\operatorname{Var}(X)=\operatorname{Var}(Y)=\frac14.$$
+
+只有 $(1,1)$ 对 $XY$ 有非零贡献，故
+
+$$E(XY)=0.4,\qquad\operatorname{Cov}(X,Y)=0.4-0.25=0.15,$$
+
+$$\rho=\frac{0.15}{0.25}=0.6.$$
+
+于是
+
+$$\boxed{\widehat Y=0.5+0.6(X-0.5)=0.2+0.6X,}$$
+
+$$\boxed{\operatorname{MSE}_{\min}=0.25(1-0.6^2)=0.16.}$$
+
+还可以直接核对：给定 $X=0$，$P(Y=1\mid X=0)=0.1/0.5=0.2$；给定 $X=1$，该概率为 $0.4/0.5=0.8$。因此本例 $E(Y\mid X)$ 恰好是 $0.2+0.6X$，而且两组条件方差均为 $0.2\cdot0.8=0.16$。此处线性与条件预测一致，是因为条件均值在两个可能的 $X$ 值上可以用直线连接，不要求正态。
+
+---
+
+## 第十二节　课件应用：一元正态计算与联合建模的必要性
+
+### 12.1 灌装质量控制
+
+**题目（第 71—72 页）。** 灌装体积 $X\sim N(500,10^2)$，单位 mL。求少于 485 mL 的概率、在 $[485,515]$ 内的比例，以及只有 5% 瓶子会超过的体积。
+
+先统一标准化：$Z=(X-500)/10\sim N(0,1)$。记 $\Phi$ 为标准正态 CDF，则
+
+$$P(X<485)=\Phi(-1.5)\approx\boxed{0.0668},$$
+
+$$P(485\le X\le515)=\Phi(1.5)-\Phi(-1.5)
+\approx\boxed{0.8664}.$$
+
+令上侧 5% 分位点为 $c$，则 $P(X\le c)=0.95$，所以
+
+$$\frac{c-500}{10}=\Phi^{-1}(0.95)\approx1.64485,$$
+
+$$\boxed{c\approx516.45\ \mathrm{mL}.}$$
+
+上侧 5% 对应 CDF 的 95% 分位点，不能误用 $\Phi^{-1}(0.05)$。正态分布连续，因此这里端点的开闭不改变概率。
+
+### 12.2 两项健康测量：边缘还缺什么
+
+**题目（第 73—74 页）。** 已知 $X\sim N(120,15^2)$、$Y\sim N(200,30^2)$，希望研究二者同时偏高的概率及组合指标 $R=X+0.5Y$。
+
+仅由边缘可以知道
+
+$$E(R)=120+0.5\cdot200=220,$$
+
+但其方差还需要协方差：
+
+$$\operatorname{Var}(R)=225+0.25\cdot900+\operatorname{Cov}(X,Y).$$
+
+同时偏高的概率更需要联合分布。单独添加一个相关系数，通常仍不足以确定所有联合概率；课件接着采用**二元联合正态模型**，再给定 $\rho=0.6$。于是
+
+$$\operatorname{Cov}(X,Y)=0.6\cdot15\cdot30=270,$$
+
+$$\operatorname{Var}(R)=225+225+270=720,$$
 
 $$\boxed{R\sim N(220,720).}$$
 
-**三个层次要分清**：均值计算只需线性性；方差计算需要协方差；完整分布为正态使用联合正态假设。
+注意 $\sqrt{720}$ 才是该指标的标准差。原题没有指定“偏高”的两个阈值，因此不能给出唯一数值概率；设阈值为 $a,b$，联合正态模型下可写为
 
-### 7.5 深度补充：二维正态的结构与条件分布
+$$P(X>a,Y>b)=\int_a^\infty
+\left[1-\Phi\left(\frac{b-\mu_Y-\rho(\sigma_Y/\sigma_X)(x-\mu_X)}{\sigma_Y\sqrt{1-\rho^2}}\right)\right]f_X(x)dx.$$
 
-本节用于补全课件引入例子与后续条件期望之间的联系，不属于课件已经完整展开的证明内容。
-
-#### (1) 一个可解释的构造
-
-取独立标准正态 $U,V$，令 $\sigma_X,\sigma_Y>0$，$-1\le\rho\le1$：
-
-$$X=\mu_X+\sigma_XU,$$
-
-$$Y=\mu_Y+\sigma_Y\left(\rho U+\sqrt{1-\rho^2}\,V\right).$$
-
-则 $X,Y$ 联合正态，且：
-
-$$\operatorname{Cov}(X,Y)=\rho\sigma_X\sigma_Y.$$
-
-$U$ 是二者共享的随机来源，$V$ 是 $Y$ 独有的随机来源。当 $\rho=0$ 时共享项消失，$X,Y$ 独立。
-
-#### (2) 非退化二维正态密度
-
-当 $|\rho|<1$ 时，令 $u=(x-\mu_X)/\sigma_X$，$v=(y-\mu_Y)/\sigma_Y$，有：
-
-$$f_{X,Y}(x,y)=\frac1{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}\exp\left[-\frac{u^2-2\rho uv+v^2}{2(1-\rho^2)}\right].$$
-
-当 $\rho=0$ 时，密度分解为 $f_X(x)f_Y(y)$，可直接看出独立。
-
-当 $|\rho|=1$ 时，分布集中在一条直线上，不能继续使用上面的二维密度公式。
-
-#### (3) 条件分布与条件均值
-
-给定 $X=x$ 后，构造中的 $U=(x-\mu_X)/\sigma_X$ 已经确定，而独立的 $V$ 保持标准正态。所以当 $|\rho|<1$：
-
-$$\boxed{Y\mid X=x\sim N\left(\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X),\ \sigma_Y^2(1-\rho^2)\right).}$$
-
-因此条件期望是线性的，条件方差与 $x$ 无关。$|\rho|=1$ 时，相应条件分布退化为确定值。
+这是后面条件正态与全概率思想的应用，不需要擅自补出题目未给的阈值。上述为课件中的数学建模示例，并非对真实人群分布的实证结论。
 
 ---
 
-## 8. 条件期望与全期望公式 (Conditional & Total Expectation)
+## 第十三节　二元正态：从独立正态构造相关正态
 
-### 8.1 普通期望、给定取值的条件期望、随机条件期望
+### 13.1 构造比长密度更容易理解
 
-对应课件第 76—80 页。
+课件第 76 页：令 $Z_1,Z_2$ 相互独立且都为 $N(0,1)$。对 $\sigma_X,\sigma_Y>0$、$-1\le\rho\le1$，定义
 
-条件期望回答：**知道额外信息后，应如何更新对随机变量平均值的判断？**
+$$\boxed{\begin{aligned}
+X&=\mu_X+\sigma_XZ_1,\\
+Y&=\mu_Y+\sigma_Y\bigl(\rho Z_1+\sqrt{1-\rho^2}Z_2\bigr).
+\end{aligned}}$$
 
-| 对象 | 数学含义 | 类型 |
-| :--- | :--- | :--- |
-| $E(Y)$ | 总体平均 | 常数 |
-| $E(Y\mid X=x)$ | 固定 $x$ 对应条件组的平均 | 对该 $x$ 而言是一个数 |
-| $E(Y\mid X)$ | 由随机 $X$ 决定的条件平均 | 随机变量，可能为常数 |
+二者共享 $Z_1$ 带来的波动，$Y$ 还含有独立来源 $Z_2$。系数 $\rho$ 控制共享部分的方向与大小，$\sqrt{1-\rho^2}$ 保证标准化后的 $Y$ 总方差为 1。
 
-定义函数：
+**补充等价定义：** 一个向量称为联合正态，如果它的每个实系数线性组合都为一元正态，允许零方差的常数情形。上述构造满足这个定义；“每个分量分别正态”则是更弱的条件。
 
-$$g(x)=E(Y\mid X=x).$$
+### 13.2 均值、方差与协方差
 
-然后：
+由构造和 $\operatorname{Cov}(Z_1,Z_2)=0$，
 
-$$\boxed{E(Y\mid X)=g(X).}$$
+$$E(X)=\mu_X,\quad E(Y)=\mu_Y,\quad\operatorname{Var}(X)=\sigma_X^2,$$
 
-这解释了为什么条件期望外面还可以再求期望或方差。
+$$\operatorname{Var}(Y)=\sigma_Y^2[\rho^2+(1-\rho^2)]=\sigma_Y^2,$$
 
-### 8.2 离散型与连续型计算流程
+$$\operatorname{Cov}(X,Y)
+=\sigma_X\sigma_Y[\rho\operatorname{Var}(Z_1)+\sqrt{1-\rho^2}\operatorname{Cov}(Z_1,Z_2)]
+=\rho\sigma_X\sigma_Y.$$
 
-对应课件第 79—80 页。
+所以构造中的 $\rho$ 正是 Pearson 相关系数，协方差矩阵为
 
-#### (1) 离散型
+$$\boxed{\Sigma=\begin{pmatrix}
+\sigma_X^2&\rho\sigma_X\sigma_Y\\
+\rho\sigma_X\sigma_Y&\sigma_Y^2
+\end{pmatrix}.}$$
 
-先求条件概率，要求 $p_X(x)>0$：
+在联合正态模型内，两个均值、两个方差及一个相关系数共五个参数决定联合分布。
 
-$$p_{Y\mid X}(y\mid x)=\frac{p_{X,Y}(x,y)}{p_X(x)},\qquad p_X(x)=\sum_y p_{X,Y}(x,y).$$
+### 13.3 非退化与退化：为什么要求 $|\rho|<1$
 
-再求条件平均：
+若 $|\rho|<1$，两条独立噪声方向都存在，$\det\Sigma=\sigma_X^2\sigma_Y^2(1-\rho^2)>0$，分布有普通二维密度，支持为整个平面。
 
-$$\boxed{E(Y\mid X=x)=\sum_y y p_{Y\mid X}(y\mid x)=\frac{\sum_y y p_{X,Y}(x,y)}{\sum_y p_{X,Y}(x,y)}.}$$
+若 $|\rho|=1$，$Z_2$ 项消失，
 
-固定 $x$，对 $y$ 求和，最后按需要将 $x$ 换回 $X$。
+$$Y=\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(X-\mu_X)\quad\text{几乎必然}.$$
 
-#### (2) 连续型
+全部概率集中在一条直线上，没有普通二维面积密度。边缘、联合 MGF、线性组合结论仍成立，但不能将 $\rho=\pm1$ 直接代入含 $\sqrt{1-\rho^2}$ 分母的密度公式。
 
-先求：
+### 13.4 密度的完整推导：连接第三章换元
 
-$$f_X(x)=\int_{\mathbb R}f_{X,Y}(x,y)\,dy.$$
+假设 $|\rho|<1$，令
 
-当 $f_X(x)>0$ 时：
+$$u=\frac{x-\mu_X}{\sigma_X},\qquad v=\frac{y-\mu_Y}{\sigma_Y}.$$
+
+逆变换为
+
+$$z_1=u,\qquad z_2=\frac{v-\rho u}{\sqrt{1-\rho^2}}.$$
+
+逆雅可比矩阵为
+
+$$\frac{\partial(z_1,z_2)}{\partial(x,y)}
+=\begin{pmatrix}
+1/\sigma_X&0\\
+-\rho/(\sigma_X\sqrt{1-\rho^2})&1/(\sigma_Y\sqrt{1-\rho^2})
+\end{pmatrix},$$
+
+故绝对行列式为 $1/[\sigma_X\sigma_Y\sqrt{1-\rho^2}]$。两个独立标准正态的联合密度为 $e^{-(z_1^2+z_2^2)/2}/(2\pi)$，于是
+
+$$f_{X,Y}(x,y)=\frac{\exp\left[-\frac12\left(u^2+\frac{(v-\rho u)^2}{1-\rho^2}\right)\right]}
+{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}.$$
+
+使用恒等式
+
+$$u^2+\frac{(v-\rho u)^2}{1-\rho^2}
+=\frac{u^2-2\rho uv+v^2}{1-\rho^2},$$
+
+得到标准形式
+
+$$\boxed{f_{X,Y}(x,y)=\frac1{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
+\exp\left[-\frac{u^2-2\rho uv+v^2}{2(1-\rho^2)}\right],\quad (x,y)\in\mathbb R^2.}$$
+
+与其死背长公式，更应记住构造、逆变换与这条配方恒等式。
+
+### 13.5 边缘分布：构造与积分的两种证明
+
+由构造，$X$ 显然为 $N(\mu_X,\sigma_X^2)$；$Y$ 是独立正态的线性组合，均值和方差如上，也为 $N(\mu_Y,\sigma_Y^2)$。
+
+对非退化情形，配方为
+
+$$u^2-2\rho uv+v^2=(1-\rho^2)u^2+(v-\rho u)^2.$$
+
+固定 $x$，以 $dy=\sigma_Ydv$ 积分：
+
+$$\begin{aligned}
+f_X(x)&=\frac{e^{-u^2/2}}{2\pi\sigma_X\sqrt{1-\rho^2}}
+\int_{\mathbb R}e^{-(v-\rho u)^2/[2(1-\rho^2)]}dv\\
+&=\frac{e^{-u^2/2}}{2\pi\sigma_X\sqrt{1-\rho^2}}
+\sqrt{2\pi(1-\rho^2)}\\
+&=\frac1{\sqrt{2\pi}\sigma_X}e^{-u^2/2}.
+\end{aligned}$$
+
+交换 $X,Y$ 得另一边缘。积分证明只用于 $|\rho|<1$；退化情形直接用构造。
+
+### 13.6 联合矩母函数
+
+定义 $M_{X,Y}(s,t)=E(e^{sX+tY})$。由构造，
+
+$$sX+tY=s\mu_X+t\mu_Y+(s\sigma_X+t\rho\sigma_Y)Z_1
++t\sigma_Y\sqrt{1-\rho^2}Z_2.$$
+
+用独立性和标准正态 MGF 得
+
+$$\begin{aligned}
+M_{X,Y}(s,t)
+&=e^{s\mu_X+t\mu_Y}
+e^{(s\sigma_X+t\rho\sigma_Y)^2/2}
+e^{t^2\sigma_Y^2(1-\rho^2)/2}\\
+&=\boxed{\exp\left[\mu_Xs+\mu_Yt+
+\frac12(\sigma_X^2s^2+2\rho\sigma_X\sigma_Yst+\sigma_Y^2t^2)\right]}.
+\end{aligned}$$
+
+它对所有实数 $s,t$ 有限，包括 $|\rho|=1$ 的退化情况。联合 MGF 中的混合项编码了协方差；把 $t=0$ 或 $s=0$ 就恢复边缘 MGF。
+
+---
+
+## 第十四节　联合正态的线性组合与独立性
+
+### 14.1 有关也可以相加后仍然正态
+
+若 $(X,Y)$ 联合正态，令 $W=aX+bY$，则
+
+$$M_W(r)=M_{X,Y}(ar,br).$$
+
+代入上式可识别出
+
+$$\boxed{aX+bY\sim N\left(a\mu_X+b\mu_Y,
+a^2\sigma_X^2+b^2\sigma_Y^2+2ab\rho\sigma_X\sigma_Y\right).}$$
+
+此处不要求 $X,Y$ 独立，前提是联合正态；协方差项不能略去。若计算出的方差为零，就将该分布理解为点质量。
+
+“边缘都正态”并不足以使和正态；第 14.3 小节将直接展示一个含点质量的和。
+
+### 14.2 联合正态中，不相关等价于独立
+
+独立推出协方差为零，是一般性质。反过来，在联合正态模型中，若 $\operatorname{Cov}(X,Y)=0$，联合 MGF 分解为
+
+$$M_{X,Y}(s,t)=e^{\mu_Xs+\sigma_X^2s^2/2}
+e^{\mu_Yt+\sigma_Y^2t^2/2}=M_X(s)M_Y(t).$$
+
+右侧是具有给定边缘的独立变量对的联合 MGF，由多元唯一性得到联合分布为乘积分布，即独立。
+
+$$\boxed{(X,Y)\text{ 联合正态}\quad\Longrightarrow\quad
+X\perp Y\ \Longleftrightarrow\ \operatorname{Cov}(X,Y)=0.}$$
+
+若两个方差为正，也等价于 $\rho=0$。如果有零方差分量，直接用其为常数的性质处理；不勉强定义相关系数。
+
+### 14.3 课件反例：两个边缘正态、零协方差，但仍然依赖
+
+**题目（第 90—91 页）。** 设 $Z\sim N(0,1)$，$S$ 独立于 $Z$，且 $P(S=1)=P(S=-1)=1/2$。令
+
+$$X=Z,\qquad Y=SZ.$$
+
+由于 $Z$ 与 $-Z$ 同分布，$Y$ 的分布是两个相同标准正态分布的等权混合，因此 $Y\sim N(0,1)$；$X$ 也标准正态。
+
+同时
+
+$$E(XY)=E(SZ^2)=E(S)E(Z^2)=0,$$
+
+故协方差和相关系数都为 0。但 $|X|=|Y|$ 几乎必然。选取 $c>0$，令 $q=P(|Z|\le c)\in(0,1)$，有
+
+$$P(|X|\le c,|Y|\le c)=q\ne q^2.$$
+
+因此二者依赖，不可能联合正态。图中样本集中在两条交叉直线上，而不是一个非退化二维高斯云团。
+
+**补充直接检验：** $X+Y=(1+S)Z$，有一半概率等于 0，另一半为 $2Z$。它既不是有正方差的连续正态，也不是常数，所以不服从一元正态。这直接否定“所有线性组合正态”，并表明仅由正态边缘不能推断和正态。
+
+### 14.4 课件例题：和与差相互独立
+
+**题目（第 96—97 页）。** $(X,Y)$ 联合正态，均值为 0、方差都为 1、相关系数为 $\rho\in(-1,1)$。令 $U=X+Y,V=X-Y$。
+
+均值都为 0，并且
+
+$$\operatorname{Var}(U)=2+2\rho=2(1+\rho),$$
+
+$$\operatorname{Var}(V)=2-2\rho=2(1-\rho).$$
+
+所以
+
+$$\boxed{U\sim N(0,2(1+\rho)),\qquad V\sim N(0,2(1-\rho)).}$$
+
+再算 $\operatorname{Cov}(U,V)=\operatorname{Var}(X)-\operatorname{Var}(Y)=0$。
+
+关键的最后一步不能省：$(U,V)$ 是联合正态向量的线性变换，因此**它们也是联合正态**。于是由零协方差推出 $U,V$ 独立。
+
+为什么线性变换保持联合正态？任意 $cU+dV=(c+d)X+(c-d)Y$ 仍为原联合正态向量的线性组合，所以服从正态。若原变量不联合正态，仅有相等方差，最多能得到和与差不相关，不能保证独立。
+
+---
+
+## 第十五节　二元正态的条件分布
+
+### 15.1 核心公式与条件
+
+对 $\sigma_X,\sigma_Y>0$、$|\rho|<1$ 的联合正态，
+
+$$\boxed{Y\mid X=x\sim N\left(
+\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X),\quad
+\sigma_Y^2(1-\rho^2)\right).}$$
+
+所以条件均值是关于 $x$ 的仿射函数，条件方差不随 $x$ 改变。交换变量即可写出 $X\mid Y=y$：均值中的标准差比也要一起交换。
+
+给定 $X=x$ 后，$x$ 是确定参数。连续情况下这通过条件密度定义，不是把普通条件概率写成一个分母为 $P(X=x)=0$ 的比值。
+
+### 15.2 从联合密度配方得到条件密度
+
+由第三章公式，
 
 $$f_{Y\mid X}(y\mid x)=\frac{f_{X,Y}(x,y)}{f_X(x)}.$$
 
-于是：
+利用第十三节的配方，除去 $X$ 的边缘密度后，剩下
 
-$$\boxed{E(Y\mid X=x)=\int_{\mathbb R}y f_{Y\mid X}(y\mid x)\,dy=\frac{\int y f_{X,Y}(x,y)\,dy}{\int f_{X,Y}(x,y)\,dy}.}$$
+$$f_{Y\mid X}(y\mid x)=\frac1{\sqrt{2\pi}\sigma_Y\sqrt{1-\rho^2}}
+\exp\left[-\frac{(v-\rho u)^2}{2(1-\rho^2)}\right].$$
 
-#### (3) 取值区域与零概率条件
+又因为
 
-如果支撑集为 $0<x<y<1$，固定 $x$ 后，$y$ 必须从 $x$ 积到 $1$，不能写成与支撑无关的 $0$ 到 $1$。
+$$v-\rho u=\frac{y-\mu_Y-\rho(\sigma_Y/\sigma_X)(x-\mu_X)}{\sigma_Y},$$
 
-连续型通常有 $P(X=x)=0$，不能直接使用两个单点事件概率相除。条件密度是在联合密度框架下定义的对象。条件期望只需在 $X$ 的分布意义下几乎处处确定。
+这正是上述均值与方差的正态密度。
 
-> **【条件方向辨析】**  
-> 求 $E(Y\mid X)$：固定 $X$，求 $Y$ 的条件分布；求 $E(X\mid Y)$：固定 $Y$，求 $X$ 的条件分布。两者一般不对称，积分范围和分母也不同。
+### 15.3 构造给出的预测与残差解释
 
-### 8.3 条件期望的代数性质
+原构造可重写为
 
-对应课件第 81 页。以下在有关可积性条件下几乎必然成立。
+$$Y=\underbrace{\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(X-\mu_X)}_{\text{由 }X\text{ 决定的部分}}
++\underbrace{\sigma_Y\sqrt{1-\rho^2}Z_2}_{\text{独立于 }X\text{ 的残差}}.$$
 
-#### (1) 线性性
+因此给定 $X$ 后只剩下独立残差的随机性。条件方差为 $\sigma_Y^2(1-\rho^2)$，与 $x$ 无关。
 
-$$E(aY+bZ\mid X)=aE(Y\mid X)+bE(Z\mid X).$$
+当 $\rho=0$，条件分布等于原来的边缘分布；当 $|\rho|$ 越接近 1，给定 $X$ 后剩余波动越小；当 $|\rho|=1$，条件分布退化为预测直线上的点质量，不能再用非退化密度公式。
 
-不要求 $Y,Z$ 独立。
+### 15.4 课件综合计算例题
 
-#### (2) 已知量可以提出
+**题目（第 94—95 页）。** $(X,Y)$ 联合正态，参数为
 
-$$\boxed{E[h(X)Y\mid X]=h(X)E(Y\mid X).}$$
+$$\mu_X=1,\quad\mu_Y=2,\quad\sigma_X=2,\quad\sigma_Y=3,\quad\rho=\frac12.$$
 
-因为知道 $X$ 就知道 $h(X)$。特别地：
+**(1) 求 $X+Y$ 的分布。** 先算协方差 $\rho\sigma_X\sigma_Y=3$，故
 
-$$E[h(X)\mid X]=h(X).$$
+$$\boxed{X+Y\sim N(1+2,\ 4+9+2\cdot3)=N(3,19).}$$
 
-例如 $E(XY+X^2\mid X)=XE(Y\mid X)+X^2$。
+**(2) 求 $Y\mid X=3$ 的分布。** 条件均值
 
-#### (3) 独立时不更新均值
+$$m=2+\frac12\frac32(3-1)=3.5,$$
 
-$$Y\perp X\implies E(Y\mid X)=E(Y).$$
+条件方差
 
-反过来不一定成立：条件均值不变并不能保证条件分布整体不变。
+$$s^2=9\left(1-\frac14\right)=\frac{27}4=6.75.$$
 
-### 8.4 全期望公式及证明
+因此
 
-对应课件第 82—83 页。
+$$\boxed{Y\mid X=3\sim N(3.5,6.75).}$$
 
-> **全期望公式（Law of Total Expectation）**：若 $Y$ 可积，则：
-> $$\boxed{E[E(Y\mid X)]=E(Y).}$$
+**(3) 求条件右尾概率。** 必须使用条件均值与条件标准差：
 
-离散型展开：
+$$\begin{aligned}
+P(Y>5\mid X=3)
+&=1-\Phi\left(\frac{5-3.5}{\sqrt{6.75}}\right)\\
+&=\boxed{1-\Phi(1/\sqrt3)\approx0.2819}.
+\end{aligned}$$
 
-$$E(Y)=\sum_x E(Y\mid X=x)p_X(x).$$
+不能仍然用边缘的 $\mu_Y=2,\sigma_Y=3$ 标准化，也不能把条件方差 $6.75$ 直接当作标准差。
 
-连续型展开：
+---
 
-$$E(Y)=\int E(Y\mid X=x)f_X(x)\,dx.$$
+## 第十六节　条件期望：信息改变时，平均值也改变
 
-**直观意义**：先求每个条件组的平均，再按组出现的概率加权平均。
+### 16.1 机器次品率：先从分组平均理解
 
-**离散型证明**：
-
-$$\begin{aligned}E[E(Y\mid X)]&=\sum_x\left[\sum_y y p_{Y\mid X}(y\mid x)\right]p_X(x)\\&=\sum_x\sum_y y p_{X,Y}(x,y)\\&=\sum_y y\sum_xp_{X,Y}(x,y)\\&=\sum_y y p_Y(y)=E(Y).\end{aligned}\quad\blacksquare$$
-
-连续型将求和换成积分即可。各组概率不相同时，不可将条件均值直接做等权算术平均。
-
-### 8.5 两台机器与离散联合分布的完整案例
-
-#### 案例 1：两台机器的总体次品率
-
-对应课件第 76—78 页。设机器来源 $X\in\{A,B\}$，次品示性变量为 $Y$。已知：
+**课件例题（第 99—101 页）。** 用 $X$ 标识产品来自机器 A 或 B，用 $Y$ 表示是否次品。已知
 
 $$P(X=A)=0.7,\quad P(X=B)=0.3,$$
 
 $$P(Y=1\mid X=A)=0.02,\quad P(Y=1\mid X=B)=0.08.$$
 
-由于 $Y$ 为示性变量：
+由于 $Y$ 是指示变量，
+
+$$E(Y\mid X=A)=0.02,\qquad E(Y\mid X=B)=0.08.$$
+
+在不知道机器前，对分组平均按组概率加权：
+
+$$\boxed{E(Y)=0.7\cdot0.02+0.3\cdot0.08=0.038.}$$
+
+不能把两个次品率等权平均为 0.05，因为两台机器贡献的产品比例不同。
+
+### 16.2 三种记号对应三种对象
+
+| 记号 | 数学对象 | 机器例子的意义 |
+|---|---|---|
+| $E(Y)$ | 一个确定数 | 总体次品率 $0.038$ |
+| $E(Y\mid X=x)$ | 给定 $x$ 后的确定数 | 指定机器的次品率 |
+| $E(Y\mid X)$ | $X$ 的函数，是随机变量 | 根据实际机器选出 $0.02$ 或 $0.08$ |
+
+定义 $g(x)=E(Y\mid X=x)$，则
+
+$$\boxed{E(Y\mid X)=g(X).}$$
+
+本例具体为
 
 $$E(Y\mid X)=\begin{cases}0.02,&X=A,\\0.08,&X=B.\end{cases}$$
 
-因此：
+这个随机变量有自己的分布：以概率 0.7 取 0.02，以概率 0.3 取 0.08。把它再求一次期望，才恢复总体平均。
 
-$$\boxed{E(Y)=0.7(0.02)+0.3(0.08)=0.038.}$$
+### 16.3 从条件分布计算条件期望
 
-总体次品率为 $3.8\%$。这也说明全概率公式是全期望公式用于示性变量的特殊情形。
+对离散联合分布，在 $p_X(x)>0$ 时，
 
-#### 案例 2：离散条件期望的完整计算
+$$\boxed{E(Y\mid X=x)=\sum_y y\,p_{Y\mid X}(y\mid x)
+=\frac{\sum_y y\,p_{X,Y}(x,y)}{p_X(x)}.}$$
 
-对应课件第 84—85 页。设：
+对具有联合密度的连续分布，在 $f_X(x)>0$ 且相应条件绝对矩有限时，
 
-$$p_{X,Y}(x,y)=\frac{x+y}{4},\qquad x,y\in\{0,1\}.$$
+$$\boxed{E(Y\mid X=x)=\int y\,f_{Y\mid X}(y\mid x)dy
+=\frac{\int y\,f_{X,Y}(x,y)dy}{f_X(x)}.}$$
 
-| $X\backslash Y$ | $Y=0$ | $Y=1$ | $p_X(x)$ |
-| :--- | :--- | :--- | :--- |
-| $X=0$ | $0$ | $1/4$ | $1/4$ |
-| $X=1$ | $1/4$ | $1/2$ | $3/4$ |
+步骤是：固定 $x$ → 写出条件支持 → 求条件分布并归一化 → 对 $y$ 求平均 → 最后把 $x$ 换成 $X$。
 
-当 $X=0$，$Y=1$ 的条件概率为 $1$：
+如果直接给出了 $Y\mid X=x$ 的已知分布，就直接用该分布均值，无需先恢复联合密度。
 
-$$E(Y\mid X=0)=1.$$
+条件期望作为随机变量只在“几乎必然”的意义下唯一；在 $X$ 不会取到的值上可以任意定义。连续模型中单个条件点的条件分布通常选用由密度比给出的自然版本，这不是给零概率事件套普通概率比值。
 
-当 $X=1$：
+### 16.4 条件期望的基本性质
+
+课件第 104 页的恒等式均在有关可积条件下几乎必然成立：
+
+$$\boxed{E(aY+bZ\mid X)=aE(Y\mid X)+bE(Z\mid X).}$$
+
+$$\boxed{E[h(X)Y\mid X]=h(X)E(Y\mid X).}$$
+
+$$\boxed{E[h(X)\mid X]=h(X).}$$
+
+第二条叫“把已知量提出”：给定 $X$ 后，$h(X)$ 已经确定。它不要求 $h(X)$ 与 $Y$ 独立。对于无界 $h$，需保证涉及的乘积可积；不能忽略这些条件随意运算。
+
+若 $Y$ 独立于 $X$，则
+
+$$\boxed{E(Y\mid X)=E(Y).}$$
+
+独立意味着条件分布不变，自然使均值不变。但反方向一般不成立，见第 17.4 小节。
+
+---
+
+## 第十七节　全期望公式与预测
+
+### 17.1 全期望：先在组内平均，再跨组平均
+
+课件第 105 页：若 $E|Y|<\infty$，
+
+$$\boxed{E[E(Y\mid X)]=E(Y).}$$
+
+离散情形为
+
+$$E(Y)=\sum_x E(Y\mid X=x)p_X(x),$$
+
+连续情形为
+
+$$E(Y)=\int_{-\infty}^{\infty}E(Y\mid X=x)f_X(x)dx.$$
+
+外层使用的是**条件变量 $X$ 的分布**，不是 $Y$ 的分布。条件均值函数并不是密度，不需要积分为 1。
+
+离散证明是
+
+$$\begin{aligned}
+E[E(Y\mid X)]
+&=\sum_x\left[\sum_y yp_{Y\mid X}(y\mid x)\right]p_X(x)\\
+&=\sum_x\sum_y yp_{X,Y}(x,y)\\
+&=\sum_y y\left[\sum_xp_{X,Y}(x,y)\right]=E(Y).
+\end{aligned}$$
+
+连续证明把求和替换为积分；绝对可积条件支持交换次序。
+
+### 17.2 课件离散条件期望例题
+
+**题目（第 107—108 页）。** $X,Y\in\{0,1\}$，联合 PMF 为 $p(x,y)=(x+y)/4$。
+
+| $X\backslash Y$ | $0$ | $1$ | $p_X$ |
+|---|---|---|---|
+| $0$ | $0$ | $1/4$ | $1/4$ |
+| $1$ | $1/4$ | $1/2$ | $3/4$ |
+
+当 $X=0$ 时，$Y=1$ 的条件概率为 1，所以 $E(Y\mid X=0)=1$。当 $X=1$ 时，
 
 $$P(Y=1\mid X=1)=\frac{1/2}{3/4}=\frac23,$$
 
-所以 $E(Y\mid X=1)=2/3$。将两种情况合并为随机变量：
+故 $E(Y\mid X=1)=2/3$。将两个值写为 $X$ 的函数：
 
 $$\boxed{E(Y\mid X)=1-\frac X3.}$$
 
-再求期望：
+再平均得
 
-$$E[E(Y\mid X)]=1\frac14+\frac23\frac34=\frac34.$$
+$$E[E(Y\mid X)]=1\cdot\frac14+\frac23\cdot\frac34
+=\boxed{\frac34}.$$
 
-直接从边缘分布也有 $P(Y=1)=3/4$，故 $E(Y)=3/4$，验证全期望公式。
+由于边缘 $P(Y=1)=3/4$，也有 $E(Y)=3/4$，全期望验证成立。条件均值随机变量的两个值不是 $0,1$，而是 $1,2/3$。
+
+### 17.3 条件期望是允许任意函数时的最佳预测（补充）
+
+假设 $E(Y^2)<\infty$，令 $m(X)=E(Y\mid X)$。对任意满足平方可积要求的预测函数 $h(X)$，
+
+$$Y-h(X)=[Y-m(X)]+[m(X)-h(X)].$$
+
+交叉项的期望为零，因为
+
+$$E\{[Y-m(X)][m(X)-h(X)]\}
+=E\{[m(X)-h(X)]E[Y-m(X)\mid X]\}=0.$$
+
+于是
+
+$$\boxed{E[(Y-h(X))^2]
+=E[(Y-m(X))^2]+E[(m(X)-h(X))^2].}$$
+
+第二项非负，所以最优预测为 $h(X)=E(Y\mid X)$，最小均方误差为 $E[\operatorname{Var}(Y\mid X)]$。
+
+这把三种预测连成一条线：无信息时最优常数为 $E(Y)$；限于仿射函数时得到第十一节的最佳线性预测；允许任意平方可积函数时得到条件期望。二元正态中，条件期望恰好为仿射函数，因此后两者一致。
+
+### 17.4 条件均值不变仍不等于独立（补充）
+
+使用第 14.3 小节的 $X=Z,Y=SZ$：给定 $X=x$，$Y$ 以各一半概率取 $x$ 与 $-x$，因此
+
+$$E(Y\mid X=x)=0,\qquad E(Y\mid X)=0=E(Y).$$
+
+但其条件方差为 $x^2$，且 $|Y|=|X|$，所以仍然依赖。条件**均值**不变只说明一个平均值不变；独立要求条件**分布**不变。
+
+在 $X,Y$ 平方可积时，$E(Y\mid X)=E(Y)$ 可以推出不相关：
+
+$$E(XY)=E[XE(Y\mid X)]=E(X)E(Y).$$
+
+这也是“独立 → 条件均值不变 → 不相关”的逻辑链；一般不能把箭头倒转。
 
 ---
 
-## 9. 条件方差、全方差与分层模型 (Conditional Variance & Hierarchical Models)
+## 第十八节　条件方差与全方差：波动从哪里来
 
-### 9.1 条件方差与全方差公式
+### 18.1 条件方差本身也是随机变量
 
-对应课件第 86—88 页。
+若 $E(Y^2)<\infty$，定义
 
-> **定义（条件方差）**：若 $E(Y^2)<\infty$，则：
-> $$\operatorname{Var}(Y\mid X)=E\left[(Y-E(Y\mid X))^2\mid X\right].$$
-> 计算公式为：
-> $$\boxed{\operatorname{Var}(Y\mid X)=E(Y^2\mid X)-[E(Y\mid X)]^2.}$$
+$$\boxed{\operatorname{Var}(Y\mid X)
+=E\bigl([Y-E(Y\mid X)]^2\mid X\bigr).}$$
 
-它描述知道 $X$ 之后，$Y$ 围绕**条件均值**的剩余波动，也是由 $X$ 决定的随机变量。
+利用条件期望线性与把已知量提出，得到计算式
 
-> **全方差公式（Law of Total Variance）**：
-> $$\boxed{\operatorname{Var}(Y)=E[\operatorname{Var}(Y\mid X)]+\operatorname{Var}[E(Y\mid X)].}$$
+$$\boxed{\operatorname{Var}(Y\mid X)
+=E(Y^2\mid X)-[E(Y\mid X)]^2.}$$
 
-两部分含义：
+给定 $X=x$ 时，$\operatorname{Var}(Y\mid X=x)$ 是一个数；将 $x$ 换为 $X$，条件方差则是依赖于 $X$ 的随机变量。
 
-- $E[\operatorname{Var}(Y\mid X)]$：平均组内波动。
-- $\operatorname{Var}[E(Y\mid X)]$：不同条件组均值之间的波动。
+### 18.2 全方差公式与代数证明
 
-#### 证明
+课件第 110—111 页：
 
-对条件方差取期望：
+$$\boxed{\operatorname{Var}(Y)
+=E[\operatorname{Var}(Y\mid X)]
++\operatorname{Var}[E(Y\mid X)].}$$
 
-$$E[\operatorname{Var}(Y\mid X)]=E(Y^2)-E\{[E(Y\mid X)]^2\}.$$
+第一项是**组内方差的平均**，第二项是**各组均值之间的方差**。前者先给定 $X$ 看剩余波动，再取平均；后者关注由 $X$ 带来的均值差异。
 
-另一方面：
+设 $m(X)=E(Y\mid X)$。分别展开：
 
-$$\operatorname{Var}[E(Y\mid X)]=E\{[E(Y\mid X)]^2\}-[E(Y)]^2.$$
+$$E[\operatorname{Var}(Y\mid X)]=E(Y^2)-E[m(X)^2],$$
 
-相加后中间项消去，得到 $E(Y^2)-[E(Y)]^2=\operatorname{Var}(Y)$。$\blacksquare$
+$$\operatorname{Var}[E(Y\mid X)]=E[m(X)^2]-[E(Y)]^2.$$
 
-> **【易错辨析：非线性运算不能直接穿过期望】**  
-> $E([E(Y\mid X)]^2)$ 通常不等于 $[E(Y)]^2$，两者之差恰好为条件均值的方差。忽略这一差别就会漏掉全方差中的组间波动项。
+相加后中间项消去，恰好得到 $\operatorname{Var}(Y)$。
 
-### 9.2 两阶段均匀模型的完整计算
+全方差不是 $\operatorname{Var}(Y)=\operatorname{Var}(E(Y\mid X))$，后者漏掉组内波动；也不是把两个方差都先取方差。两项的运算顺序应读成“**方差的期望＋期望的方差**”。
 
-对应课件第 89—91 页。
+### 18.3 用二元正态核对
 
-先抽取 $X\sim U(0,1)$；给定 $X=x$ 后，再抽取：
+二元正态中
 
-$$Y\mid X=x\sim U(x,1).$$
+$$E[\operatorname{Var}(Y\mid X)]=\sigma_Y^2(1-\rho^2),$$
 
-求条件均值、条件方差以及无条件均值、方差。
+$$\operatorname{Var}[E(Y\mid X)]
+=\operatorname{Var}\left[\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(X-\mu_X)\right]
+=\rho^2\sigma_Y^2.$$
 
-#### 第一步：识别条件分布
+两项相加为 $\sigma_Y^2$。因此 $\rho^2$ 在此模型中是由条件均值解释的总体方差比例；这一解释依赖条件均值为线性，不能把一般非线性依赖全部归入 Pearson 相关。
 
-均匀分布 $U(a,b)$ 的均值为 $(a+b)/2$，方差为 $(b-a)^2/12$，所以：
+条件方差不一定在每一个 $x$ 处都小于总体方差；全方差保证的是平均意义下
 
-$$\boxed{E(Y\mid X)=\frac{X+1}{2},\qquad \operatorname{Var}(Y\mid X)=\frac{(1-X)^2}{12}.}$$
+$$E[\operatorname{Var}(Y\mid X)]\le\operatorname{Var}(Y).$$
 
-#### 第二步：使用全期望
+### 18.4 课件两阶段均匀模型
 
-$$E(Y)=E\left(\frac{X+1}{2}\right)=\frac{E(X)+1}{2}=\boxed{\frac34}.$$
+**题目（第 112—114 页）。** 先取 $X\sim U(0,1)$；观察到 $X=x$ 后，再取 $Y\mid X=x\sim U(x,1)$。求条件均值、条件方差及 $Y$ 的总体均值、方差。
 
-#### 第三步：计算平均组内方差
+**第一步：直接使用均匀分布公式。**
 
-$$E[\operatorname{Var}(Y\mid X)]=\frac1{12}\int_0^1(1-x)^2\,dx=\frac1{36}.$$
+$$E(Y\mid X=x)=\frac{x+1}2,\qquad
+\operatorname{Var}(Y\mid X=x)=\frac{(1-x)^2}{12}.$$
 
-#### 第四步：计算条件均值的方差
+所以
 
-$$\operatorname{Var}[E(Y\mid X)]=\operatorname{Var}\left(\frac{X+1}{2}\right)=\frac14\operatorname{Var}(X)=\frac1{48}.$$
+$$\boxed{E(Y\mid X)=\frac{X+1}2,\qquad
+\operatorname{Var}(Y\mid X)=\frac{(1-X)^2}{12}.}$$
 
-#### 第五步：相加得到总方差
+**第二步：全期望。**
+
+$$\boxed{E(Y)=\frac{E(X)+1}2=\frac34.}$$
+
+**第三步：全方差的组内项。**
+
+$$E[\operatorname{Var}(Y\mid X)]
+=\frac1{12}\int_0^1(1-x)^2dx=\frac1{36}.$$
+
+**第四步：全方差的组间项。**
+
+$$\operatorname{Var}[E(Y\mid X)]
+=\frac14\operatorname{Var}(X)=\frac1{48}.$$
+
+因此
 
 $$\boxed{\operatorname{Var}(Y)=\frac1{36}+\frac1{48}=\frac7{144}.}$$
 
-**方法价值**：无需先推导 $Y$ 的边缘密度，即可得到均值和方差。
+### 18.5 为什么该模型不是“在三角形内均匀取点”（补充）
 
-> **【深度补充：相同取值区域不等于相同分布】**  
-> 此模型的联合密度为 $f_{X,Y}(x,y)=f_X(x)f_{Y\mid X}(y\mid x)=1/(1-x)$，区域为 $0<x<y<1$。它不是在三角形上取常数密度 $2$ 的均匀模型。两者虽然有相同的区域，边缘分布却不同，不能互相套用结果。
+其联合密度应由条件密度乘边缘得到：
 
-**边缘分布核对（补充）**：对 $0<y<1$：
+$$\boxed{f_{X,Y}(x,y)=\frac1{1-x},\qquad0<x<y<1,}$$
 
-$$f_Y(y)=\int_0^y\frac1{1-x}\,dx=-\ln(1-y).$$
+区域外为 0。因为给定 $x$ 后，要在长度为 $1-x$ 的区间上归一化。它虽然支持于三角形内，密度却不是常数 2。
 
-该密度不是常数，说明条件上均匀不意味着无条件下仍均匀。
+对 $x$ 积分可以验证边缘
 
-### 9.3 随机成功概率二项模型的均值、方差和边缘分布
+$$f_Y(y)=\int_0^y\frac1{1-x}dx=-\log(1-y),\qquad0<y<1.$$
 
-对应课件第 92—94 页。
+因此 $Y$ 不是 $U(0,1)$，它更倾向于靠近 1。若改成三角形上密度恒为 2，则 $f_X(x)=2(1-x)$，不再符合题设 $X\sim U(0,1)$。
 
-设随机选取地区的患病率 $Q\sim U(0,1)$。给定 $Q=q$ 后抽取 $n$ 个条件独立个体，患病人数满足：
+用条件二阶矩还能独立核对：
+
+$$E(Y^2\mid X=x)=\frac{x^2+x+1}3,$$
+
+$$E(Y^2)=\frac{1/3+1/2+1}3=\frac{11}{18},\qquad
+\frac{11}{18}-\left(\frac34\right)^2=\frac7{144}.$$
+
+这个例子把第三章“由条件恢复联合”与本章“由条件恢复总体矩”连在一起。
+
+---
+
+## 第十九节　分层模型：随机参数带来额外波动
+
+### 19.1 课件患病率模型的两层随机性
+
+**题目（第 115—117 页）。** 随机选择一个地区，地区患病率 $Q\sim U(0,1)$。给定 $Q=q$ 后，抽取 $n$ 个条件独立的人，患病人数满足
 
 $$X\mid Q=q\sim\operatorname{Binomial}(n,q).$$
 
-#### (1) 条件均值与条件方差
+求 $E(X)$、$\operatorname{Var}(X)$ 与 $X$ 的边缘分布。
 
-$$E(X\mid Q)=nQ,\qquad \operatorname{Var}(X\mid Q)=nQ(1-Q).$$
+这是课件设定的示范模型。随机性有两层：先决定地区患病率，再决定在该患病率下的个人结果；同一次抽样中的所有人共享同一个 $Q$。
 
-#### (2) 无条件均值
+### 19.2 先写条件矩，再求总体矩
+
+由二项分布，
+
+$$E(X\mid Q)=nQ,\qquad\operatorname{Var}(X\mid Q)=nQ(1-Q).$$
+
+而 $E(Q)=1/2,E(Q^2)=1/3,\operatorname{Var}(Q)=1/12$。全期望得到
 
 $$\boxed{E(X)=nE(Q)=\frac n2.}$$
 
-#### (3) 无条件方差
+全方差则给出
 
-$$\begin{aligned}\operatorname{Var}(X)&=E[nQ(1-Q)]+\operatorname{Var}(nQ)\\&=n[E(Q)-E(Q^2)]+n^2\operatorname{Var}(Q)\\&=n\left(\frac12-\frac13\right)+\frac{n^2}{12}\\&=\boxed{\frac{n(n+2)}{12}}.\end{aligned}$$
+$$\begin{aligned}
+\operatorname{Var}(X)
+&=E[nQ(1-Q)]+\operatorname{Var}(nQ)\\
+&=n\left(\frac12-\frac13\right)+\frac{n^2}{12}\\
+&=\boxed{\frac{n(n+2)}{12}}.
+\end{aligned}$$
 
-#### (4) 边缘分布
+第一项 $n/6$ 是组内二项波动的平均，第二项 $n^2/12$ 是地区患病率差异导致的波动。
 
-对 $k=0,1,\ldots,n$，由条件概率积分：
+### 19.3 边缘分布：二项分布的连续混合
 
-$$P(X=k)=\int_0^1\binom nkq^k(1-q)^{n-k}\,dq.$$
+对 $k=0,1,\ldots,n$，按全概率积分，
 
-利用 Beta 积分：
+$$P(X=k)=\int_0^1\binom nkq^k(1-q)^{n-k}dq.$$
 
-$$\int_0^1q^k(1-q)^{n-k}\,dq=B(k+1,n-k+1)=\frac{k!(n-k)!}{(n+1)!}.$$
+使用 Beta 积分
 
-因此：
+$$\int_0^1q^k(1-q)^{n-k}dq
+=B(k+1,n-k+1)=\frac{k!(n-k)!}{(n+1)!},$$
 
-$$\boxed{P(X=k)=\frac1{n+1},\qquad k=0,1,\ldots,n.}$$
+得到
 
-无条件的 $X$ 服从 $\{0,1,\ldots,n\}$ 上的离散均匀分布。
+$$P(X=k)=\frac{n!}{k!(n-k)!}\frac{k!(n-k)!}{(n+1)!}
+=\boxed{\frac1{n+1}}.$$
 
-#### (5) 为什么不能把 $Q$ 替换成 $E(Q)$？
+所以 $X$ 在 $\{0,1,\ldots,n\}$ 上服从**离散均匀分布**，不是一般的 Binomial$(n,1/2)$。用离散均匀公式也可验证均值 $n/2$、方差 $n(n+2)/12$。
 
-误写为 $\operatorname{Binomial}(n,1/2)$，会得到方差 $n/4$，而真实方差为 $n(n+2)/12$。二者相差：
+### 19.4 为什么不能直接把 $Q$ 换成 $E(Q)$（补充）
 
-$$\frac{n(n+2)}{12}-\frac n4=\frac{n(n-1)}{12}.$$
+把 $Q$ 替换为 $1/2$，会得到 Binomial$(n,1/2)$，其方差为 $n/4$；而实际方差为 $n(n+2)/12$。二者之差为
 
-当 $n>1$ 时有额外波动，来自所有个体共享的随机成功概率。
+$$\frac{n(n+2)}{12}-\frac n4=\frac{n(n-1)}{12},$$
 
-### 9.4 条件独立与无条件依赖的区别
+当 $n>1$ 时严格为正。只在 $n=1$ 这个特殊情形，两种边缘都是 Bernoulli$(1/2)$。
 
-以下为帮助理解上题的深度补充。
-
-设 $I_i$ 表示第 $i$ 个个体是否患病。给定 $Q$ 后，$I_i$ 条件独立，但无条件下：
+用个体指示变量可以看清原因。令 $I_i$ 表示第 $i$ 人患病，$X=\sum_iI_i$。给定 $Q$ 后它们独立，但不再对 $Q$ 条件化时，
 
 $$E(I_i)=E(Q)=\frac12,$$
 
-$$E(I_iI_j)=E[E(I_iI_j\mid Q)]=E(Q^2)=\frac13,\qquad i\ne j.$$
+$$E(I_iI_j)=E[E(I_iI_j\mid Q)]=E(Q^2)=\frac13\quad(i\ne j),$$
 
-所以：
+$$\boxed{\operatorname{Cov}(I_i,I_j)=\frac13-\frac14=\frac1{12}>0.}$$
 
-$$\operatorname{Cov}(I_i,I_j)=\frac13-\frac14=\frac1{12}>0.$$
+共享的随机环境造成正相关。用完整的和方差公式核对：
 
-因此：
+$$\operatorname{Var}(X)=\frac n4+2\binom n2\frac1{12}
+=\frac{n(n+2)}{12}.$$
 
-$$\operatorname{Var}\left(\sum_{i=1}^nI_i\right)=\frac n4+2\binom n2\frac1{12}=\frac{n(n+2)}{12}.$$
-
-这从协方差角度再次验证了全方差的答案。
-
-> **【知识连接】**  
-> 同一个随机参数使不同个体共享了信息，从而产生无条件依赖。全方差中的组间波动，与变量和公式中的交叉协方差，是这一现象的两种数学表达。
+所以“给定 $Q$ 后相互独立”不等于“总体相互独立”。这也是混合模型相较固定参数模型波动更大的具体机制。
 
 ---
 
-## 10. 最优预测：线性预测与条件期望 (Optimal Prediction)
+## 第二十节　公式速查、解题路线与自测
 
-### 10.1 最佳线性预测的公式与配方证明
+### 20.1 基本数字特征速查
 
-对应课件第 58—59 页。已知 $X$，用 $\widehat Y=a+bX$ 预测 $Y$，要求最小化：
-
-$$E[(Y-a-bX)^2].$$
-
-假设二阶矩有限且 $\operatorname{Var}(X)>0$。
-
-> **最佳线性预测（Best Linear Predictor）**：
-> $$\boxed{\widehat Y=\mu_Y+\frac{\operatorname{Cov}(X,Y)}{\operatorname{Var}(X)}(X-\mu_X).}$$
-> 对应斜率与截距为：
-> $$b=\frac{\operatorname{Cov}(X,Y)}{\sigma_X^2},\qquad a=\mu_Y-b\mu_X.$$
-
-#### 严谨推导
-
-先分解均值与中心化部分：
-
-$$\begin{aligned}E[(Y-a-bX)^2]&=(\mu_Y-a-b\mu_X)^2\\&\quad+\sigma_Y^2+b^2\sigma_X^2-2b\operatorname{Cov}(X,Y).\end{aligned}$$
-
-对固定 $b$，取 $a=\mu_Y-b\mu_X$，使第一项为零。再对剩余项配方：
-
-$$\begin{aligned}&\sigma_Y^2+b^2\sigma_X^2-2b\operatorname{Cov}(X,Y)\\&=\sigma_X^2\left(b-\frac{\operatorname{Cov}(X,Y)}{\sigma_X^2}\right)^2+\sigma_Y^2-\frac{\operatorname{Cov}(X,Y)^2}{\sigma_X^2}.\end{aligned}$$
-
-第一项在所给斜率处为零，得最优解。预测直线经过 $(\mu_X,\mu_Y)$。
-
-注意误差是 $Y-a-bX$，即固定 $X$ 时的纵向残差，不是点到直线的垂直距离。
-
-### 10.2 相关系数与最小均方误差
-
-最小均方误差为：
-
-$$\boxed{\operatorname{MSE}_{\min}=\sigma_Y^2-\frac{\operatorname{Cov}(X,Y)^2}{\sigma_X^2}.}$$
-
-若 $\sigma_Y>0$，可写成：
-
-$$\boxed{\widehat Y=\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(X-\mu_X),\qquad \operatorname{MSE}_{\min}=\sigma_Y^2(1-\rho^2).}$$
-
-不用 $X$ 时，最佳常数预测为 $\mu_Y$，误差为 $\sigma_Y^2$。因此 $\rho^2$ 表示使用最佳线性预测后相对减少的均方误差比例。
-
-- $\rho=0$：在直线预测范围内，$X$ 不改善预测。
-- $|\rho|=1$：线性预测误差为零。
-- $0<|\rho|<1$：仍存在无法被最佳直线解释的波动。
-
-### 10.3 二元离散预测案例
-
-对应课件第 60—61 页。
-
-| $X\backslash Y$ | $Y=0$ | $Y=1$ |
-| :--- | :--- | :--- |
-| $X=0$ | $0.4$ | $0.1$ |
-| $X=1$ | $0.1$ | $0.4$ |
-
-两边边缘均为 $\operatorname{Bernoulli}(1/2)$，故：
-
-$$E(X)=E(Y)=\frac12,\qquad \operatorname{Var}(X)=\operatorname{Var}(Y)=\frac14.$$
-
-因 $XY=1$ 仅在 $(1,1)$ 发生：
-
-$$E(XY)=0.4,\quad \operatorname{Cov}(X,Y)=0.4-0.25=0.15,\quad \rho=0.6.$$
-
-最佳线性预测：
-
-$$\widehat Y=0.5+0.6(X-0.5)=\boxed{0.2+0.6X}.$$
-
-最小误差：
-
-$$\boxed{\operatorname{MSE}_{\min}=0.25(1-0.6^2)=0.16.}$$
-
-**与条件期望连接**：$E(Y\mid X=0)=0.1/0.5=0.2$，$E(Y\mid X=1)=0.4/0.5=0.8$，因此本例中 $E(Y\mid X)=0.2+0.6X$，恰好与最佳线性预测一致。
-
-### 10.4 深度补充：条件期望是最佳一般均方预测
-
-课件详细证明了最佳线性预测；下面解释它与条件期望的关系。
-
-如果不把预测限制为 $a+bX$，而允许任意平方可积的 $g(X)$，令：
-
-$$m(X)=E(Y\mid X).$$
-
-分解误差：
-
-$$Y-g(X)=[Y-m(X)]+[m(X)-g(X)].$$
-
-由于：
-
-$$E[Y-m(X)\mid X]=0,$$
-
-交叉项的期望为零：
-
-$$E\{[Y-m(X)][m(X)-g(X)]\}=0.$$
-
-所以：
-
-$$\boxed{E[(Y-g(X))^2]=E[\operatorname{Var}(Y\mid X)]+E[(m(X)-g(X))^2].}$$
-
-第二项非负，故最优解为：
-
-$$\boxed{\widehat Y_{\mathrm{opt}}=E(Y\mid X),\qquad \min_gE[(Y-g(X))^2]=E[\operatorname{Var}(Y\mid X)].}$$
-
-| 预测问题 | 允许的函数 | 最优结果 |
-| :--- | :--- | :--- |
-| 最佳常数预测 | 常数 $c$ | $E(Y)$ |
-| 最佳线性预测 | $a+bX$ | 均值、方差与协方差决定的直线 |
-| 最佳一般均方预测 | 任意合适的 $g(X)$ | $E(Y\mid X)$ |
-
-例如 $X\sim U(-1,1)$、$Y=X^2$ 时，相关系数为零，最佳线性预测只能使用常数 $E(Y)=1/3$；但非线性预测 $g(X)=X^2$ 没有误差。
-
-在联合正态情况下，条件期望本身是线性的，因此最佳一般预测与最佳线性预测相同。这解释了二维正态条件均值公式与最佳直线公式具有相同形式。
-
----
-
-## 11. 核心公式速查与易错知识点深度辨析 (Summary & Pitfalls)
-
-### 11.1 公式、条件和用途对照表
-
-#### (1) 核心公式
-
-| 知识点 | 公式 | 条件或用途 |
-| :--- | :--- | :--- |
-| 函数期望 | $E[g(X)]=\sum g(x)p_X(x)$ 或 $\int g(x)f_X(x)\,dx$ | $g(X)$ 可积，不必先求新分布 |
-| 期望线性性 | $E(\sum a_iX_i)=\sum a_iE(X_i)$ | 不要求独立 |
+| 内容 | 公式 | 使用条件或注意 |
+|---|---|---|
+| 函数期望 | $E[g(X)]=\sum g(x)p_X(x)$ 或 $\int g(x)f_X(x)dx$ | 对应绝对期望有限；无需先求 $g(X)$ 的分布 |
+| 指示变量 | $E(I_A)=P(A)$ | 计数可拆为指示变量之和 |
+| 线性 | $E(\sum a_iX_i+b)=\sum a_iE(X_i)+b$ | 可积，不要求独立 |
 | 独立乘积 | $E(\prod g_i(X_i))=\prod E[g_i(X_i)]$ | 相互独立，各项可积 |
-| 方差 | $\operatorname{Var}(X)=E(X^2)-[E(X)]^2$ | 二阶矩有限 |
-| 方差变换 | $\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)$ | 标准差缩放为 $\lvert a\rvert$ 倍 |
-| 协方差 | $\operatorname{Cov}(X,Y)=E(XY)-E(X)E(Y)$ | 计算线性共同变化 |
-| 相关系数 | $\rho=\operatorname{Cov}(X,Y)/(\sigma_X\sigma_Y)$ | 两方差正且有限 |
-| 线性组合方差 | $a^2\sigma_X^2+b^2\sigma_Y^2+2ab\operatorname{Cov}(X,Y)$ | 不要求独立 |
-| MGF 生成矩 | $M_X^{(r)}(0)=E(X^r)$ | MGF 零点邻域有限 |
-| 仿射 MGF | $M_{aX+b}(t)=e^{bt}M_X(at)$ | 识别变换后分布 |
-| 独立和 MGF | $M_{\sum a_iX_i}(t)=\prod M_{X_i}(a_it)$ | 相互独立 |
+| 方差 | $E(X^2)-[E(X)]^2$ | 二阶矩有限 |
+| 仿射方差 | $\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)$ | 标准差乘 $|a|$ |
+| 协方差 | $E(XY)-E(X)E(Y)$ | 本章取二阶矩有限 |
+| 相关系数 | $\rho=\operatorname{Cov}(X,Y)/(\sigma_X\sigma_Y)$ | 两个标准差正且有限 |
+| 一般和方差 | $\sum a_i^2\operatorname{Var}(X_i)+2\sum_{i<j}a_ia_j\operatorname{Cov}(X_i,X_j)$ | 不要求独立 |
+| 线性预测 | $\mu_Y+\operatorname{Cov}(X,Y)(X-\mu_X)/\sigma_X^2$ | $\sigma_X^2>0$，最小化纵向均方误差 |
+| 条件期望 | $E(Y\mid X)=g(X),\ g(x)=E(Y\mid X=x)$ | 是随机变量 |
 | 全期望 | $E[E(Y\mid X)]=E(Y)$ | $Y$ 可积 |
-| 条件方差 | $E(Y^2\mid X)-[E(Y\mid X)]^2$ | 中心是条件均值 |
-| 全方差 | $E[\operatorname{Var}(Y\mid X)]+\operatorname{Var}[E(Y\mid X)]$ | 等于 $\operatorname{Var}(Y)$，二阶矩有限 |
-| 最佳线性预测 | $\mu_Y+\operatorname{Cov}(X,Y)(X-\mu_X)/\sigma_X^2$ | $\sigma_X^2>0$ |
-| 最佳一般预测 | $E(Y\mid X)$ | 均方误差准则，二阶矩有限 |
+| 条件方差 | $E(Y^2\mid X)-[E(Y\mid X)]^2$ | $Y$ 平方可积 |
+| 全方差 | $E[\operatorname{Var}(Y\mid X)]+\operatorname{Var}[E(Y\mid X)]$ | 等于总体方差 |
 
-#### (2) MGF 速查
+### 20.2 MGF 速查
 
-| 分布 | MGF | 有限范围 |
-| :--- | :--- | :--- |
-| $\operatorname{Bernoulli}(p)$ | $1-p+pe^t$ | $t\in\mathbb R$ |
-| $\operatorname{Binomial}(n,p)$ | $(1-p+pe^t)^n$ | $t\in\mathbb R$ |
-| $\operatorname{Poisson}(\lambda)$ | $e^{\lambda(e^t-1)}$ | $t\in\mathbb R$ |
-| $\operatorname{Exp}(\lambda)$ | $\lambda/(\lambda-t)$ | $t<\lambda$ |
-| $\operatorname{Gamma}(\alpha,\lambda)$ | $(\lambda/(\lambda-t))^\alpha$ | $t<\lambda$ |
-| $\chi^2(n)$ | $(1-2t)^{-n/2}$ | $t<1/2$ |
-| $N(\mu,\sigma^2)$ | $e^{\mu t+\sigma^2t^2/2}$ | $t\in\mathbb R$ |
+| 分布 | $M_X(t)$ | 有限域 |
+|---|---|---|
+| 常数 $c$ | $e^{ct}$ | $\mathbb R$ |
+| Bernoulli$(p)$ | $1-p+pe^t$ | $\mathbb R$ |
+| Binomial$(n,p)$ | $(1-p+pe^t)^n$ | $\mathbb R$ |
+| Poisson$(\lambda)$ | $e^{\lambda(e^t-1)}$ | $\mathbb R$ |
+| Exp$(\lambda)$ | $\lambda/(\lambda-t)$ | $t<\lambda$ |
+| Gamma$(\alpha,\lambda)$ | $[\lambda/(\lambda-t)]^\alpha$ | $t<\lambda$ |
+| $\chi^2(\nu)$ | $(1-2t)^{-\nu/2}$ | $t<1/2$ |
+| $N(\mu,\sigma^2)$ | $e^{\mu t+\sigma^2t^2/2}$ | $\mathbb R$ |
 
-### 11.2 高频错误与概念边界
+配套三条：
 
-#### 辨析 1：把期望的规则套到方差上
+$$M_X^{(r)}(0)=E(X^r),\qquad
+M_{aX+b}(t)=e^{bt}M_X(at),\qquad
+M_{\sum_ka_kX_k}(t)=\prod_kM_{X_k}(a_kt)\ \text{（相互独立）}.$$
 
-- **错误**：$\operatorname{Var}(aX+bY)=a\operatorname{Var}(X)+b\operatorname{Var}(Y)$。
-- **正确**：系数要平方，还需保留 $2ab\operatorname{Cov}(X,Y)$。
-- **检查方法**：令 $Y=X$ 或 $Y=-X$ 代入，常可立即发现不合理结果。
+MGF 的矩公式要求在 0 邻域存在；识别分布时还要使用唯一性。
 
-#### 辨析 2：独立、不相关、均值独立混为一谈
+### 20.3 二元正态最应熟练的三条
 
-- 独立推出不相关（在二阶矩有限时）。
-- $E(Y\mid X)=E(Y)$ 表示条件均值不变，但仍可能存在条件方差等方面的依赖。
-- 零协方差更不能推出独立。
-- 联合正态是可将不相关提升为独立的重要附加条件。
+在联合正态前提下：
 
-#### 辨析 3：MGF 二阶导数与方差混淆
+$$aX+bY\sim N\left(a\mu_X+b\mu_Y,
+a^2\sigma_X^2+b^2\sigma_Y^2+2ab\rho\sigma_X\sigma_Y\right),$$
 
-$$M_X''(0)=E(X^2),\qquad \operatorname{Var}(X)=M_X''(0)-[M_X'(0)]^2.$$
+$$X\perp Y\quad\Longleftrightarrow\quad\operatorname{Cov}(X,Y)=0,$$
 
-例如正态分布有 $M_X''(0)=\mu^2+\sigma^2$，不能把它直接写成 $\sigma^2$。
+$$Y\mid X=x\sim N\left(\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X),
+\sigma_Y^2(1-\rho^2)\right).$$
 
-#### 辨析 4：忽略分布可加性的参数要求
+最后一个普通条件密度公式要求 $|\rho|<1$ 且两个标准差正；退化情形用构造解释。不要在“各自正态”前提下直接使用这些联合结论。
 
-二项和要求相同成功率；Gamma 和要求相同速率；整个 MGF 乘积法还要求相互独立。只写“分布名称相同”不足以使用可加性。
+### 20.4 看到题目先选择哪条路线
 
-#### 辨析 5：条件期望的对象类型不清楚
+**求均值或方差：** 先检查支持与有限性，判断能否直接用已知分布的矩；若是函数期望，优先 LOTUS；若是和，优先线性与完整方差公式。
 
-$E(Y\mid X=x)$ 对固定 $x$ 是数，$E(Y\mid X)$ 是 $X$ 的函数。前者换回随机变量后，才能按 $X$ 的分布进一步求期望或方差。
+**求独立和的分布：** 写 MGF → 用独立性相乘 → 整理参数 → 写有效邻域 → 用唯一性识别。若是最小值，往往生存函数更直接。
 
-#### 辨析 6：全方差漏掉条件均值的方差
+**算相关系数：** 联合分布 → 边缘 → $E(X),E(Y),E(X^2),E(Y^2),E(XY)$ → 两个方差与协方差 → 归一化。不要提前舍入，否则小协方差可能被数值误差掩盖。
 
-知道组别后仍有组内波动，不同组的均值也可能不同；总体方差必须计入两者。只有条件均值几乎必然为常数时，组间项才为零。
+**判断独立：** 普通模型用联合分解或事件概率；联合正态模型先确认联合正态，再用零协方差。零协方差通常只能证明不相关。
 
-#### 辨析 7：条件模型中的随机参数直接换成平均数
+**给定条件分布或分层生成过程：** 先求条件矩 → 全期望、全方差。若求边缘分布，才按条件分布对混合变量求和或积分。不要把随机参数直接换成它的均值。
 
-一般不能把 $X\mid Q\sim\operatorname{Binomial}(n,Q)$ 改为 $X\sim\operatorname{Binomial}(n,E(Q))$。需要对整个条件分布按 $Q$ 积分，或使用全期望、全方差。
+### 20.5 自测题（均为补充练习）
 
-#### 辨析 8：正态边缘、联合正态与相关信息混淆
+建议先遮住解析。每题除结果外，至少说明一次“为什么可以使用这条公式”。
 
-两个正态边缘并不能保证联合正态。均值、方差、相关系数通常只描述部分联合信息；在联合正态模型内，它们才足以确定联合分布。
+**习题 1：存在性。** 标准柯西变量关于 0 对称，能否推出 $E(X)=0$？若某随机变量只有 $M_X(0)=1$ 已知，能否直接使用 MGF 的矩公式？
 
-#### 辨析 9：最佳线性预测被误认为任意意义上的最佳预测
+**习题 2：函数期望与仿射变换。** $X\sim U(-1,1)$，求 $E(X^2)$、$\operatorname{Var}(X^2)$、$E(3X-2)$ 与 $\operatorname{Var}(3X-2)$。
 
-最佳线性预测只在直线函数类中最优。均方误差意义下的一般最优预测是条件期望；它可能是非线性的。
+**习题 3：和的方差。** 已知 $\operatorname{Var}(X)=4$、$\operatorname{Var}(Y)=9$、$\operatorname{Cov}(X,Y)=3$。求 $\rho$、$\operatorname{Var}(2X-Y)$ 与 $\operatorname{Cov}(X+Y,X-Y)$。这些条件能否保证 $2X-Y$ 正态？
 
-### 11.3 按题型选择方法
+**习题 4：MGF 识别。** 相互独立的 $X\sim\operatorname{Gamma}(2,3)$、$Y\sim\operatorname{Gamma}(4,3)$ 均采用速率参数。求 $S=X+Y$ 的分布、MGF 有限域、均值和方差。
 
-| 题型信号 | 优先方法 | 最后检查 |
-| :--- | :--- | :--- |
-| 已知密度求 $E[g(X)]$ | 直接积分 $g(x)f_X(x)$ | 支撑范围与可积性 |
-| 计算复杂计数的均值 | 拆成示性变量 | 不要误加独立条件 |
-| 求变量和的均值、方差 | 线性性与完整方差公式 | 协方差是否已知或为零 |
-| 求独立和的完整分布 | MGF 相乘、唯一性 | 同参数要求与收敛范围 |
-| 独立指数变量的最小值 | 生存函数相乘 | 求的是最小值还是和 |
-| 联合概率表求相关系数 | 边缘矩、交叉矩、标准化 | $\lvert\rho\rvert\le1$ |
-| 联合密度求条件期望 | 边缘密度、条件密度、积分 | 固定哪个变量、积分哪个变量 |
-| 直接给出条件分布 | 全期望与全方差 | 全方差的两项是否齐全 |
-| 给出随机成功率 | 分层模型计算 | 条件独立不等于无条件独立 |
-| 预测直线 | 协方差除以自变量方差 | 回归方向、截距与误差 |
+**习题 5：系数改变 MGF 有限域。** $X\sim\operatorname{Exp}(2)$，$W=1-3X$。求 $M_W(t)$、有限域、均值和方差。
 
-### 11.4 自测题与答案核对
+**习题 6：指数和与最小值。** $X_1\sim\operatorname{Exp}(2)$、$X_2\sim\operatorname{Exp}(5)$ 独立。求 $\min(X_1,X_2)$ 的分布及均值。$X_1+X_2$ 能否直接写为同速率 Gamma？求和的均值与方差。
 
-以下为复习补充题，用于检查公式是否真正会用。
+**习题 7：最佳线性预测。** $E(X)=1,E(Y)=2$，方差分别为 4 和 9，协方差为 3。求用 $X$ 预测 $Y$ 的最佳仿射函数与最小均方误差。它是否必等于 $E(Y\mid X)$？
 
-#### 自测 1：相关变量的线性组合
+**习题 8：联合正态。** 在习题 7 的数值条件之外，增加 $(X,Y)$ 联合正态。求 $Y\mid X=3$ 的分布与 $P(Y>5\mid X=3)$，并用全方差检查总体方差。
 
-已知 $\operatorname{Var}(X)=4$、$\operatorname{Var}(Y)=9$、$\operatorname{Cov}(X,Y)=1$，求 $\operatorname{Var}(2X-Y)$。
+**习题 9：零相关与信息。** $Z\sim N(0,1)$，$S$ 独立于 $Z$ 且等概率取 $\pm1$，令 $X=Z,Y=SZ$。求 $E(Y\mid X)$ 与 $\operatorname{Var}(Y\mid X)$。两个边缘是否正态？二者是否独立？
 
-**答案**：
+**习题 10：离散条件期望。** $p(x,y)=(x+y)/4$，$x,y\in\{0,1\}$。求 $\operatorname{Var}(Y\mid X)$、$E[\operatorname{Var}(Y\mid X)]$、$\operatorname{Var}[E(Y\mid X)]$，验证全方差。
 
-$$4\cdot4+9+2(2)(-1)(1)=\boxed{21}.$$
+**习题 11：反向的两阶段均匀模型。** $X\sim U(0,1)$，给定 $X=x$ 后 $Y\sim U(0,x)$。求 $E(Y\mid X)$、$\operatorname{Var}(Y\mid X)$、$E(Y)$、$\operatorname{Var}(Y)$，并写联合密度。
 
-#### 自测 2：从 MGF 识别分布
+**习题 12：分层二项。** $Q\sim U(0,1)$，$X\mid Q\sim\operatorname{Binomial}(6,Q)$。求 $E(X)$、$\operatorname{Var}(X)$ 与 $P(X=0)$；和把 $Q$ 固定为 $1/2$ 的模型比较。
 
-已知 $M_X(t)=\exp(3t+2t^2)$，求分布、均值与方差。
+### 20.6 参考解析
 
-**答案**：与 $\exp(\mu t+\sigma^2t^2/2)$ 比较，$X\sim N(3,4)$；均值为 $3$，方差为 $4$，二阶原点矩为 $13$。
+**1.** 均不能。柯西变量的正负部分期望都无限，有限期望不存在，主值不能代替期望；仅有 $M_X(0)=1$ 不能证明 MGF 在 0 的邻域有限。
 
-#### 自测 3：指数最小值
+**2.** LOTUS 给出 $E(X^2)=1/3$、$E(X^4)=1/5$，因此
 
-独立的 $X\sim\operatorname{Exp}(2)$、$Y\sim\operatorname{Exp}(3)$，求 $W=\min(X,Y)$ 的分布和均值。
+$$\operatorname{Var}(X^2)=\frac15-\frac19=\frac4{45}.$$
 
-**答案**：$W\sim\operatorname{Exp}(5)$，$E(W)=1/5$。不能据此把 $X+Y$ 也写成 $\operatorname{Exp}(5)$。
+另有 $E(X)=0,\operatorname{Var}(X)=1/3$，故 $E(3X-2)=-2$、$\operatorname{Var}(3X-2)=9/3=3$。
 
-#### 自测 4：全期望与全方差
+**3.** $\rho=3/(2\cdot3)=1/2$。由完整方差公式，
 
-已知 $E(Y\mid X)=2X+1$、$\operatorname{Var}(Y\mid X)=3$，且 $E(X)=0$、$\operatorname{Var}(X)=2$。求 $E(Y)$、$\operatorname{Var}(Y)$。
+$$\operatorname{Var}(2X-Y)=4\cdot4+9-4\cdot3=13.$$
 
-**答案**：
+双线性给出 $\operatorname{Cov}(X+Y,X-Y)=4-9=-5$。这些矩条件没有说明分布族，不能保证线性组合正态。
 
-$$E(Y)=1,\qquad \operatorname{Var}(Y)=3+\operatorname{Var}(2X+1)=3+8=11.$$
+**4.**
 
-#### 自测 5：不相关是否意味着不可预测？
+$$M_S(t)=\left(\frac3{3-t}\right)^2\left(\frac3{3-t}\right)^4
+=\left(\frac3{3-t}\right)^6,\qquad t<3.$$
 
-若 $X\sim U(-1,1)$，$Y=X^2$，比较最佳线性预测与最佳一般预测。
+由唯一性 $S\sim\operatorname{Gamma}(6,3)$，均值为 $6/3=2$，方差为 $6/9=2/3$。独立与同速率是关键。
 
-**答案**：协方差为零，最佳线性预测为 $1/3$。由 $E(X^4)=1/5$，其最小均方误差为 $1/5-1/9=4/45$。一般最优预测为 $X^2$，误差为零。
+**5.**
 
-#### 自测 6：随机成功率模型
+$$M_W(t)=e^tM_X(-3t)=\frac{2e^t}{2+3t},\qquad -3t<2\Longleftrightarrow t>-\frac23.$$
 
-若 $Q\sim U(0,1)$，$X\mid Q\sim\operatorname{Binomial}(4,Q)$，求 $P(X=0)$、$E(X)$、$\operatorname{Var}(X)$。
+负系数使有限域方向翻转。$E(W)=1-3/2=-1/2$，$\operatorname{Var}(W)=9/4$。
 
-**答案**：$X$ 在 $\{0,1,2,3,4\}$ 上等概率，故 $P(X=0)=1/5$、$E(X)=2$、$\operatorname{Var}(X)=2$。
+**6.** 最小值为 Exp$(7)$，均值为 $1/7$。和的两个速率不同，不能用同速率 Gamma 可加性；其 MGF 为 $[2/(2-t)][5/(5-t)]$，并不具有单一 Gamma 的形式。由独立性，和的均值为 $1/2+1/5=7/10$，方差为 $1/4+1/25=29/100$。
+
+**7.**
+
+$$\widehat Y=2+\frac34(X-1)=\frac54+\frac34X,$$
+
+$$\operatorname{MSE}_{\min}=9-\frac{3^2}4=\frac{27}4.$$
+
+不必等于 $E(Y\mid X)$；还需要条件均值为仿射函数的条件，联合正态是保证它成立的一种情形。
+
+**8.** 这里 $\rho=1/2$，所以 $Y\mid X=3\sim N(7/2,27/4)$，所求概率为 $1-\Phi(1/\sqrt3)\approx0.2819$。全方差的组内项为 $27/4$，组间项为 $(3/4)^2\cdot4=9/4$，相加为 9。
+
+**9.** 给定 $X=x$ 后 $Y$ 等概率取 $x,-x$，故 $E(Y\mid X)=0$、$\operatorname{Var}(Y\mid X)=X^2$。两个边缘均为标准正态，但 $|X|=|Y|$，因此依赖，也非联合正态。全方差核对为 $E(X^2)+0=1$。
+
+**10.** 已知 $E(Y\mid X)=1-X/3$。当 $X=0$ 时 $Y$ 为常数，条件方差为 0；当 $X=1$ 时 $Y\sim\operatorname{Bernoulli}(2/3)$，条件方差为 $2/9$。故
+
+$$\operatorname{Var}(Y\mid X)=\frac{2X}9,\qquad
+E[\operatorname{Var}(Y\mid X)]=\frac29\frac34=\frac16.$$
+
+因 $X\sim\operatorname{Bernoulli}(3/4)$，
+
+$$\operatorname{Var}[E(Y\mid X)]=\frac19\frac34\frac14=\frac1{48}.$$
+
+两项和为 $1/6+1/48=3/16$，与边缘 Bernoulli$(3/4)$ 的方差一致。
+
+**11.**
+
+$$E(Y\mid X)=\frac X2,\qquad\operatorname{Var}(Y\mid X)=\frac{X^2}{12}.$$
+
+因此 $E(Y)=1/4$，组内项为 $E(X^2)/12=1/36$，组间项为 $\operatorname{Var}(X)/4=1/48$，故 $\operatorname{Var}(Y)=7/144$。联合密度为 $1/x$，$0<y<x<1$，区域外为 0。不是三角形上的常数密度。
+
+**12.** $X$ 在 $\{0,1,\ldots,6\}$ 上离散均匀，所以 $E(X)=3$、$\operatorname{Var}(X)=6\cdot8/12=4$、$P(X=0)=1/7$。固定 $Q=1/2$ 时 $X\sim\operatorname{Binomial}(6,1/2)$，均值仍为 3，但方差为 $3/2$，$P(X=0)=1/64$。随机环境同时改变总体方差和完整分布。
 
 ---
 
-## 课件与笔记模块对应索引
+## 附录 A　高频错误与修正
 
-| 课件内容 | PDF 页码 | 本笔记位置 |
-| :--- | :--- | :--- |
-| 期望、函数期望、示性变量、线性性 | 6—10 | 第 2 节 |
-| 方差、标准差、分布均值方差练习 | 11—19 | 第 3 节 |
-| MGF 定义、生成矩、分布 MGF | 21—29 | 第 4 节 |
-| MGF 唯一性、独立和、仿射变换 | 30—34 | 第 4—5 节 |
-| 二项、正态线性组合、标准化与卡方 | 35—44 | 第 4—5 节 |
-| 可加性、指数和与最小值 | 45—49 | 第 5 节 |
-| 二元函数期望、协方差与相关系数 | 51—57 | 第 2、6 节 |
-| 最佳线性预测及例题 | 58—61 | 第 10 节 |
-| 独立与不相关、协方差双线性、组合方差 | 62—70 | 第 6 节 |
-| 正态质量控制、二维正态引入 | 71—74 | 第 7 节 |
-| 条件期望、性质、全期望与例题 | 76—85 | 第 8 节 |
-| 条件方差与全方差 | 86—88 | 第 9 节 |
-| 两阶段均匀模型 | 89—91 | 第 9 节 |
-| 随机成功率二项模型 | 92—94 | 第 9 节 |
+| 常见错误 | 正确做法 |
+|---|---|
+| 分布对称就写期望等于中心 | 先验证绝对可积；柯西是典型反例 |
+| 为求 $E[g(X)]$ 先机械地求 $g(X)$ 的密度 | 优先用 LOTUS |
+| 写 $E[g(X)]=g(E(X))$ | 一般不成立，线性函数等特殊情形除外 |
+| 期望相加时额外要求独立 | 有限和只要求各项可积 |
+| 乘积期望随意分解 | 先确认独立或另有直接证明 |
+| 把 $E(X^2)$ 当方差 | 还要减去 $[E(X)]^2$ |
+| 缩放后的方差只乘 $a$ | 方差乘 $a^2$，标准差乘 $|a|$ |
+| 差的方差等于方差之差 | 用 $\sigma_X^2+\sigma_Y^2-2\operatorname{Cov}(X,Y)$ |
+| MGF 二阶导数直接等于方差 | 它等于二阶原点矩 |
+| $M_X(0)=1$ 就认为可以求任意阶矩 | 确认 MGF 在 0 的一个双侧开邻域有限 |
+| 改变变量系数后沿用原 MGF 有限域 | 检查 $at$ 的取值条件，负系数会翻转不等号 |
+| 不同 $p$ 的二项和直接合并 | 同一个 $p$ 才能用对应可加性 |
+| 不同速率 Gamma 之和直接合并 | 对应可加性要求同速率 |
+| 指数和与指数最小值混淆 | 同速率和为 Gamma，独立最小值为速率和的指数 |
+| 相关系数接近零就判“几乎独立” | 它只说明线性相关弱，非线性依赖可能很强 |
+| 相关系数为 1 就说明两个变量相等 | 是正斜率仿射关系，斜率与截距不一定为 1、0 |
+| 两个边缘正态就用零相关推出独立 | 必须先确认联合正态 |
+| 和与差零协方差后直接判独立 | 加上它们联合正态等足够条件 |
+| 认为 $\rho=\pm1$ 可直接代入二维密度 | 分布退化到直线，使用构造 |
+| 条件正态概率仍用原边缘均值和标准差 | 先求条件均值与条件方差，再标准化 |
+| 把 $E(Y\mid X)$ 当成单一确定数 | 它是 $X$ 的函数；给定 $X=x$ 后才是数 |
+| 全期望对组均值等权平均 | 使用条件变量各组的实际概率或密度 |
+| 全方差只保留条件方差平均 | 还要加条件均值的方差 |
+| 条件均值恒定就判独立 | 条件分布可能仍改变，比如条件方差随 $X$ 变化 |
+| 两阶段均匀抽样等同于区域上均匀 | 用 $f_{X,Y}=f_{Y\mid X}f_X$ 检查密度 |
+| 条件独立就认为总体独立 | 共享随机参数可能造成总体依赖 |
 
-**复习使用建议**：第一遍按知识模块理解定义和条件；第二遍遮住答案独立完成课件案例；考前用第 11 节核对公式、适用前提和易错点。遇到忘记的推导，再通过页码索引回到原课件。
+## 附录 B　课件核对与阅读注意
+
+本讲义按提取文字与页面图像核对。当前课件已经在多处明确补充可积性、几何支持、速率参数与联合正态条件；这些是正确前提，应保留，不应当作课件错误。
+
+| PDF 页码 | 阅读时要注意的情况 | 本文处理 |
+|---|---|---|
+| 全篇 | 页脚显示总页数为 123，文件实际为 120 页 | 一律引用物理页码，不据页脚推断缺失内容 |
+| 4、6、11、52 | 有限期望、方差、协方差各有有限性前提 | 各定理处明确标注，区分无限扩展期望与不存在 |
+| 13—15 | Geometric 的支持从 1 开始 | 统一用首次成功的试验次数，补充从 0 开始时均值的变化 |
+| 18 | $t$ 分布均值、方差只在部分自由度下成立 | 分别保留 $\nu>1$、$\nu>2$ 的条件 |
+| 21—24 | $M(0)=1$ 是必要性质，真正前提是 0 邻域有限 | 不把所有矩有限与 MGF 存在混为一谈 |
+| 30、89 | 使用一元及多元变换唯一性定理 | 说明其为课件引用的定理，避免把未证结论冒充初等代数证明 |
+| 39—40 | 求和项数与二项参数同时使用 $n,n_k$ | 用 $m$ 表示求和项数，保留每项参数 $n_k$ |
+| 45—49 | 同速率 Gamma 和与不同速率指数最小值的条件不同 | 分别陈述与推导 |
+| 56—59 | 相关界与含 $\rho$ 的误差公式有正方差条件 | 分离常数变量情形，避免除以零 |
+| 73—74 | “同时偏高”没有给出具体阈值 | 解释需要联合模型，并用符号阈值给公式，不虚构数值答案 |
+| 76—93 | 构造允许 $|\rho|=1$，普通二维密度则不允许 | 区分非退化密度与退化点线分布 |
+| 90—91 | 正态边缘不足以推出联合正态 | 完整保留随机符号反例，另用和带点质量核对 |
+| 102—104 | 给定具体值的条件期望与条件期望随机变量是不同对象 | 单独解释 $g(x)$ 与 $g(X)$，保留几乎必然意义 |
+| 112—117 | 两阶段均匀与随机参数二项均为条件生成模型 | 避免误用均匀区域密度或把随机参数直接替成平均值 |
+
+课件编号从习题 4.1 跳到 4.4，并有例 4.8、例 4.10 等编号；本文保留原编号，不据此虚构文件中未出现的例题。
+
+## 附录 C　复习顺序与达标要求
+
+**第一轮：掌握均值与波动。** 阅读第一至四节，能说明期望为何要检查绝对可积，能用指示变量和函数期望简化问题，能独立推导五个基础分布的均值方差。
+
+**第二轮：用 MGF 识别分布。** 阅读第五至七节，重做 Poisson、指数与正态的 MGF，能在证明中写出独立性、有限域与唯一性三个依据，理解同参数可加性。
+
+**第三轮：区分线性关系与依赖。** 阅读第八至十一节，自己重算例 4.8；能够给出“不相关但依赖”的具体反例，能从均方误差推导最佳线性预测。
+
+**第四轮：掌握联合正态。** 阅读第十二至十五节，先记构造，再由换元重建密度；掌握组合分布、零协方差与独立、条件分布三类题，并能识别退化边界。
+
+**第五轮：用信息分解平均与波动。** 阅读第十六至十九节，先分清 $E(Y\mid X=x)$ 与 $E(Y\mid X)$，再独立完成离散条件期望、两阶段均匀、分层二项三类模型，能解释全方差的两个来源。
+
+最终达标标准是：看到问题，能判断需要完整分布、几个矩、线性预测还是条件模型；写出公式时能同时说明其前提，而不是仅凭符号相似就套用。
+
+
